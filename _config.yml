@@ -1,1 +1,4 @@
 theme: jekyll-theme-minimal
+logo: img/zvoog.fw.png
+title: Zvoog project
+description: Zvoog plugin framework for Web Audio API
