@@ -40,9 +40,19 @@ Diversity
 
 ### by building process
 * Compile via framework like a React
-* plain JS and HTML
+* Plain JS and HTML
 
 Diversity
-* 
+* Different code rules for different frameworks
 
+### by plugin hosting
+* Host on publisher site
+* Embed into application
+* Install from publisher site
+
+Diversity
+* Access policy for resources
+* Different code rules for different frameworks
+
+## Examples of applications
 

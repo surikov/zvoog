@@ -2,13 +2,13 @@
 
 This specification describes a plugin's framework for musical applications.
 
-##Aim of this plugin framework
+## Aim of this plugin framework
 
 * help developers to extends existed musical applications by ready-made blocks
 * define distribution center for publishing and discovering of plugins
 * allow users to change functionality of musical applications without programming
 
-##The primary paradigm
+## The primary paradigm
 
 * functionality of plugins are discoverable and the information has human readable format
 * host application doesn't depend from plugins code and can replace one pligin to another in realtime
