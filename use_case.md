@@ -13,8 +13,8 @@ Diversity
 
 ### by platform
 * Web Application hosted on individual web site (https://www.noteflight.com/public_scores#/popular)
-* Embedded web application (Facebook Instant Games)
-* Hybrid applications (Cordova, Electron)
+* Embedded web application (https://surikov.itch.io/diamond-defense)
+* Hybrid applications (https://play.google.com/store/apps/details?id=surikov.riffshareii)
 
 Diversity
 * Access to local resources (filesystem)
@@ -31,7 +31,7 @@ Diversity
 * no diversity
 
 ### by proprietary
-* Proprietary plugins
+* Proprietary plugins 
 * Free plugins
 
 Diversity
@@ -54,5 +54,5 @@ Diversity
 * Access policy for resources
 * Different code rules for different frameworks
 
-## Examples of applications
+
 
