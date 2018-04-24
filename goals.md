@@ -15,5 +15,5 @@ This specification describes a plugin's framework for musical applications.
 * each plugin has input and output to connect into chain of AudioNodes
 * host application and plugins can manage other plugins, a plugin know nothing about host
 
-This specification omit performance of sound processing. Plugin can use plain JS, asm.js, JS in Worklet, native browser plugin or whatever.
+This specification omit performance of sound processing. Plugin can use plain JS, asm.js, JS in Worklet, native browser plugin DLL or whatever.
 This specification doesn't intended to direct copying or extending of any technology like Web Audio API, MIDI, VST.

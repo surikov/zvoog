@@ -31,12 +31,12 @@ Diversity
 * no diversity
 
 ### by proprietary
-* Proprietary plugins 
-* Free plugins
+* Proprietary applications
+* Free application without any warranties
 
 Diversity
 * Code encryption or obfuscating
-* Online key validation
+* Online validation
 
 ### by building process
 * Compile via framework like a React
