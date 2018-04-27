@@ -14,6 +14,7 @@ function ZvoogDispatсher(audioContext, name) {
 	});
 	this._plugins = [];
 	this._states = [];
+	this._routes = [];
 	this.saveStatesToLocalStorage = function () {
 		console.log('saveStatesToLocalStorage');
 		var arr = [];
@@ -24,11 +25,9 @@ function ZvoogDispatсher(audioContext, name) {
 				value: this._states[i].state.value()
 			});
 		}
-		//console.log(arr);
 		localStorage.setItem(name, JSON.stringify(arr));
 	};
 	this.restoreStatesFromLocalStorage = function () {
-		//console.log('restoreStatesFromLocalStorage');
 		try {
 			var o = JSON.parse(localStorage.getItem(name));
 			if (o) {
@@ -56,11 +55,12 @@ function ZvoogDispatсher(audioContext, name) {
 		return state;
 	};
 	this.createPluginFromFunction = function (functionDefinition, pluginID) {
-		var o = new functionDefinition(audioContext, function (stateID, action) {
+		var newState=function (stateID, action) {
 				var state = me.takeState(pluginID, stateID);
 				state._action = action;
 				return state;
-			});
+			};
+		var o = new functionDefinition(audioContext, newState);
 		this._plugins.push({
 			pluginID: pluginID,
 			zvoogPlugin: o
@@ -72,11 +72,44 @@ function ZvoogDispatсher(audioContext, name) {
 			fromAudioNode.connect(toAudioNode);
 		}
 	};
+	this.disconnect = function (fromAudioNode, toAudioNode) {
+		if ((fromAudioNode) && (toAudioNode)) {
+			fromAudioNode.disconnect(toAudioNode);
+		}
+	};
+	this.route = function (fromPlugin, toPlugin) {};
+	this.unroute = function (fromPlugin, toPlugin) {};
+	this.send = function (fromPlugin, toPlugin) {};
 	return this;
 }
 function ZvoogPlugin(audioContext, newState) {
 	this.input = null;
 	this.output = null;
+	return this;
+}
+function ZvoogEvent(when, duration, value, shifts) {
+	this.key = key;
+	this.when = when;
+	this.duration = duration;
+	this.value = value;
+	this.shifts = [];
+	if (this.shifts) {
+		this.shifts = shifts;
+	}
+	this.clone = function () {
+		var c = new ZvoogMessage();
+		c.key = this.key;
+		c.when = this.when;
+		c.duration = this.duratio;
+		c.value = this.value;
+		for (var i = 0; i < this.shifts.length; i++) {
+			var s = new ZvoogShift();
+			s.skip = this.shifts[i].skip;
+			s.delta = this.shifts[i].delta;
+			c.shifts.push(s);
+		}
+		return c;
+	};
 	return this;
 }
 function Zvoog_Volume(audioContext, newState) {
@@ -125,15 +158,11 @@ function ZvoogState() {
 		this.relay(newText, [this]);
 	}
 	this.change = function (newText) {
-
 		var t = '' + newText;
-
 		if (!(this._value == t)) {
 			this._value = t;
-			//console.log('change',t,this._value);
 			if (this._action) {
 				this._action();
-				//console.log('action',newText,this._action);
 			}
 		}
 	}
@@ -153,13 +182,6 @@ function ZvoogState() {
 	}
 	return this;
 }
-function ZvoogPluginImplementation(zvoogPlugin) {
-	//
-}
-var AudioContextFunc = function () {
-	return null;
-}; //window.AudioContext || window.webkitAudioContext;
-
 
 //mediaFile.routeTo(gainFx).connectTo(outputSpeaker);
 /*
