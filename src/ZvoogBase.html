@@ -6,13 +6,62 @@
 		<div>
 			<p><button onclick='start()'>start</button></p>
 			<p><input id="vlmcntrl" type="range" min=0.0 max=1.0 value=1.0 step=0.01 ></input></p>
-			<p><input id="vlmtgl" type="checkbox">&nbsp;&nbsp;&nbsp;</input></p>
+			<p><input id="mttgl" type="checkbox">&nbsp;&nbsp;&nbsp;</input></p>
 		</div>
 		<script>
+start();
 			function start() {
-				console.log('start test');
+				//console.log('start test');
+				
+				
+				/*
 				var AudioContextFunc = window.AudioContext || window.webkitAudioContext;
 				var audioContext = new AudioContextFunc();
+				var ac = new AudioContextFunc();
+				*/
+				var dispatсher = new ZvoogDispatсher('tst1');
+				
+				var gainFx = dispatсher.createPluginFromFunction(Zvoog_Volume, 'gain');
+				var gainState = dispatсher.takeState('application', 'main volume').action(function () {
+						//console.log('setup range');
+						document.getElementById('vlmcntrl').value = gainState.numeric();
+					}).bind(gainFx.loudness);
+				/*gainState._action=function(){
+				console.log('setup range');
+				document.getElementById('vlmcntrl').value = gainState.numeric();
+				};*/
+				//gainState.bind(gainFx.loudness);
+				document.getElementById('vlmcntrl').onchange = function (e) {
+					//console.log('event range');
+					gainState.set(e.target.value);
+				};
+				
+				dispatсher.restoreStatesFromLocalStorage();
+				//gainState.set(0.25);
+				/*
+				window.pagehide = function () {
+					dispatсher.saveStatesToLocalStorage();
+				};
+				window.onblur = function () {
+					dispatсher.saveStatesToLocalStorage();
+				};
+				window.onbeforeunload = function () {
+					dispatсher.saveStatesToLocalStorage();
+				};
+				window.onunload = function () {
+					dispatсher.saveStatesToLocalStorage();
+				};*/
+				/*
+				var mediaFile = dispatсher.createPluginFromObject(new ZvoogPlugin(), 'media');
+				var gainFx = dispatсher.createPluginFromObject(new ZvoogPlugin(), 'gain');
+				var gainRange = dispatсher.createPluginFromObject(new ZvoogPlugin(), 'volume');
+				var muteToggle = dispatсher.createPluginFromObject(new ZvoogPlugin(), 'mute');
+				var outputSpeaker = '';
+				dispatсher.connect(mediaFile.output(),gainFx.input());
+				dispatсher.connect(gainFx.output(),ac.destination);
+				*/
+				
+				/*
 				var ticker = new ZvoogBase(audioContext, 'ticker');
 				var volumeFx = new ZvoogBase(audioContext, 'volumeFx');
 				var control = new ZvoogBase(audioContext, 'control');
@@ -49,6 +98,7 @@
 						}
 					}
 				};
+				*/
 			}
 		</script>
 	</body>
