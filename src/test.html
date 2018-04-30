@@ -2,11 +2,19 @@
 	<head>
 		<script src='ZvoogBase.js'></script>
 		<script src='ZvoogPlugins.js'></script>
+		<script src='ZvoogState.js'></script>
 		<script src='ZvoogTest.js'></script>
+		<style>
+			.uicontrol {
+				border-style: inset;
+				}
+		</style>
 	</head>
 	<body>
-		<div id='mediFileUI'></div>
-		<div id='toggleUI'></div>
+		<p>mediaInput</p>
+		<div id='mediFileUI' class='uicontrol'></div>
+		<p>togglePlay</p>
+		<div id='toggleUI' class='uicontrol'></div>
 		<script>
 			letsgo();
 		</script>

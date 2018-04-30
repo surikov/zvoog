@@ -46,7 +46,7 @@ function ZvoogDispatcher(name) {
 				return this._states[i].state;
 			}
 		}
-		var state = new ZvoogState();
+		var state = new ZvoogState(stateID);
 		this._states.push({
 			pluginID: pluginID,
 			stateID: stateID,
@@ -157,69 +157,5 @@ function ZvoogEvent(channel, key, variation, when, duration, value, shifts) {
 		}
 		return c;
 	};
-	return this;
-}
-
-function ZvoogState() {
-	this._value = '';
-	this._binded = [];
-	this._action = null;
-	this.action = function (afterChange) {
-		this._action = afterChange;
-		return this;
-	};
-	this.bind = function (zvoogState) {
-		if (this._binded.indexOf(zvoogState) < 0) {
-			this._binded.push(zvoogState);
-			zvoogState.bind(this);
-		}
-		return this;
-	};
-	this.unbind = function (zvoogState) {
-		var n = this._binded.indexOf(zvoogState);
-		if (n > -1) {
-			var c = this._binded[n];
-			this._binded.splice(n, 1);
-			c.unbind(this);
-		}
-		return this;
-	};
-	this.relay = function (newValue, stopList) {
-		for (var i = 0; i < this._binded.length; i++) {
-			if (stopList.indexOf(this._binded[i]) < 0) {
-				this._binded[i].change(newValue);
-				stopList.push(this._binded[i]);
-				this._binded[i].relay(newValue, stopList);
-			}
-		}
-		return this;
-	};
-	this.set = function (newText) {
-		this.change(newText);
-		this.relay(newText, [this]);
-	}
-	this.change = function (newText) {
-		var t = '' + newText;
-		if (!(this._value == t)) {
-			this._value = t;
-			if (this._action) {
-				this._action();
-			}
-		}
-	}
-	this.value = function () {
-		return this._value;
-	}
-	this.numeric = function () {
-		if (this._value) {
-			var r = 1 * this._value;
-			if (!(r)) {
-				r = 0;
-			}
-			return r;
-		} else {
-			return 0;
-		}
-	}
 	return this;
 }

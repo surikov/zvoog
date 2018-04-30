@@ -24,26 +24,75 @@ function Zvoog_Volume(audioContext, newState) {
 function Zvoog_LocalMediaFile_withUI(audioContext, newState) {
 	var me = this;
 	this.output = audioContext.createGain();
-	this.id='Zvoog_LocalMediaFile_withUI' + Math.round(Math.random() * 10000000);
+	this.output.connect(audioContext.destination);
+	//this.output.gain.setValueAtTime(0.1, 0);
+	this.id = 'Zvoog_LocalMediaFile_withUI' + Math.round(Math.random() * 10000000);
+	this.playState = newState('play-pause', function () {
+			me.togglePlay();
+		});
 	this.attachToDIV = function (div) {
-		div.innerHTML = '<p>Media<input id="fileinput' + this.id + '" type="file" name="name" style="display: none;" /><audio id="audio' + this.id + '" /></p>';
-		console.log(div);
+		div.innerHTML = '<p><input id="fileinput' + this.id + '" type="file" name="name" style="display: none;" /><audio id="audio' + this.id + '" loop /></p>';
+		//console.log(div);
+		document.getElementById('fileinput' + this.id).onchange = function () {
+			var files = this.files;
+			var file = URL.createObjectURL(files[0]);
+			//console.log(file);
+			var audio = document.getElementById('audio' + me.id);
+			audio.src = file;
+			//
+			if (me.mediaElementSource) {
+				me.mediaElementSource.disconnect();
+			}
+			me.mediaElementSource = audioContext.createMediaElementSource(audio);
+			me.mediaElementSource.connect(me.output);
+
+			//console.log(audio,me.mediaElementSource);
+			//audio.play();
+			me.playState.set(1);
+		};
+	};
+	this.togglePlay = function () {
+		var audio = document.getElementById('audio' + this.id);
+		//console.log('togglePlay',this.playState.value(),audio.src);
+		if (this.playState.value() > 0) {
+			//console.log('try play');
+			if (audio.src) {
+				audio.play();
+			} else {
+				//console.log('try load');
+				this.playState.set(0);
+				this.promptFile();
+			}
+		} else {
+			//console.log('stop');
+			audio.pause();
+		}
+	};
+	this.promptFile = function () {
+		//console.log('start prompt');
+		document.getElementById('fileinput' + this.id).click();
+		//console.log('done prompt');
 	};
 	return this;
 }
 function Zvoog_Toggle_withUI(audioContext, newState) {
 	var me = this;
-	this.id='Zvoog_Toggle_withUI' + Math.round(Math.random() * 10000000);
+	this.id = 'Zvoog_Toggle_withUI' + Math.round(Math.random() * 10000000);
 	this.onOff = newState('on/off', function () {
-			console.log('set on/off to', me.onOff.value());
-			document.getElementById(me.id).checked=me.loudness.value()>0;
+			var v=false;
+			if(me.onOff.value()){
+				v=true;
+			}
+			//console.log('set toggle',v);
+			document.getElementById(me.id).checked = v;
 		});
 	this.attachToDIV = function (div) {
 		div.innerHTML = '<p><input id="' + this.id + '" type="checkbox">&nbsp;&nbsp;&nbsp;</input></p>';
 		document.getElementById(this.id).onchange = function (e) {
-			var value = e.target.checked ? 1:0;
-			console.log(value);
+			var value = e.target.checked ? 1 : 0;
+			me.onOff.set(value);
 		};
 	};
+
 	return this;
 }
