@@ -29,7 +29,7 @@ function ZvoogState(tag) {
 		return this;
 	};
 	this.set = function (newText) {
-		//console.log('set', this.tag, 'to <',newText,'> from <',this._value,'>');
+		console.log('set', this.tag, 'to <',newText,'> from <',this._value,'>');
 		if (ZvoogState.lock.length > 0) {
 			//console.log('	delay', this.tag, newText,'from <',this._value,'> to',ZvoogState.lock[0].tag);
 			ZvoogState.lock[0]._changes.push(newText);

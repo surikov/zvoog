@@ -16,15 +16,16 @@ function Zvoog_Volume(audioContext, newState) {
 	this.input = gainNode;
 	this.output = gainNode;
 	this.loudness = newState('volume value', function () {
-			console.log('set volume to', me.loudness.value());
+			//console.log('set volume to', me.loudness.value());
 			gainNode.gain.setValueAtTime(me.loudness.value(), audioContext.currentTime);
 		});
+	gainNode.gain.setValueAtTime(me.loudness.value(), audioContext.currentTime);
 	return this;
 }
 function Zvoog_LocalMediaFile_withUI(audioContext, newState) {
 	var me = this;
 	this.output = audioContext.createGain();
-	this.output.connect(audioContext.destination);
+	//this.output.connect(audioContext.destination);
 	//this.output.gain.setValueAtTime(0.1, 0);
 	this.id = 'Zvoog_LocalMediaFile_withUI' + Math.round(Math.random() * 10000000);
 	this.playState = newState('play-pause', function () {
@@ -91,6 +92,37 @@ function Zvoog_Toggle_withUI(audioContext, newState) {
 		document.getElementById(this.id).onchange = function (e) {
 			var value = e.target.checked ? 1 : 0;
 			me.onOff.set(value);
+		};
+		document.getElementById(me.id).checked = me.onOff.value()? 1 : 0;
+	};
+
+	return this;
+}
+function Zvoog_Range_withUI(audioContext, newState) {
+	var me = this;
+	this.id = 'Zvoog_Range_withUI' + Math.round(Math.random() * 10000000);
+	this.value = newState('value', function () {
+			document.getElementById(me.id).value = me.value.value();
+		});
+	this.attachToDIV = function (div) {
+		div.innerHTML = '<p><input id="' + this.id + '" type="range" min=0.0 max=1.0 value=1.0 step=0.01></input></p>';
+		document.getElementById(this.id).onchange = function (e) {
+			me.value.set(e.target.value * 1);
+		};
+		document.getElementById(me.id).value = me.value.value();
+	};
+
+	return this;
+}
+function Zvoog_buttonUI(audioContext, newState, scheduleEvent) {
+	var me = this;
+	this.id = 'Zvoog_buttonUI' + Math.round(Math.random() * 10000000);
+	var clickevent=new ZvoogEvent(3000,0,0,0,0,0);
+	this.attachToDIV = function (div) {
+		div.innerHTML = '<p><button id="' + this.id + '" >press me</button></p>';
+		document.getElementById(this.id).onclick = function (e) {
+			console.log('click');
+			scheduleEvent(clickevent);
 		};
 	};
 

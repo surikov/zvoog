@@ -4,22 +4,29 @@ function letsgo() {
 	var dispatcher = new ZvoogDispatcher('testing2');
 	var mediaInput = dispatcher.createPluginFromFunction(Zvoog_LocalMediaFile_withUI, 'mediaInput');
 	var togglePlay = dispatcher.createPluginFromFunction(Zvoog_Toggle_withUI, 'togglePlay');
-	//var gainControl = dispatcher.createPluginFromFunction(ZvoogPlugin, 'gainControl');
+	var gainControl = dispatcher.createPluginFromFunction(Zvoog_Range_withUI, 'gainControl');
+	var gainFx = dispatcher.createPluginFromFunction(Zvoog_Volume, 'gainFx');
+	var playButton = dispatcher.createPluginFromFunction(Zvoog_buttonUI, 'playButton');
 	//var filterControl = dispatcher.createPluginFromFunction(ZvoogPlugin, 'filterControl');
 	//var metronome = dispatcher.createPluginFromFunction(ZvoogPlugin, 'metronome');
 	//var synth = dispatcher.createPluginFromFunction(ZvoogPlugin, 'synth');
 	//var startPause = dispatcher.createPluginFromFunction(ZvoogPlugin, 'synth');
-	/*dispatcher.connect(mediaInput.output, filterControl.input);
-	dispatcher.connect(filterControl.output, gainControl.input);
-	dispatcher.connect(gainControl.output, dispatcher.audioContext.destination);
-	dispatcher.connect(synth.output, gainControl.input);*/
+	dispatcher.connect(mediaInput.output, gainFx.input);
+	//dispatcher.connect(filterControl.output, gainControl.input);
+	dispatcher.connect(gainFx.output, dispatcher.audioContext.destination);
+	
+	//dispatcher.connect(synth.output, gainControl.input);
 	//dispatcher.connect(mediaInput.output, dispatcher.audioContext.destination);
+	dispatcher.route(playButton, 3000,'',2000);
 	//dispatcher.route('metronome', 'synth');
+	playButton.attachToDIV(document.getElementById('playButton'));
 	mediaInput.attachToDIV(document.getElementById('mediFileUI'));
 	togglePlay.attachToDIV(document.getElementById('toggleUI'));
+	gainControl.attachToDIV(document.getElementById('gainUI'));
 	mediaInput.playState.bind(togglePlay.onOff);
+	gainControl.value.bind(gainFx.loudness);
 	//console.log('restoreStatesFromLocalStorage');
-	dispatcher.restoreStatesFromLocalStorage();
+	//dispatcher.restoreStatesFromLocalStorage();
 	//console.log('unset');
 	mediaInput.playState.set(0);
 /*
