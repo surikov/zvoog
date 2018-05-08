@@ -1,5 +1,5 @@
 console.log('ZvoogPlugins v1.01');
-function ZvoogPlugin(audioContext, newState, scheduleEvent) {
+function ZvoogPlugin(audioContext, newState, scheduleMessage) {
 	this.input = null;
 	this.output = null;
 	this.onEvent = function (zvoogEvent) {
@@ -114,15 +114,15 @@ function Zvoog_Range_withUI(audioContext, newState) {
 
 	return this;
 }
-function Zvoog_buttonUI(audioContext, newState, scheduleEvent) {
+function Zvoog_buttonUI(audioContext, newState, scheduleMessage) {
 	var me = this;
 	this.id = 'Zvoog_buttonUI' + Math.round(Math.random() * 10000000);
-	var clickevent=new ZvoogEvent(3000,0,0,0,0,0);
+	var m=new ZvoogMessage();
 	this.attachToDIV = function (div) {
 		div.innerHTML = '<p><button id="' + this.id + '" >press me</button></p>';
 		document.getElementById(this.id).onclick = function (e) {
 			console.log('click');
-			scheduleEvent(clickevent);
+			scheduleMessage(m);
 		};
 	};
 

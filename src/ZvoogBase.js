@@ -61,10 +61,12 @@ function ZvoogDispatcher(name) {
 		//state.set(state.value());
 		return state;
 	};
-	this.scheduleEvent = function (fromPluginID, zvoogEvent) {
-		console.log('event', this.channelPurpose(zvoogEvent.channel));
+	this.scheduleMessage = function (fromPluginID, zvoogMessage) {
+		console.log('event', zvoogMessage);
 		for (var i = 0; i < this._routes.length; i++) {
-			if (this._routes[i].fromPluginID == fromPluginID) {}
+			if (this._routes[i].fromPluginID == fromPluginID) {
+				console.log('route', this._routes[i]);
+			}
 		}
 	};
 	this.setPluginObject = function (pluginID, o) {
@@ -83,10 +85,10 @@ function ZvoogDispatcher(name) {
 		var newState = function (stateID, action) {
 			return me.setStateAction(pluginID, stateID, action);
 		};
-		var scheduleEvent = function (zvoogEvent) {
-			me.scheduleEvent(pluginID, zvoogEvent.clone());
+		var scheduleMessage = function (zvoogMessage) {
+			me.scheduleMessage(pluginID, me.cloneMessage(zvoogMessage));
 		};
-		var o = new functionDefinition(this.audioContext, newState, scheduleEvent);
+		var o = new functionDefinition(this.audioContext, newState, scheduleMessage);
 		o.pluginID = pluginID;
 		this.setPluginObject(pluginID, o);
 		return o;
@@ -117,7 +119,7 @@ function ZvoogDispatcher(name) {
 		}
 		return null;
 	};
-	this.route = function (fromPlugin, fromChannel, toPlugin, toChannel) {
+	this.routeMessages = function (fromPlugin, fromChannel, toPlugin, toChannel) {
 		var fromPluginID = '';
 		if (fromPlugin) {
 			fromPluginID = fromPlugin.pluginID;
@@ -157,7 +159,7 @@ function ZvoogDispatcher(name) {
 	this.cancelTicker = function () {
 		console.log('cancel');
 	};
-	this.channelPurpose = function (n) {
+	/*this.channelPurpose = function (n) {
 		if (n >= 0 && n <= 127) {
 			return 'melody track';
 		}
@@ -174,36 +176,33 @@ function ZvoogDispatcher(name) {
 			return 'button click';
 		}
 		return 'unknown channel';
-	};
-	this.restoreStatesFromLocalStorage();
-	return this;
-}
-function ZvoogEvent(channel, key, variation, when, duration, value, shifts) {
-	this.channel = channel;
-	this.key = key;
-	this.variation = variation;
-	this.when = when;
-	this.duration = duration;
-	this.value = value;
-	this.shifts = [];
-	if (shifts) {
-		this.shifts = shifts;
-	}
-	this.clone = function () {
-		var c = new ZvoogEvent();
-		c.channel = this.channel;
-		c.key = this.key;
-		c.variation = this.variation;
-		c.when = this.when;
-		c.duration = this.duratio;
-		c.value = this.value;
-		for (var i = 0; i < this.shifts.length; i++) {
+	};*/
+	this.cloneMessage = function (zvoogMessage) {
+		var c = new ZvoogMessage();
+		c.channel = zvoogMessage.channel;
+		c.key = zvoogMessage.key;
+		c.variation = zvoogMessage.variation;
+		c.when = zvoogMessage.when;
+		c.duration = zvoogMessage.duratio;
+		c.value = zvoogMessage.value;
+		for (var i = 0; i < zvoogMessage.shifts.length; i++) {
 			var s = new ZvoogShift();
-			s.skip = this.shifts[i].skip;
-			s.delta = this.shifts[i].delta;
+			s.skip = zvoogMessage.shifts[i].skip;
+			s.delta = zvoogMessage.shifts[i].delta;
 			c.shifts.push(s);
 		}
 		return c;
 	};
+	this.restoreStatesFromLocalStorage();
+	return this;
+}
+function ZvoogMessage(channel, key, variation, when, duration, value, shifts) {
+	this.channel = channel||0;
+	this.key = key||0;
+	this.variation = variation||0;
+	this.when = when||0;
+	this.duration = duration||0;
+	this.value = value||0;
+	this.shifts = shifts||[];
 	return this;
 }

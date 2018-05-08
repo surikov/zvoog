@@ -17,7 +17,7 @@ function letsgo() {
 	
 	//dispatcher.connect(synth.output, gainControl.input);
 	//dispatcher.connect(mediaInput.output, dispatcher.audioContext.destination);
-	dispatcher.route(playButton, 3000,'',2000);
+	dispatcher.routeMessages(playButton, 0,'',0);
 	//dispatcher.route('metronome', 'synth');
 	playButton.attachToDIV(document.getElementById('playButton'));
 	mediaInput.attachToDIV(document.getElementById('mediFileUI'));
