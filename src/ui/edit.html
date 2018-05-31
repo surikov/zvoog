@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang='en'>
+	<head>
+		<title>MolgavIII</title>
+		<meta charset='utf-8'>
+		<meta name='viewport' content='initial-scale=1.0, width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0' />
+		<script src='tilelevel.js'></script>
+		<script src='https://surikov.github.io/webaudiofont/npm/dist/WebAudioFontPlayer.js'></script>
+		<script src='songloader.js'></script>
+		<script src='accidentalZoomRender.js'></script>
+		
+		<link href='https://fonts.googleapis.com/css?family=Racing+Sans+One' rel='stylesheet'>
+		<link href='main.css' rel='stylesheet'>
+	</head>
+	<body>
+		<div id='contentDiv' >
+			<svg id='contentSVG'>
+				<defs>
+					<radialGradient id='bgGradient'>
+						<stop offset='0%' stop-color='#eef'/>
+						<stop offset='100%' stop-color='#abc'/>
+					</radialGradient>
+				</defs>
+				<g id='cntnt'></g>
+			</svg>
+		</div>
+		<script src='init.js'></script>
+	</body>
+</html>
