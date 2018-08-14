@@ -9,7 +9,7 @@ function ZvoogSession() {
 			//this.channels[i].init(this);
 		}
 	};
-	this.addChannelWriter = function (channel, component) {
+	this.route = function (output, input) {
 		//
 	};
 	return this;
