@@ -1,15 +1,12 @@
 console.log('ZvoogCueInput v1.02');
 function ZvoogCueInput() {
-	this.startKey = function (pitch, volume) {
+	this.openKey=function(pitch,volume){
 		//
 	};
-	this.stopKey = function (pitch) {
+	this.closeKey=function(pitch){
 		//
 	};
-	this.queueChord = function (chord) {
-		//
-	};
-	this.dropChord = function (at) {
+	this.setNote=function(note){
 		//
 	};
 }

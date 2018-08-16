@@ -1,11 +1,9 @@
 console.log('ZvoogComponent v1.02');
-function ZvoogComponent() {
+function ZvoogComponent(session) {
 	this.audioInputs = [];
 	this.audioOutputs = [];
 	this.cueInputs = [];
 	this.cueOutputs = [];
-	this.init = function (session) {
-		this.session = session;
-	};
+	this.session = session;
 	return this;
 }
