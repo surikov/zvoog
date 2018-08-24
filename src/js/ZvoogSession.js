@@ -2,6 +2,7 @@ console.log('ZvoogSession v1.02');
 function ZvoogSession() {
 	this.measures = [];
 	this.channels = [];
+	this.patterns = [];
 	this.links = [];
 	this.master = new ZvoogChannel();
 	this.init = function (audioContext) {
