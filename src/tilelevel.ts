@@ -1,48 +1,133 @@
 console.log('tilelevel v2.02');
 let _tileLevel: TileLevel = null;
+/*
 let layerModeLockX: string = 'lockX';
-let 	layerModeNormal: string = 'normal';
-let 	layerModeOverlay: string = 'overlay';
-let 	layerModeLockY: string = 'lockY';
-let 	layerModeStickBottom: string = 'stickBottom';
-let 	layerModeStickRight: string = 'stickRight';
-class TileZoom {
-	x: number = 0;
-	y: number = 0;
-	z: number = 0;
+let layerModeNormal: string = 'normal';
+let layerModeOverlay: string = 'overlay';
+let layerModeLockY: string = 'lockY';
+let layerModeStickBottom: string = 'stickBottom';
+let layerModeStickRight: string = 'stickRight';
+*/
+type TileZoom ={
+	x: number ,
+	y: number ,
+	z: number 
 }
-class TilePoint {
-	x: number = 0;
-	y: number = 0;
+type TilePoint ={
+	x: number ,
+	y: number 
 }
-class TileModelLayer {
-	g: SVGElement = null;
-	mode: string = 'normal';
-	shift: number;
+type TileModelLayer ={
+	g: SVGElement ,
+	//mode: string = 'normal';
+	//shift: number;
 	//viceversa: boolean;
-	definition: TileDefinition[] = [];
+	//definition: TileDefinition[] = [];
+	groups: TileGroup[] 
 }
-type TileDefinition = {
+function isLayerNormal(t: TileModelLayer|TileLayerStickLeft|TileLayerStickTop|TileLayerStickBottom|TileLayerStickRight|TileLayerOverlay): t is TileModelLayer {
+	return (t as any).stickLeft === undefined
+	&& (t as any).stickTop === undefined
+	&& (t as any).stickBottom === undefined
+	&& (t as any).stickRight === undefined
+	&& (t as any).overlay === undefined
+	;
+}
+type TileLayerStickLeft={
+	stickLeft:number
+}&TileModelLayer;
+function isLayerStickLeft(t: TileModelLayer|TileLayerStickLeft|TileLayerStickTop|TileLayerStickBottom|TileLayerStickRight|TileLayerOverlay): t is TileLayerStickLeft {
+	return (t as TileLayerStickLeft).stickLeft !== undefined;
+}
+type TileLayerStickTop={
+	stickTop:number
+}&TileModelLayer;
+function isLayerStickTop(t: TileModelLayer|TileLayerStickLeft|TileLayerStickTop|TileLayerStickBottom|TileLayerStickRight|TileLayerOverlay): t is TileLayerStickTop {
+	return (t as TileLayerStickTop).stickTop !== undefined;
+}
+type TileLayerStickBottom={
+	stickBottom:number
+}&TileModelLayer;
+function isLayerStickBottom(t: TileModelLayer|TileLayerStickLeft|TileLayerStickTop|TileLayerStickBottom|TileLayerStickRight|TileLayerOverlay): t is TileLayerStickBottom {
+	return (t as TileLayerStickBottom).stickBottom !== undefined;
+}
+type TileLayerStickRight={
+	stickRight:number
+}&TileModelLayer;
+function isLayerStickRight(t: TileModelLayer|TileLayerStickLeft|TileLayerStickTop|TileLayerStickBottom|TileLayerStickRight|TileLayerOverlay): t is TileLayerStickRight {
+	return (t as TileLayerStickRight).stickRight !== undefined;
+}
+type TileLayerOverlay={
+	overlay:number
+}&TileModelLayer;
+function isLayerOverlay(t: TileModelLayer|TileLayerStickLeft|TileLayerStickTop|TileLayerStickBottom|TileLayerStickRight|TileLayerOverlay): t is TileLayerOverlay {
+	return (t as TileLayerOverlay).overlay !== undefined;
+}
+type TileBaseDefinition = {
 	id: string// = 'id'+Math.floor(Math.random()*1000000000)
-	, draw: string
+	//, draw: string
 	, css: string
-	, x: number
-	, y: number
-	, w: number
-	, h: number
+
 	, action: (x: number, y: number) => void
-	, z: number[]
-	, scale: number
-	, rx: number
-	, ry: number
+	//, z: number[]
+	,showZoom:number
+	,hideZoom:number
+/*
 	, x1: number
 	, x2: number
 	, y1: number
 	, y2: number
-	, text: string
-	, points: string//path definition
-	, sub: TileDefinition[]
+*/
+
+	//, sub: TileDefinition[]
 };
+type TileGroup = {
+	x: number
+	, y: number
+	, w: number
+	, h: number
+	,content: (TileGroup|TileRectangle|TileText|TilePath|TileLine)[]
+} & TileBaseDefinition;
+function isTileGroup(t: TileGroup|TileRectangle|TileText|TilePath|TileLine): t is TileGroup {
+	return (t as TileGroup).content !== undefined;
+}
+type TileRectangle = {
+	x: number
+	, y: number
+	, w: number
+	, h: number
+	, rx: number
+	, ry: number
+} & TileBaseDefinition;
+function isTileRectangle(t: TileGroup|TileRectangle|TileText|TilePath|TileLine): t is TileRectangle {
+	return (t as TileRectangle).h !== undefined;
+}
+type TileText = {
+	x: number
+	, y: number
+	, text: string
+} & TileBaseDefinition;
+function isTileText(t: TileGroup|TileRectangle|TileText|TilePath|TileLine): t is TileText {
+	return (t as TileText).text !== undefined;
+}
+type TilePath = {
+	x: number
+	, y: number
+	, scale: number
+	, points: string//path definition
+} & TileBaseDefinition;
+function isTilePath(t: TileGroup|TileRectangle|TileText|TilePath|TileLine): t is TilePath {
+	return (t as TilePath).points !== undefined;
+}
+type TileLine = {
+	x1: number
+	, x2: number
+	, y1: number
+	, y2: number
+} & TileBaseDefinition;
+function isTileLine(t: TileGroup|TileRectangle|TileText|TilePath|TileLine): t is TileLine {
+	return (t as TileLine).x1 !== undefined;
+}
 type TileSVGElement = SVGElement & {
 	onClickFunction: (x: number, y: number) => void
 	, watchX: number
@@ -52,7 +137,7 @@ type TileSVGElement = SVGElement & {
 	, minZoom: number
 	, maxZoom: number
 };
-class TileLevel{
+class TileLevel {
 	svg: SVGElement = null;
 	tapSize: number = 50;
 	twoZoom: boolean = false;
@@ -62,9 +147,9 @@ class TileLevel{
 	viewHeight: number = 0;
 	innerWidth: number = 0;
 	innerHeight: number = 0;
-	translateX: number = 0;
-	translateY: number = 0;
-	translateZ: number = 1;
+	_translateX: number = 0;
+	_translateY: number = 0;
+	_translateZ: number = 1;
 	startMouseScreenX: number = 0;
 	startMouseScreenY: number = 0;
 	clickX: number = 0;
@@ -78,17 +163,50 @@ class TileLevel{
 	twodistance: number = 0;
 	twocenter: TilePoint = null;
 	model: TileModelLayer[] = [];
-	
-	constructor(svgObject: SVGElement, inWidth:number, inHeight:number, minZoom: number, curZoom: number, maxZoom: number,layers: TileModelLayer[]){
+
+	get translateZ(): number {
+		return this._translateZ;
+	}
+	set translateZ(z: number) {
+		if (z != this._translateZ) {
+			//console.log('z',this._translateZ,'=>',z);
+			this._translateZ = z;
+		}
+
+	}
+	get translateX(): number {
+		return this._translateX;
+	}
+	set translateX(x: number) {
+		if (x != this._translateX) {
+			//console.log('x',this._translateX,'=>',x);
+			this._translateX = x;
+		}
+
+	}
+	get translateY(): number {
+		return this._translateY;
+	}
+	set translateY(y: number) {
+		if (y != this._translateY) {
+			//console.log('y',this._translateY,'=>',y);
+			this._translateY = y;
+		}
+
+	}
+
+	constructor(svgObject: SVGElement, inWidth: number, inHeight: number, minZoom: number, curZoom: number, maxZoom: number, layers: TileModelLayer[]) {
 		console.log('TileLevel');
 		_tileLevel = this;
-		this.svg=svgObject;
+		this.svg = svgObject;
 		this.setupTapSize();
 
 		this.viewWidth = this.svg.clientWidth;
 		this.viewHeight = this.svg.clientHeight;
-		this.innerWidth = this.viewWidth;
-		this.innerHeight = this.viewHeight;
+		//this.innerWidth = this.viewWidth;
+		//this.innerHeight = this.viewHeight;
+		this.innerWidth = inWidth * this.tapSize;
+		this.innerHeight = inHeight * this.tapSize;
 		this.mx = maxZoom;
 		this.mn = minZoom;
 		this.translateZ = curZoom;
@@ -123,8 +241,8 @@ class TileLevel{
 		this.applyZoomPosition();
 		this.clearUselessDetails();
 	}
-	dump(){
-		console.log('dump',this);
+	dump() {
+		console.log('dump', this);
 	}
 	/*
 	start(layers: TileModelLayer[]){//layers: TileModelLayer[], innerWidth: number, innerHeight: number, minZoom: number, curZoom: number, maxZoom: number) {
@@ -332,29 +450,32 @@ class TileLevel{
 				if (this.viewHeight * this.translateZ > this.innerHeight) {
 					cY = (this.viewHeight * this.translateZ - this.innerHeight) / 2;
 				}
-				if (layer.mode == layerModeOverlay) {
+				if (isLayerOverlay(layer)) {
+				//if (layer.mode == layerModeOverlay) {
 					tz = this.translateZ;
 					tx = -this.translateX;
 					ty = -this.translateY;
 					cX = 0;
 					cY = 0;
 				} else {
-					if (layer.mode == layerModeLockX) {
+					if (isLayerStickLeft(layer)) {
+					//if (layer.mode == layerModeLockX) {
 						tx = -this.translateX;
 						cX = 0;
-						if (layer.shift) {
+						if (layer.stickLeft) {
 							//let shiftX=layer.shiftX(this);
-							sX = layer.shift * this.tapSize * this.translateZ;
+							sX = layer.stickLeft * this.tapSize * this.translateZ;
 						}
 					} else {
-						if (layer.mode == layerModeLockY) {
+						if (isLayerStickTop(layer)) {
+						//if (layer.mode == layerModeLockY) {
 							ty = -this.translateY;
 							cY = 0;
-							if (layer.shift) {
+							if (layer.stickTop) {
 								//let shiftY=layer.shiftY(this);
 
 
-								sY = layer.shift * this.tapSize * this.translateZ;
+								sY = layer.stickTop * this.tapSize * this.translateZ;
 								/*}else{
 									
 									sY = (this.viewHeight+layer.shiftY * this.tapSize) * this.translateZ;
@@ -370,20 +491,23 @@ class TileLevel{
 								}
 							}*/
 						} else {
-							if (layer.mode == layerModeStickBottom) {
+							if (isLayerStickBottom(layer)) {
+							//if (layer.mode == layerModeStickBottom) {
 								ty = -this.translateY;
 								cY = 0;
 								sY = this.viewHeight * this.translateZ;
-								if (layer.shift) {
-									sY = this.viewHeight * this.translateZ - layer.shift * this.tapSize;
+								if (layer.stickBottom) {
+									sY = this.viewHeight * this.translateZ - layer.stickBottom * this.tapSize;
 								}
 							} else {
-								if (layer.mode == layerModeStickRight) {
+								
+								if (isLayerStickRight(layer)) {
+								//if (layer.mode == layerModeStickRight) {
 									tx = -this.translateX;
 									cX = 0;
 									sX = this.viewWidth * this.translateZ;
-									if (layer.shift) {
-										sX = this.viewWidth * this.translateZ - layer.shift * this.tapSize;
+									if (layer.stickRight) {
+										sX = this.viewWidth * this.translateZ - layer.stickRight * this.tapSize;
 									}
 								}
 							}
@@ -557,11 +681,11 @@ class TileLevel{
 		if (this.model) {
 			for (let k = 0; k < this.model.length; k++) {
 				let group: SVGElement = this.model[k].g;
-				this.clearUselessGroups(group, this.model[k].mode);
+				this.clearUselessGroups(group, this.model[k]);
 			}
 		}
 	}
-	clearUselessGroups(group: SVGElement, kind: string) {
+	clearUselessGroups(group: SVGElement, layer: TileModelLayer|TileLayerStickLeft|TileLayerStickTop|TileLayerStickBottom|TileLayerStickRight|TileLayerOverlay) {
 		let x: number = -this.translateX;
 		let y: number = -this.translateY;
 		let w: number = this.svg.clientWidth * this.translateZ;
@@ -576,27 +700,32 @@ class TileLevel{
 			cY = (this.viewHeight * this.translateZ - this.innerHeight) / 2;
 			y = y - cY;
 		}
-		if (kind == layerModeOverlay) {
+		if(isLayerOverlay(layer)){
+		//if (kind == layerModeOverlay) {
 			x = 0;
 			y = 0;
 		} else {
-			if (kind == layerModeLockX) {
+			if(isLayerStickLeft(layer)){
+			//if (kind == layerModeLockX) {
 				x = 0;
 			} else {
-				if (kind == layerModeLockY) {
+				if(isLayerStickTop(layer)){
+				//if (kind == layerModeLockY) {
 					y = 0;
 				} else {
-					if (kind == layerModeStickRight) {
+					if(isLayerStickRight(layer)){
+					//if (kind == layerModeStickRight) {
 						x = 0;
 					} else {
-						if (kind == layerModeStickBottom) {
+						if(isLayerStickBottom(layer)){
+						//if (kind == layerModeStickBottom) {
 							y = 0;
 						}
 					}
 				}
 			}
 		}
-		if(group)this.msEdgeHook(group);
+		if (group) this.msEdgeHook(group);
 		for (let i: number = 0; i < group.children.length; i++) {
 			let child: TileSVGElement = group.children[i] as TileSVGElement;
 			if (this.outOfWatch(child, x, y, w, h) || child.minZoom > this.translateZ || child.maxZoom <= this.translateZ) {
@@ -604,7 +733,7 @@ class TileLevel{
 				i--;
 			} else {
 				if (child.localName == 'g') {
-					this.clearUselessGroups(child, kind);
+					this.clearUselessGroups(child, layer);
 				}
 			}
 		}
@@ -639,17 +768,17 @@ class TileLevel{
 		//console.log('tileFromModel',this.model);
 		if (this.model) {
 			for (let k = 0; k < this.model.length; k++) {
-				let group: SVGElement = this.model[k].g;
-				let arr: TileDefinition[] = this.model[k].definition;
+				let svggroup: SVGElement = this.model[k].g;
+				let arr: TileGroup[] = this.model[k].groups;
 				for (let i: number = 0; i < arr.length; i++) {
-					let a: TileDefinition = arr[i];
-					this.addGroupTile(group, a, this.model[k].mode);
+					let a: TileGroup = arr[i];
+					this.addGroupTile(svggroup, a, this.model[k]);
 				}
 			}
 		}
 		this.valid = true;
 	}
-	addGroupTile(parentGroup: SVGElement, definitions: TileDefinition, layerKind: string) {
+	addGroupTile(parentGroup: SVGElement, tileGroup: TileGroup, layer: TileModelLayer|TileLayerStickLeft|TileLayerStickTop|TileLayerStickBottom|TileLayerStickRight|TileLayerOverlay) {
 		//console.log('addGroupTile',this.translateZ,definitions);
 		let x: number = -this.translateX;
 		let y: number = -this.translateY;
@@ -665,56 +794,67 @@ class TileLevel{
 			cY = (this.viewHeight * this.translateZ - this.innerHeight) / 2;
 			y = y - cY;
 		}
-		if (layerKind == layerModeOverlay) {
+		if(isLayerOverlay(layer)){
+		//if (layerKind == layerModeOverlay) {
 			x = 0;
 			y = 0;
 		} else {
-			if (layerKind == layerModeLockX) {
+			if(isLayerStickLeft(layer)){
+			//if (layerKind == layerModeLockX) {
 				x = 0;
 			} else {
-				if (layerKind == layerModeLockY) {
+				if(isLayerStickTop(layer)){
+				//if (layerKind == layerModeLockY) {
 					y = 0;
 				} else {
-					if (layerKind == layerModeStickRight) {
+					if(isLayerStickRight(layer)){
+					//if (layerKind == layerModeStickRight) {
 						x = 0;
 					} else {
-						if (layerKind == layerModeStickBottom) {
+						if(isLayerStickBottom(layer)){
+						//if (layerKind == layerModeStickBottom) {
 							y = 0;
 						}
 					}
 				}
 			}
 		}
-		
-		if (definitions.z[0] <= this.translateZ && definitions.z[1] > this.translateZ) {
+
+		//if (definitions.z[0] <= this.translateZ && definitions.z[1] > this.translateZ) {
+		if (tileGroup.showZoom <= this.translateZ && tileGroup.hideZoom > this.translateZ) {
 			//console.log(this.collision(definitions.x * this.tapSize, definitions.y * this.tapSize, definitions.w * this.tapSize, definitions.h * this.tapSize, x, y, w, h));
-			if (this.collision(definitions.x * this.tapSize, definitions.y * this.tapSize, definitions.w * this.tapSize, definitions.h * this.tapSize //
+			if (this.collision(tileGroup.x * this.tapSize, tileGroup.y * this.tapSize, tileGroup.w * this.tapSize, tileGroup.h * this.tapSize //
 				, x, y, w, h)) {
-				let xg: SVGElement = this.childExists(parentGroup, definitions.id);
+				let xg: SVGElement = this.childExists(parentGroup, tileGroup.id);
 				//console.log(xg);
 				if (xg) {
-					for (let n = 0; n < definitions.sub.length; n++) {
-						let d = definitions.sub[n];
-						if (d.draw == 'group') {
-							this.addElement(xg, d, layerKind);
+					//if (isTileGroup(tileGroup)) {
+						for (let n = 0; n < tileGroup.content.length; n++) {
+							let d = tileGroup.content[n];
+							//if (d.draw == 'group') {
+							if (isTileGroup(d)){
+								this.addElement(xg, d, layer);
+							}
 						}
-					}
+					//}
 				} else {
 					let g: TileSVGElement = document.createElementNS(this.svgns, 'g') as TileSVGElement;
 					//console.log(parentGroup,g);
-					g.id = definitions.id;
+					g.id = tileGroup.id;
 					//let gg = g as any;
-					g.watchX = definitions.x * this.tapSize;
-					g.watchY = definitions.y * this.tapSize;
-					g.watchW = definitions.w * this.tapSize;
-					g.watchH = definitions.h * this.tapSize;
+					g.watchX = tileGroup.x * this.tapSize;
+					g.watchY = tileGroup.y * this.tapSize;
+					g.watchW = tileGroup.w * this.tapSize;
+					g.watchH = tileGroup.h * this.tapSize;
 					parentGroup.appendChild(g);
-					g.minZoom = definitions.z[0];
-					g.maxZoom = definitions.z[1];
-					for (let n = 0; n < definitions.sub.length; n++) {
-						let d = definitions.sub[n];
-						this.addElement(g, d, layerKind);
-					}
+					g.minZoom = tileGroup.showZoom;
+					g.maxZoom = tileGroup.hideZoom;
+					//if (isTileGroup(tileGroup)) {
+						for (let n = 0; n < tileGroup.content.length; n++) {
+							let d = tileGroup.content[n];
+							this.addElement(g, d, layer);
+						}
+					//}
 				}
 			}
 		}
@@ -722,7 +862,7 @@ class TileLevel{
 	childExists(group: SVGElement, id: string): SVGElement {//SVGGraphicsElement/SVGElement
 		//console.log('childExists',group, id);
 		//console.dir(group);
-		if(group)this.msEdgeHook(group);
+		if (group) this.msEdgeHook(group);
 		for (let i: number = 0; i < group.children.length; i++) {
 			let child: SVGElement = group.children[i] as SVGElement;
 			if (child.id == id) {
@@ -731,23 +871,29 @@ class TileLevel{
 		}
 		return null;
 	}
-	addElement(g: SVGElement, d: TileDefinition, layerKind: string) {
+	addElement(g: SVGElement, d: TileGroup|TileRectangle|TileText|TilePath|TileLine, layer: TileModelLayer|TileLayerStickLeft|TileLayerStickTop|TileLayerStickBottom|TileLayerStickRight|TileLayerOverlay) {
 		//console.log('addElement',d);
 		let element: TileSVGElement = null;
-		if (d.draw == 'rectangle') {
+		//if (d.draw == 'rectangle') {
+		if(isTileRectangle(d)){
+			//let r=d as TileRectangle;
 			element = this.tileRectangle(g, d.x * this.tapSize, d.y * this.tapSize, d.w * this.tapSize, d.h * this.tapSize, d.rx * this.tapSize, d.ry * this.tapSize, d.css);
 		}
-		if (d.draw == 'text') {
+		//if (d.draw == 'text') {
+		if(isTileText(d)){
 			element = this.tileText(g, d.x * this.tapSize, d.y * this.tapSize, d.text, d.css);
 		}
-		if (d.draw == 'path') {
+		//if (d.draw == 'path') {
+		if(isTilePath(d)){
 			element = this.tilePath(g, d.x * this.tapSize, d.y * this.tapSize, d.scale, d.points, d.css);
 		}
-		if (d.draw == 'line') {
+		//if (d.draw == 'line') {
+		if(isTileLine(d)){
 			element = this.tileLine(g, d.x1 * this.tapSize, d.y1 * this.tapSize, d.x2 * this.tapSize, d.y2 * this.tapSize, d.css);
 		}
-		if (d.draw == 'group') {
-			this.addGroupTile(g, d, layerKind);
+		//if (d.draw == 'group') {
+		if(isTileGroup(d)){
+			this.addGroupTile(g, d, layer);
 		}
 		if (element) {
 			if (d.action) {
@@ -841,27 +987,33 @@ class TileLevel{
 		}
 	}
 	clearGroupDetails(group: SVGElement) {
-		if(group)this.msEdgeHook(group);
+		if (group) this.msEdgeHook(group);
 		while (group.children.length) {
 			group.removeChild(group.children[0]);
 		}
 	}
-	autoID(definition: TileDefinition[]) {
+	autoID(definition: (TileGroup|TileRectangle|TileText|TilePath|TileLine)[]) {
 		if (definition) {
 			if (definition.length) {
 				for (let i: number = 0; i < definition.length; i++) {
 					if (!(definition[i].id)) {
 						definition[i].id = 'id' + Math.floor(Math.random() * 1000000000);
 					}
-					this.autoID(definition[i].sub);
+					//let tt:TileGroup|TileDefinition=definition[i];
+					//this.autoID(tt.sub);
+					if (isTileGroup(definition[i])) {
+						let group: TileGroup = definition[i] as TileGroup;
+						this.autoID(group.content);
+					}
+					//this.autoID(definition[i].sub);
 				}
 			}
 		}
 	}
-	
+
 	setModel(layers: TileModelLayer[]) {
 		for (let i: number = 0; i < layers.length; i++) {
-			this.autoID(layers[i].definition);
+			this.autoID(layers[i].groups);
 		}
 		//console.log(layers);
 		this.model = layers;
@@ -875,7 +1027,7 @@ class TileLevel{
 		this.valid = false;
 	}
 	startLoop() {
-		console.log('startLoop',this.model);
+		console.log('startLoop', this.model);
 		let last: number = new Date().getTime();
 		let me: TileLevel = this;
 		let step: () => void = function () {
@@ -890,5 +1042,5 @@ class TileLevel{
 		};
 		step();
 	}
-	
+
 }

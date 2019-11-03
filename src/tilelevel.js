@@ -1,35 +1,42 @@
 console.log('tilelevel v2.02');
 var _tileLevel = null;
-var layerModeLockX = 'lockX';
-var layerModeNormal = 'normal';
-var layerModeOverlay = 'overlay';
-var layerModeLockY = 'lockY';
-var layerModeStickBottom = 'stickBottom';
-var layerModeStickRight = 'stickRight';
-var TileZoom = /** @class */ (function () {
-    function TileZoom() {
-        this.x = 0;
-        this.y = 0;
-        this.z = 0;
-    }
-    return TileZoom;
-}());
-var TilePoint = /** @class */ (function () {
-    function TilePoint() {
-        this.x = 0;
-        this.y = 0;
-    }
-    return TilePoint;
-}());
-var TileModelLayer = /** @class */ (function () {
-    function TileModelLayer() {
-        this.g = null;
-        this.mode = 'normal';
-        //viceversa: boolean;
-        this.definition = [];
-    }
-    return TileModelLayer;
-}());
+function isLayerNormal(t) {
+    return t.stickLeft === undefined
+        && t.stickTop === undefined
+        && t.stickBottom === undefined
+        && t.stickRight === undefined
+        && t.overlay === undefined;
+}
+function isLayerStickLeft(t) {
+    return t.stickLeft !== undefined;
+}
+function isLayerStickTop(t) {
+    return t.stickTop !== undefined;
+}
+function isLayerStickBottom(t) {
+    return t.stickBottom !== undefined;
+}
+function isLayerStickRight(t) {
+    return t.stickRight !== undefined;
+}
+function isLayerOverlay(t) {
+    return t.overlay !== undefined;
+}
+function isTileGroup(t) {
+    return t.content !== undefined;
+}
+function isTileRectangle(t) {
+    return t.h !== undefined;
+}
+function isTileText(t) {
+    return t.text !== undefined;
+}
+function isTilePath(t) {
+    return t.points !== undefined;
+}
+function isTileLine(t) {
+    return t.x1 !== undefined;
+}
 var TileLevel = /** @class */ (function () {
     function TileLevel(svgObject, inWidth, inHeight, minZoom, curZoom, maxZoom, layers) {
         this.svg = null;
@@ -41,9 +48,9 @@ var TileLevel = /** @class */ (function () {
         this.viewHeight = 0;
         this.innerWidth = 0;
         this.innerHeight = 0;
-        this.translateX = 0;
-        this.translateY = 0;
-        this.translateZ = 1;
+        this._translateX = 0;
+        this._translateY = 0;
+        this._translateZ = 1;
         this.startMouseScreenX = 0;
         this.startMouseScreenY = 0;
         this.clickX = 0;
@@ -63,8 +70,10 @@ var TileLevel = /** @class */ (function () {
         this.setupTapSize();
         this.viewWidth = this.svg.clientWidth;
         this.viewHeight = this.svg.clientHeight;
-        this.innerWidth = this.viewWidth;
-        this.innerHeight = this.viewHeight;
+        //this.innerWidth = this.viewWidth;
+        //this.innerHeight = this.viewHeight;
+        this.innerWidth = inWidth * this.tapSize;
+        this.innerHeight = inHeight * this.tapSize;
         this.mx = maxZoom;
         this.mn = minZoom;
         this.translateZ = curZoom;
@@ -99,6 +108,45 @@ var TileLevel = /** @class */ (function () {
         this.applyZoomPosition();
         this.clearUselessDetails();
     }
+    Object.defineProperty(TileLevel.prototype, "translateZ", {
+        get: function () {
+            return this._translateZ;
+        },
+        set: function (z) {
+            if (z != this._translateZ) {
+                //console.log('z',this._translateZ,'=>',z);
+                this._translateZ = z;
+            }
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(TileLevel.prototype, "translateX", {
+        get: function () {
+            return this._translateX;
+        },
+        set: function (x) {
+            if (x != this._translateX) {
+                //console.log('x',this._translateX,'=>',x);
+                this._translateX = x;
+            }
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(TileLevel.prototype, "translateY", {
+        get: function () {
+            return this._translateY;
+        },
+        set: function (y) {
+            if (y != this._translateY) {
+                //console.log('y',this._translateY,'=>',y);
+                this._translateY = y;
+            }
+        },
+        enumerable: true,
+        configurable: true
+    });
     TileLevel.prototype.dump = function () {
         console.log('dump', this);
     };
@@ -315,7 +363,8 @@ var TileLevel = /** @class */ (function () {
                 if (this.viewHeight * this.translateZ > this.innerHeight) {
                     cY = (this.viewHeight * this.translateZ - this.innerHeight) / 2;
                 }
-                if (layer.mode == layerModeOverlay) {
+                if (isLayerOverlay(layer)) {
+                    //if (layer.mode == layerModeOverlay) {
                     tz = this.translateZ;
                     tx = -this.translateX;
                     ty = -this.translateY;
@@ -323,21 +372,23 @@ var TileLevel = /** @class */ (function () {
                     cY = 0;
                 }
                 else {
-                    if (layer.mode == layerModeLockX) {
+                    if (isLayerStickLeft(layer)) {
+                        //if (layer.mode == layerModeLockX) {
                         tx = -this.translateX;
                         cX = 0;
-                        if (layer.shift) {
+                        if (layer.stickLeft) {
                             //let shiftX=layer.shiftX(this);
-                            sX = layer.shift * this.tapSize * this.translateZ;
+                            sX = layer.stickLeft * this.tapSize * this.translateZ;
                         }
                     }
                     else {
-                        if (layer.mode == layerModeLockY) {
+                        if (isLayerStickTop(layer)) {
+                            //if (layer.mode == layerModeLockY) {
                             ty = -this.translateY;
                             cY = 0;
-                            if (layer.shift) {
+                            if (layer.stickTop) {
                                 //let shiftY=layer.shiftY(this);
-                                sY = layer.shift * this.tapSize * this.translateZ;
+                                sY = layer.stickTop * this.tapSize * this.translateZ;
                                 /*}else{
                                     
                                     sY = (this.viewHeight+layer.shiftY * this.tapSize) * this.translateZ;
@@ -353,21 +404,23 @@ var TileLevel = /** @class */ (function () {
                             }*/
                         }
                         else {
-                            if (layer.mode == layerModeStickBottom) {
+                            if (isLayerStickBottom(layer)) {
+                                //if (layer.mode == layerModeStickBottom) {
                                 ty = -this.translateY;
                                 cY = 0;
                                 sY = this.viewHeight * this.translateZ;
-                                if (layer.shift) {
-                                    sY = this.viewHeight * this.translateZ - layer.shift * this.tapSize;
+                                if (layer.stickBottom) {
+                                    sY = this.viewHeight * this.translateZ - layer.stickBottom * this.tapSize;
                                 }
                             }
                             else {
-                                if (layer.mode == layerModeStickRight) {
+                                if (isLayerStickRight(layer)) {
+                                    //if (layer.mode == layerModeStickRight) {
                                     tx = -this.translateX;
                                     cX = 0;
                                     sX = this.viewWidth * this.translateZ;
-                                    if (layer.shift) {
-                                        sX = this.viewWidth * this.translateZ - layer.shift * this.tapSize;
+                                    if (layer.stickRight) {
+                                        sX = this.viewWidth * this.translateZ - layer.stickRight * this.tapSize;
                                     }
                                 }
                             }
@@ -552,11 +605,11 @@ var TileLevel = /** @class */ (function () {
         if (this.model) {
             for (var k = 0; k < this.model.length; k++) {
                 var group = this.model[k].g;
-                this.clearUselessGroups(group, this.model[k].mode);
+                this.clearUselessGroups(group, this.model[k]);
             }
         }
     };
-    TileLevel.prototype.clearUselessGroups = function (group, kind) {
+    TileLevel.prototype.clearUselessGroups = function (group, layer) {
         var x = -this.translateX;
         var y = -this.translateY;
         var w = this.svg.clientWidth * this.translateZ;
@@ -571,24 +624,29 @@ var TileLevel = /** @class */ (function () {
             cY = (this.viewHeight * this.translateZ - this.innerHeight) / 2;
             y = y - cY;
         }
-        if (kind == layerModeOverlay) {
+        if (isLayerOverlay(layer)) {
+            //if (kind == layerModeOverlay) {
             x = 0;
             y = 0;
         }
         else {
-            if (kind == layerModeLockX) {
+            if (isLayerStickLeft(layer)) {
+                //if (kind == layerModeLockX) {
                 x = 0;
             }
             else {
-                if (kind == layerModeLockY) {
+                if (isLayerStickTop(layer)) {
+                    //if (kind == layerModeLockY) {
                     y = 0;
                 }
                 else {
-                    if (kind == layerModeStickRight) {
+                    if (isLayerStickRight(layer)) {
+                        //if (kind == layerModeStickRight) {
                         x = 0;
                     }
                     else {
-                        if (kind == layerModeStickBottom) {
+                        if (isLayerStickBottom(layer)) {
+                            //if (kind == layerModeStickBottom) {
                             y = 0;
                         }
                     }
@@ -605,7 +663,7 @@ var TileLevel = /** @class */ (function () {
             }
             else {
                 if (child.localName == 'g') {
-                    this.clearUselessGroups(child, kind);
+                    this.clearUselessGroups(child, layer);
                 }
             }
         }
@@ -642,17 +700,17 @@ var TileLevel = /** @class */ (function () {
         //console.log('tileFromModel',this.model);
         if (this.model) {
             for (var k = 0; k < this.model.length; k++) {
-                var group = this.model[k].g;
-                var arr = this.model[k].definition;
+                var svggroup = this.model[k].g;
+                var arr = this.model[k].groups;
                 for (var i = 0; i < arr.length; i++) {
                     var a = arr[i];
-                    this.addGroupTile(group, a, this.model[k].mode);
+                    this.addGroupTile(svggroup, a, this.model[k]);
                 }
             }
         }
         this.valid = true;
     };
-    TileLevel.prototype.addGroupTile = function (parentGroup, definitions, layerKind) {
+    TileLevel.prototype.addGroupTile = function (parentGroup, tileGroup, layer) {
         //console.log('addGroupTile',this.translateZ,definitions);
         var x = -this.translateX;
         var y = -this.translateY;
@@ -668,60 +726,71 @@ var TileLevel = /** @class */ (function () {
             cY = (this.viewHeight * this.translateZ - this.innerHeight) / 2;
             y = y - cY;
         }
-        if (layerKind == layerModeOverlay) {
+        if (isLayerOverlay(layer)) {
+            //if (layerKind == layerModeOverlay) {
             x = 0;
             y = 0;
         }
         else {
-            if (layerKind == layerModeLockX) {
+            if (isLayerStickLeft(layer)) {
+                //if (layerKind == layerModeLockX) {
                 x = 0;
             }
             else {
-                if (layerKind == layerModeLockY) {
+                if (isLayerStickTop(layer)) {
+                    //if (layerKind == layerModeLockY) {
                     y = 0;
                 }
                 else {
-                    if (layerKind == layerModeStickRight) {
+                    if (isLayerStickRight(layer)) {
+                        //if (layerKind == layerModeStickRight) {
                         x = 0;
                     }
                     else {
-                        if (layerKind == layerModeStickBottom) {
+                        if (isLayerStickBottom(layer)) {
+                            //if (layerKind == layerModeStickBottom) {
                             y = 0;
                         }
                     }
                 }
             }
         }
-        if (definitions.z[0] <= this.translateZ && definitions.z[1] > this.translateZ) {
+        //if (definitions.z[0] <= this.translateZ && definitions.z[1] > this.translateZ) {
+        if (tileGroup.showZoom <= this.translateZ && tileGroup.hideZoom > this.translateZ) {
             //console.log(this.collision(definitions.x * this.tapSize, definitions.y * this.tapSize, definitions.w * this.tapSize, definitions.h * this.tapSize, x, y, w, h));
-            if (this.collision(definitions.x * this.tapSize, definitions.y * this.tapSize, definitions.w * this.tapSize, definitions.h * this.tapSize //
+            if (this.collision(tileGroup.x * this.tapSize, tileGroup.y * this.tapSize, tileGroup.w * this.tapSize, tileGroup.h * this.tapSize //
             , x, y, w, h)) {
-                var xg = this.childExists(parentGroup, definitions.id);
+                var xg = this.childExists(parentGroup, tileGroup.id);
                 //console.log(xg);
                 if (xg) {
-                    for (var n = 0; n < definitions.sub.length; n++) {
-                        var d = definitions.sub[n];
-                        if (d.draw == 'group') {
-                            this.addElement(xg, d, layerKind);
+                    //if (isTileGroup(tileGroup)) {
+                    for (var n = 0; n < tileGroup.content.length; n++) {
+                        var d = tileGroup.content[n];
+                        //if (d.draw == 'group') {
+                        if (isTileGroup(d)) {
+                            this.addElement(xg, d, layer);
                         }
                     }
+                    //}
                 }
                 else {
                     var g = document.createElementNS(this.svgns, 'g');
                     //console.log(parentGroup,g);
-                    g.id = definitions.id;
+                    g.id = tileGroup.id;
                     //let gg = g as any;
-                    g.watchX = definitions.x * this.tapSize;
-                    g.watchY = definitions.y * this.tapSize;
-                    g.watchW = definitions.w * this.tapSize;
-                    g.watchH = definitions.h * this.tapSize;
+                    g.watchX = tileGroup.x * this.tapSize;
+                    g.watchY = tileGroup.y * this.tapSize;
+                    g.watchW = tileGroup.w * this.tapSize;
+                    g.watchH = tileGroup.h * this.tapSize;
                     parentGroup.appendChild(g);
-                    g.minZoom = definitions.z[0];
-                    g.maxZoom = definitions.z[1];
-                    for (var n = 0; n < definitions.sub.length; n++) {
-                        var d = definitions.sub[n];
-                        this.addElement(g, d, layerKind);
+                    g.minZoom = tileGroup.showZoom;
+                    g.maxZoom = tileGroup.hideZoom;
+                    //if (isTileGroup(tileGroup)) {
+                    for (var n = 0; n < tileGroup.content.length; n++) {
+                        var d = tileGroup.content[n];
+                        this.addElement(g, d, layer);
                     }
+                    //}
                 }
             }
         }
@@ -739,23 +808,29 @@ var TileLevel = /** @class */ (function () {
         }
         return null;
     };
-    TileLevel.prototype.addElement = function (g, d, layerKind) {
+    TileLevel.prototype.addElement = function (g, d, layer) {
         //console.log('addElement',d);
         var element = null;
-        if (d.draw == 'rectangle') {
+        //if (d.draw == 'rectangle') {
+        if (isTileRectangle(d)) {
+            //let r=d as TileRectangle;
             element = this.tileRectangle(g, d.x * this.tapSize, d.y * this.tapSize, d.w * this.tapSize, d.h * this.tapSize, d.rx * this.tapSize, d.ry * this.tapSize, d.css);
         }
-        if (d.draw == 'text') {
+        //if (d.draw == 'text') {
+        if (isTileText(d)) {
             element = this.tileText(g, d.x * this.tapSize, d.y * this.tapSize, d.text, d.css);
         }
-        if (d.draw == 'path') {
+        //if (d.draw == 'path') {
+        if (isTilePath(d)) {
             element = this.tilePath(g, d.x * this.tapSize, d.y * this.tapSize, d.scale, d.points, d.css);
         }
-        if (d.draw == 'line') {
+        //if (d.draw == 'line') {
+        if (isTileLine(d)) {
             element = this.tileLine(g, d.x1 * this.tapSize, d.y1 * this.tapSize, d.x2 * this.tapSize, d.y2 * this.tapSize, d.css);
         }
-        if (d.draw == 'group') {
-            this.addGroupTile(g, d, layerKind);
+        //if (d.draw == 'group') {
+        if (isTileGroup(d)) {
+            this.addGroupTile(g, d, layer);
         }
         if (element) {
             if (d.action) {
@@ -862,14 +937,20 @@ var TileLevel = /** @class */ (function () {
                     if (!(definition[i].id)) {
                         definition[i].id = 'id' + Math.floor(Math.random() * 1000000000);
                     }
-                    this.autoID(definition[i].sub);
+                    //let tt:TileGroup|TileDefinition=definition[i];
+                    //this.autoID(tt.sub);
+                    if (isTileGroup(definition[i])) {
+                        var group = definition[i];
+                        this.autoID(group.content);
+                    }
+                    //this.autoID(definition[i].sub);
                 }
             }
         }
     };
     TileLevel.prototype.setModel = function (layers) {
         for (var i = 0; i < layers.length; i++) {
-            this.autoID(layers[i].definition);
+            this.autoID(layers[i].groups);
         }
         //console.log(layers);
         this.model = layers;

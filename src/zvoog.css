@@ -1,10 +1,59 @@
 .onecm1 {
 	background-color: #557799;
+	fill: #557799;
 	width: 1cm;
 	height: 1cm;
 }
-.redbackground {
+.testred {
 	fill: #ff0000;
+}
+.testgreen {
+	fill: #00ff00;
+}
+.testblue {
+	fill: #0000ff;
+}
+.testpurple {
+	fill: #ff00ff;
+}
+.testyellow {
+	fill: #ffff00;
+}
+.testline {
+	stroke: #00ff00;
+	stroke-width:20cm;
+}
+.testtext500 {
+	fill: #ff00ff;
+	font-size:500cm;
+}
+.testtext300 {
+	fill: #00ff00;
+	font-size:300cm;
+}
+.testtext200 {
+	fill: #ffff00;
+	font-size:200cm;
+}
+.testtext100 {
+	fill: #ffff00;
+	font-size:100cm;
+}
+.testtext10 {
+	fill: #ffff00;
+	font-size:10cm;
+}
+.testtext1 {
+	fill: #ffff00;
+	font-size:1cm;
+}
+.testtext05 {
+	fill: #ffff00;
+	font-size:0.5cm;
+}
+.testtext01 {
+	fill: #ffff00;
+	font-size:0.1cm;
 }
 html {
 	width:100%;
