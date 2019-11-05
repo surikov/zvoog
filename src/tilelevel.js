@@ -1,5 +1,16 @@
 console.log('tilelevel v2.02');
 var _tileLevel = null;
+/*
+let layerModeLockX: string = 'lockX';
+let layerModeNormal: string = 'normal';
+let layerModeOverlay: string = 'overlay';
+let layerModeLockY: string = 'lockY';
+let layerModeStickBottom: string = 'stickBottom';
+let layerModeStickRight: string = 'stickRight';
+*/
+function rid() {
+    return 'id' + Math.floor(Math.random() * 1000000000);
+}
 function isLayerNormal(t) {
     return t.stickLeft === undefined
         && t.stickTop === undefined
@@ -655,8 +666,10 @@ var TileLevel = /** @class */ (function () {
         }
         if (group)
             this.msEdgeHook(group);
+        //console.log('this.translateZ',this.translateZ);
         for (var i = 0; i < group.children.length; i++) {
             var child = group.children[i];
+            //console.log('check',child.minZoom,child.maxZoom,child);
             if (this.outOfWatch(child, x, y, w, h) || child.minZoom > this.translateZ || child.maxZoom <= this.translateZ) {
                 group.removeChild(child);
                 i--;
@@ -758,7 +771,7 @@ var TileLevel = /** @class */ (function () {
         //if (definitions.z[0] <= this.translateZ && definitions.z[1] > this.translateZ) {
         if (tileGroup.showZoom <= this.translateZ && tileGroup.hideZoom > this.translateZ) {
             //console.log(this.collision(definitions.x * this.tapSize, definitions.y * this.tapSize, definitions.w * this.tapSize, definitions.h * this.tapSize, x, y, w, h));
-            if (this.collision(tileGroup.x * this.tapSize, tileGroup.y * this.tapSize, tileGroup.w * this.tapSize, tileGroup.h * this.tapSize //
+            if (this.collision(tileGroup.xx * this.tapSize, tileGroup.yy * this.tapSize, tileGroup.ww * this.tapSize, tileGroup.hh * this.tapSize //
             , x, y, w, h)) {
                 var xg = this.childExists(parentGroup, tileGroup.id);
                 //console.log(xg);
@@ -778,10 +791,10 @@ var TileLevel = /** @class */ (function () {
                     //console.log(parentGroup,g);
                     g.id = tileGroup.id;
                     //let gg = g as any;
-                    g.watchX = tileGroup.x * this.tapSize;
-                    g.watchY = tileGroup.y * this.tapSize;
-                    g.watchW = tileGroup.w * this.tapSize;
-                    g.watchH = tileGroup.h * this.tapSize;
+                    g.watchX = tileGroup.xx * this.tapSize;
+                    g.watchY = tileGroup.yy * this.tapSize;
+                    g.watchW = tileGroup.ww * this.tapSize;
+                    g.watchH = tileGroup.hh * this.tapSize;
                     parentGroup.appendChild(g);
                     g.minZoom = tileGroup.showZoom;
                     g.maxZoom = tileGroup.hideZoom;
@@ -809,7 +822,6 @@ var TileLevel = /** @class */ (function () {
         return null;
     };
     TileLevel.prototype.addElement = function (g, d, layer) {
-        //console.log('addElement',d);
         var element = null;
         //if (d.draw == 'rectangle') {
         if (isTileRectangle(d)) {
@@ -833,6 +845,10 @@ var TileLevel = /** @class */ (function () {
             this.addGroupTile(g, d, layer);
         }
         if (element) {
+            //console.log('add',d.showZoom,d.hideZoom,d,element);
+            //element.minZoom = d.showZoom;
+            //element.maxZoom = d.hideZoom;
+            //console.log('addElement',this.translateZ,d,element);
             if (d.action) {
                 //let e:any = element as any;
                 //let e:TileSVGElement = element;
@@ -935,7 +951,9 @@ var TileLevel = /** @class */ (function () {
             if (definition.length) {
                 for (var i = 0; i < definition.length; i++) {
                     if (!(definition[i].id)) {
-                        definition[i].id = 'id' + Math.floor(Math.random() * 1000000000);
+                        //definition[i].id = 'id' + Math.floor(Math.random() * 1000000000);
+                        definition[i].id = rid();
+                        //console.log('/',definition[i]);
                     }
                     //let tt:TileGroup|TileDefinition=definition[i];
                     //this.autoID(tt.sub);

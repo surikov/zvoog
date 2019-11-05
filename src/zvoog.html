@@ -8,12 +8,42 @@
 	</head>
 	<body>
 		<svg id="contentSVG" class='contentSVG' viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1">
+			<defs>
+				<pattern id="tileImg8" patternUnits="userSpaceOnUse" width="2560" height="2240">
+					<image xlink:href="img/tile.png" x="0" y="0" width="320" height="280" transform="scale(8)"/>
+				</pattern>
+				<pattern id="tileImg4" patternUnits="userSpaceOnUse" width="1280" height="1120">
+				  <image xlink:href="img/tile.png" x="0" y="0" width="320" height="280" transform="scale(4)"/>
+				</pattern>
+				<pattern id="tileImg2" patternUnits="userSpaceOnUse" width="640" height="560">
+					<image xlink:href="img/tile.png" x="0" y="0" width="320" height="280" transform="scale(2)"/>
+				  </pattern>
+				<pattern id="tileImg1" patternUnits="userSpaceOnUse" width="320" height="280">
+					<image xlink:href="img/tile.png" x="0" y="0" width="320" height="280" transform="scale(1)"/>
+				</pattern>
+				<pattern id="tileImg05" patternUnits="userSpaceOnUse" width="160" height="140">
+					<image xlink:href="img/tile.png" x="0" y="0" width="320" height="280" transform="scale(0.5)"/>
+				</pattern>
+				<pattern id="tileImg25" patternUnits="userSpaceOnUse" width="80" height="70">
+						<image xlink:href="img/tile.png" x="0" y="0" width="320" height="280" transform="scale(0.25)"/>
+					</pattern>
+				<pattern id="tileImg125" patternUnits="userSpaceOnUse" width="40" height="35">
+							<image xlink:href="img/tile.png" x="0" y="0" width="320" height="280" transform="scale(0.125)"/>
+						</pattern>
+				<pattern id="tileImg625" patternUnits="userSpaceOnUse" width="20" height="17.5">
+								<image xlink:href="img/tile.png" x="0" y="0" width="320" height="280" transform="scale(0.0625)"/>
+							</pattern>
+			</defs>
 			<g id='backGroundGroup'></g>
-			<g id='overlayGroup'></g>
+			<g id='gridGroup'></g>
 			<g id='stickLeftGroup'></g>
 			<g id='stickRightGroup'></g>
 			<g id='stickTopGroup'></g>
 			<g id='stickBottomGroup'></g>
+			<g id='shadowGroup'></g>
+			<g id='contentGroup'></g>
+			<g id='buttonsGroup'></g>
+			<g id='overlayGroup'></g>
 		</svg>
 		<script>
 			composeUI();

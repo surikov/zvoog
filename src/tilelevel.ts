@@ -8,87 +8,79 @@ let layerModeLockY: string = 'lockY';
 let layerModeStickBottom: string = 'stickBottom';
 let layerModeStickRight: string = 'stickRight';
 */
-type TileZoom ={
-	x: number ,
-	y: number ,
-	z: number 
+function rid() {
+	return 'id' + Math.floor(Math.random() * 1000000000);
 }
-type TilePoint ={
-	x: number ,
-	y: number 
+type TileZoom = {
+	x: number,
+	y: number,
+	z: number
 }
-type TileModelLayer ={
-	g: SVGElement ,
+type TilePoint = {
+	x: number,
+	y: number
+}
+type TileModelLayer = {
+	g: SVGElement,
 	//mode: string = 'normal';
 	//shift: number;
 	//viceversa: boolean;
 	//definition: TileDefinition[] = [];
-	groups: TileGroup[] 
+	groups: TileGroup[]
 }
-function isLayerNormal(t: TileModelLayer|TileLayerStickLeft|TileLayerStickTop|TileLayerStickBottom|TileLayerStickRight|TileLayerOverlay): t is TileModelLayer {
+function isLayerNormal(t: TileModelLayer | TileLayerStickLeft | TileLayerStickTop | TileLayerStickBottom | TileLayerStickRight | TileLayerOverlay): t is TileModelLayer {
 	return (t as any).stickLeft === undefined
-	&& (t as any).stickTop === undefined
-	&& (t as any).stickBottom === undefined
-	&& (t as any).stickRight === undefined
-	&& (t as any).overlay === undefined
-	;
+		&& (t as any).stickTop === undefined
+		&& (t as any).stickBottom === undefined
+		&& (t as any).stickRight === undefined
+		&& (t as any).overlay === undefined
+		;
 }
-type TileLayerStickLeft={
-	stickLeft:number
-}&TileModelLayer;
-function isLayerStickLeft(t: TileModelLayer|TileLayerStickLeft|TileLayerStickTop|TileLayerStickBottom|TileLayerStickRight|TileLayerOverlay): t is TileLayerStickLeft {
+type TileLayerStickLeft = {
+	stickLeft: number
+} & TileModelLayer;
+function isLayerStickLeft(t: TileModelLayer | TileLayerStickLeft | TileLayerStickTop | TileLayerStickBottom | TileLayerStickRight | TileLayerOverlay): t is TileLayerStickLeft {
 	return (t as TileLayerStickLeft).stickLeft !== undefined;
 }
-type TileLayerStickTop={
-	stickTop:number
-}&TileModelLayer;
-function isLayerStickTop(t: TileModelLayer|TileLayerStickLeft|TileLayerStickTop|TileLayerStickBottom|TileLayerStickRight|TileLayerOverlay): t is TileLayerStickTop {
+type TileLayerStickTop = {
+	stickTop: number
+} & TileModelLayer;
+function isLayerStickTop(t: TileModelLayer | TileLayerStickLeft | TileLayerStickTop | TileLayerStickBottom | TileLayerStickRight | TileLayerOverlay): t is TileLayerStickTop {
 	return (t as TileLayerStickTop).stickTop !== undefined;
 }
-type TileLayerStickBottom={
-	stickBottom:number
-}&TileModelLayer;
-function isLayerStickBottom(t: TileModelLayer|TileLayerStickLeft|TileLayerStickTop|TileLayerStickBottom|TileLayerStickRight|TileLayerOverlay): t is TileLayerStickBottom {
+type TileLayerStickBottom = {
+	stickBottom: number
+} & TileModelLayer;
+function isLayerStickBottom(t: TileModelLayer | TileLayerStickLeft | TileLayerStickTop | TileLayerStickBottom | TileLayerStickRight | TileLayerOverlay): t is TileLayerStickBottom {
 	return (t as TileLayerStickBottom).stickBottom !== undefined;
 }
-type TileLayerStickRight={
-	stickRight:number
-}&TileModelLayer;
-function isLayerStickRight(t: TileModelLayer|TileLayerStickLeft|TileLayerStickTop|TileLayerStickBottom|TileLayerStickRight|TileLayerOverlay): t is TileLayerStickRight {
+type TileLayerStickRight = {
+	stickRight: number
+} & TileModelLayer;
+function isLayerStickRight(t: TileModelLayer | TileLayerStickLeft | TileLayerStickTop | TileLayerStickBottom | TileLayerStickRight | TileLayerOverlay): t is TileLayerStickRight {
 	return (t as TileLayerStickRight).stickRight !== undefined;
 }
-type TileLayerOverlay={
-	overlay:number
-}&TileModelLayer;
-function isLayerOverlay(t: TileModelLayer|TileLayerStickLeft|TileLayerStickTop|TileLayerStickBottom|TileLayerStickRight|TileLayerOverlay): t is TileLayerOverlay {
+type TileLayerOverlay = {
+	overlay: number
+} & TileModelLayer;
+function isLayerOverlay(t: TileModelLayer | TileLayerStickLeft | TileLayerStickTop | TileLayerStickBottom | TileLayerStickRight | TileLayerOverlay): t is TileLayerOverlay {
 	return (t as TileLayerOverlay).overlay !== undefined;
 }
 type TileBaseDefinition = {
-	id: string// = 'id'+Math.floor(Math.random()*1000000000)
-	//, draw: string
+	id: string | undefined// = 'id'+Math.floor(Math.random()*1000000000)
 	, css: string
-
 	, action: (x: number, y: number) => void
-	//, z: number[]
-	,showZoom:number
-	,hideZoom:number
-/*
-	, x1: number
-	, x2: number
-	, y1: number
-	, y2: number
-*/
-
-	//, sub: TileDefinition[]
 };
 type TileGroup = {
-	x: number
-	, y: number
-	, w: number
-	, h: number
-	,content: (TileGroup|TileRectangle|TileText|TilePath|TileLine)[]
+	xx: number
+	, yy: number
+	, ww: number
+	, hh: number
+	, showZoom: number
+	, hideZoom: number
+	, content: (TileGroup | TileRectangle | TileText | TilePath | TileLine)[]
 } & TileBaseDefinition;
-function isTileGroup(t: TileGroup|TileRectangle|TileText|TilePath|TileLine): t is TileGroup {
+function isTileGroup(t: TileGroup | TileRectangle | TileText | TilePath | TileLine): t is TileGroup {
 	return (t as TileGroup).content !== undefined;
 }
 type TileRectangle = {
@@ -99,7 +91,7 @@ type TileRectangle = {
 	, rx: number
 	, ry: number
 } & TileBaseDefinition;
-function isTileRectangle(t: TileGroup|TileRectangle|TileText|TilePath|TileLine): t is TileRectangle {
+function isTileRectangle(t: TileGroup | TileRectangle | TileText | TilePath | TileLine): t is TileRectangle {
 	return (t as TileRectangle).h !== undefined;
 }
 type TileText = {
@@ -107,7 +99,7 @@ type TileText = {
 	, y: number
 	, text: string
 } & TileBaseDefinition;
-function isTileText(t: TileGroup|TileRectangle|TileText|TilePath|TileLine): t is TileText {
+function isTileText(t: TileGroup | TileRectangle | TileText | TilePath | TileLine): t is TileText {
 	return (t as TileText).text !== undefined;
 }
 type TilePath = {
@@ -116,7 +108,7 @@ type TilePath = {
 	, scale: number
 	, points: string//path definition
 } & TileBaseDefinition;
-function isTilePath(t: TileGroup|TileRectangle|TileText|TilePath|TileLine): t is TilePath {
+function isTilePath(t: TileGroup | TileRectangle | TileText | TilePath | TileLine): t is TilePath {
 	return (t as TilePath).points !== undefined;
 }
 type TileLine = {
@@ -125,7 +117,7 @@ type TileLine = {
 	, y1: number
 	, y2: number
 } & TileBaseDefinition;
-function isTileLine(t: TileGroup|TileRectangle|TileText|TilePath|TileLine): t is TileLine {
+function isTileLine(t: TileGroup | TileRectangle | TileText | TilePath | TileLine): t is TileLine {
 	return (t as TileLine).x1 !== undefined;
 }
 type TileSVGElement = SVGElement & {
@@ -451,7 +443,7 @@ class TileLevel {
 					cY = (this.viewHeight * this.translateZ - this.innerHeight) / 2;
 				}
 				if (isLayerOverlay(layer)) {
-				//if (layer.mode == layerModeOverlay) {
+					//if (layer.mode == layerModeOverlay) {
 					tz = this.translateZ;
 					tx = -this.translateX;
 					ty = -this.translateY;
@@ -459,7 +451,7 @@ class TileLevel {
 					cY = 0;
 				} else {
 					if (isLayerStickLeft(layer)) {
-					//if (layer.mode == layerModeLockX) {
+						//if (layer.mode == layerModeLockX) {
 						tx = -this.translateX;
 						cX = 0;
 						if (layer.stickLeft) {
@@ -468,7 +460,7 @@ class TileLevel {
 						}
 					} else {
 						if (isLayerStickTop(layer)) {
-						//if (layer.mode == layerModeLockY) {
+							//if (layer.mode == layerModeLockY) {
 							ty = -this.translateY;
 							cY = 0;
 							if (layer.stickTop) {
@@ -492,7 +484,7 @@ class TileLevel {
 							}*/
 						} else {
 							if (isLayerStickBottom(layer)) {
-							//if (layer.mode == layerModeStickBottom) {
+								//if (layer.mode == layerModeStickBottom) {
 								ty = -this.translateY;
 								cY = 0;
 								sY = this.viewHeight * this.translateZ;
@@ -500,9 +492,9 @@ class TileLevel {
 									sY = this.viewHeight * this.translateZ - layer.stickBottom * this.tapSize;
 								}
 							} else {
-								
+
 								if (isLayerStickRight(layer)) {
-								//if (layer.mode == layerModeStickRight) {
+									//if (layer.mode == layerModeStickRight) {
 									tx = -this.translateX;
 									cX = 0;
 									sX = this.viewWidth * this.translateZ;
@@ -685,7 +677,7 @@ class TileLevel {
 			}
 		}
 	}
-	clearUselessGroups(group: SVGElement, layer: TileModelLayer|TileLayerStickLeft|TileLayerStickTop|TileLayerStickBottom|TileLayerStickRight|TileLayerOverlay) {
+	clearUselessGroups(group: SVGElement, layer: TileModelLayer | TileLayerStickLeft | TileLayerStickTop | TileLayerStickBottom | TileLayerStickRight | TileLayerOverlay) {
 		let x: number = -this.translateX;
 		let y: number = -this.translateY;
 		let w: number = this.svg.clientWidth * this.translateZ;
@@ -700,25 +692,25 @@ class TileLevel {
 			cY = (this.viewHeight * this.translateZ - this.innerHeight) / 2;
 			y = y - cY;
 		}
-		if(isLayerOverlay(layer)){
-		//if (kind == layerModeOverlay) {
+		if (isLayerOverlay(layer)) {
+			//if (kind == layerModeOverlay) {
 			x = 0;
 			y = 0;
 		} else {
-			if(isLayerStickLeft(layer)){
-			//if (kind == layerModeLockX) {
+			if (isLayerStickLeft(layer)) {
+				//if (kind == layerModeLockX) {
 				x = 0;
 			} else {
-				if(isLayerStickTop(layer)){
-				//if (kind == layerModeLockY) {
+				if (isLayerStickTop(layer)) {
+					//if (kind == layerModeLockY) {
 					y = 0;
 				} else {
-					if(isLayerStickRight(layer)){
-					//if (kind == layerModeStickRight) {
+					if (isLayerStickRight(layer)) {
+						//if (kind == layerModeStickRight) {
 						x = 0;
 					} else {
-						if(isLayerStickBottom(layer)){
-						//if (kind == layerModeStickBottom) {
+						if (isLayerStickBottom(layer)) {
+							//if (kind == layerModeStickBottom) {
 							y = 0;
 						}
 					}
@@ -726,8 +718,10 @@ class TileLevel {
 			}
 		}
 		if (group) this.msEdgeHook(group);
+		//console.log('this.translateZ',this.translateZ);
 		for (let i: number = 0; i < group.children.length; i++) {
 			let child: TileSVGElement = group.children[i] as TileSVGElement;
+			//console.log('check',child.minZoom,child.maxZoom,child);
 			if (this.outOfWatch(child, x, y, w, h) || child.minZoom > this.translateZ || child.maxZoom <= this.translateZ) {
 				group.removeChild(child);
 				i--;
@@ -778,7 +772,7 @@ class TileLevel {
 		}
 		this.valid = true;
 	}
-	addGroupTile(parentGroup: SVGElement, tileGroup: TileGroup, layer: TileModelLayer|TileLayerStickLeft|TileLayerStickTop|TileLayerStickBottom|TileLayerStickRight|TileLayerOverlay) {
+	addGroupTile(parentGroup: SVGElement, tileGroup: TileGroup, layer: TileModelLayer | TileLayerStickLeft | TileLayerStickTop | TileLayerStickBottom | TileLayerStickRight | TileLayerOverlay) {
 		//console.log('addGroupTile',this.translateZ,definitions);
 		let x: number = -this.translateX;
 		let y: number = -this.translateY;
@@ -794,25 +788,25 @@ class TileLevel {
 			cY = (this.viewHeight * this.translateZ - this.innerHeight) / 2;
 			y = y - cY;
 		}
-		if(isLayerOverlay(layer)){
-		//if (layerKind == layerModeOverlay) {
+		if (isLayerOverlay(layer)) {
+			//if (layerKind == layerModeOverlay) {
 			x = 0;
 			y = 0;
 		} else {
-			if(isLayerStickLeft(layer)){
-			//if (layerKind == layerModeLockX) {
+			if (isLayerStickLeft(layer)) {
+				//if (layerKind == layerModeLockX) {
 				x = 0;
 			} else {
-				if(isLayerStickTop(layer)){
-				//if (layerKind == layerModeLockY) {
+				if (isLayerStickTop(layer)) {
+					//if (layerKind == layerModeLockY) {
 					y = 0;
 				} else {
-					if(isLayerStickRight(layer)){
-					//if (layerKind == layerModeStickRight) {
+					if (isLayerStickRight(layer)) {
+						//if (layerKind == layerModeStickRight) {
 						x = 0;
 					} else {
-						if(isLayerStickBottom(layer)){
-						//if (layerKind == layerModeStickBottom) {
+						if (isLayerStickBottom(layer)) {
+							//if (layerKind == layerModeStickBottom) {
 							y = 0;
 						}
 					}
@@ -823,37 +817,40 @@ class TileLevel {
 		//if (definitions.z[0] <= this.translateZ && definitions.z[1] > this.translateZ) {
 		if (tileGroup.showZoom <= this.translateZ && tileGroup.hideZoom > this.translateZ) {
 			//console.log(this.collision(definitions.x * this.tapSize, definitions.y * this.tapSize, definitions.w * this.tapSize, definitions.h * this.tapSize, x, y, w, h));
-			if (this.collision(tileGroup.x * this.tapSize, tileGroup.y * this.tapSize, tileGroup.w * this.tapSize, tileGroup.h * this.tapSize //
+			if (this.collision(tileGroup.xx * this.tapSize
+				, tileGroup.yy * this.tapSize
+				, tileGroup.ww * this.tapSize
+				, tileGroup.hh * this.tapSize //
 				, x, y, w, h)) {
 				let xg: SVGElement = this.childExists(parentGroup, tileGroup.id);
 				//console.log(xg);
 				if (xg) {
 					//if (isTileGroup(tileGroup)) {
-						for (let n = 0; n < tileGroup.content.length; n++) {
-							let d = tileGroup.content[n];
-							//if (d.draw == 'group') {
-							if (isTileGroup(d)){
-								this.addElement(xg, d, layer);
-							}
+					for (let n = 0; n < tileGroup.content.length; n++) {
+						let d = tileGroup.content[n];
+						//if (d.draw == 'group') {
+						if (isTileGroup(d)) {
+							this.addElement(xg, d, layer);
 						}
+					}
 					//}
 				} else {
 					let g: TileSVGElement = document.createElementNS(this.svgns, 'g') as TileSVGElement;
 					//console.log(parentGroup,g);
 					g.id = tileGroup.id;
 					//let gg = g as any;
-					g.watchX = tileGroup.x * this.tapSize;
-					g.watchY = tileGroup.y * this.tapSize;
-					g.watchW = tileGroup.w * this.tapSize;
-					g.watchH = tileGroup.h * this.tapSize;
+					g.watchX = tileGroup.xx * this.tapSize;
+					g.watchY = tileGroup.yy * this.tapSize;
+					g.watchW = tileGroup.ww * this.tapSize;
+					g.watchH = tileGroup.hh * this.tapSize;
 					parentGroup.appendChild(g);
 					g.minZoom = tileGroup.showZoom;
 					g.maxZoom = tileGroup.hideZoom;
 					//if (isTileGroup(tileGroup)) {
-						for (let n = 0; n < tileGroup.content.length; n++) {
-							let d = tileGroup.content[n];
-							this.addElement(g, d, layer);
-						}
+					for (let n = 0; n < tileGroup.content.length; n++) {
+						let d = tileGroup.content[n];
+						this.addElement(g, d, layer);
+					}
 					//}
 				}
 			}
@@ -871,31 +868,35 @@ class TileLevel {
 		}
 		return null;
 	}
-	addElement(g: SVGElement, d: TileGroup|TileRectangle|TileText|TilePath|TileLine, layer: TileModelLayer|TileLayerStickLeft|TileLayerStickTop|TileLayerStickBottom|TileLayerStickRight|TileLayerOverlay) {
-		//console.log('addElement',d);
+	addElement(g: SVGElement, d: TileGroup | TileRectangle | TileText | TilePath | TileLine, layer: TileModelLayer | TileLayerStickLeft | TileLayerStickTop | TileLayerStickBottom | TileLayerStickRight | TileLayerOverlay) {
+		
 		let element: TileSVGElement = null;
 		//if (d.draw == 'rectangle') {
-		if(isTileRectangle(d)){
+		if (isTileRectangle(d)) {
 			//let r=d as TileRectangle;
 			element = this.tileRectangle(g, d.x * this.tapSize, d.y * this.tapSize, d.w * this.tapSize, d.h * this.tapSize, d.rx * this.tapSize, d.ry * this.tapSize, d.css);
 		}
 		//if (d.draw == 'text') {
-		if(isTileText(d)){
+		if (isTileText(d)) {
 			element = this.tileText(g, d.x * this.tapSize, d.y * this.tapSize, d.text, d.css);
 		}
 		//if (d.draw == 'path') {
-		if(isTilePath(d)){
+		if (isTilePath(d)) {
 			element = this.tilePath(g, d.x * this.tapSize, d.y * this.tapSize, d.scale, d.points, d.css);
 		}
 		//if (d.draw == 'line') {
-		if(isTileLine(d)){
+		if (isTileLine(d)) {
 			element = this.tileLine(g, d.x1 * this.tapSize, d.y1 * this.tapSize, d.x2 * this.tapSize, d.y2 * this.tapSize, d.css);
 		}
 		//if (d.draw == 'group') {
-		if(isTileGroup(d)){
+		if (isTileGroup(d)) {
 			this.addGroupTile(g, d, layer);
 		}
 		if (element) {
+			//console.log('add',d.showZoom,d.hideZoom,d,element);
+			//element.minZoom = d.showZoom;
+			//element.maxZoom = d.hideZoom;
+			//console.log('addElement',this.translateZ,d,element);
 			if (d.action) {
 				//let e:any = element as any;
 				//let e:TileSVGElement = element;
@@ -992,12 +993,15 @@ class TileLevel {
 			group.removeChild(group.children[0]);
 		}
 	}
-	autoID(definition: (TileGroup|TileRectangle|TileText|TilePath|TileLine)[]) {
+	autoID(definition: (TileGroup | TileRectangle | TileText | TilePath | TileLine)[]) {
 		if (definition) {
 			if (definition.length) {
 				for (let i: number = 0; i < definition.length; i++) {
+
 					if (!(definition[i].id)) {
-						definition[i].id = 'id' + Math.floor(Math.random() * 1000000000);
+						//definition[i].id = 'id' + Math.floor(Math.random() * 1000000000);
+						definition[i].id = rid();
+						//console.log('/',definition[i]);
 					}
 					//let tt:TileGroup|TileDefinition=definition[i];
 					//this.autoID(tt.sub);

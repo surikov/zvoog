@@ -66,10 +66,90 @@ body {
 	height:100%;
 	margin:0px;
 	padding:0px;
+	background-image2: url("img/tile.png");
 }
 .contentSVG {
 	width:100%;
 	height:100%;
 	margin:0px;
 	padding:0px;
+}
+.zvoogBackgroundFill{
+	fill: #ecf2f8;
+	
+}
+.zvoogTile8{
+	fill:url(#tileImg8)
+}
+.zvoogTile4{
+	fill:url(#tileImg4)
+}
+.zvoogTile2{
+	fill:url(#tileImg2)
+}
+.zvoogTile1{
+	fill:url(#tileImg1)
+}
+.zvoogTile05{
+	fill:url(#tileImg05)
+}
+.zvoogTile25{
+	fill:url(#tileImg25)
+}
+.zvoogTile125{
+	fill:url(#tileImg125)
+}
+.zvoogTile625{
+	fill:url(#tileImg625)
+}
+.zvoogBackgroundSquare{
+	fill: rgb(248, 232, 232);
+}
+.zvoogText256 {
+	fill: #d8d8f0;
+	font-size:256cm;
+}
+.zvoogText128 {
+	fill: #d8d8f0;
+	font-size:128cm;
+}
+.zvoogText64 {
+	fill: #d8d8f0;
+	font-size:64cm;
+}
+.zvoogText32 {
+	fill: #d8d8f0;
+	font-size:32cm;
+}
+.zvoogText16 {
+	fill: #d8d8f0;
+	font-size:16cm;
+}
+.zvoogText8 {
+	fill: #d8d8f0;
+	font-size:8cm;
+}
+.zvoogText4 {
+	fill: #d8d8f0;
+	font-size:4cm;
+}
+.zvoogText2 {
+	fill: #d8d8f0;
+	font-size:2cm;
+}
+.zvoogText1 {
+	fill: #d8d8f0;
+	font-size:1cm;
+}
+.zvoogText05 {
+	fill: #d8d8f0;
+	font-size:0.5cm;
+}
+.zvoogText025 {
+	fill: #d8d8f0;
+	font-size:0.25cm;
+}
+.zvoogText0125 {
+	fill: #d8d8f0;
+	font-size:0.125cm;
 }
