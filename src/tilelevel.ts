@@ -67,9 +67,9 @@ function isLayerOverlay(t: TileModelLayer | TileLayerStickLeft | TileLayerStickT
 	return (t as TileLayerOverlay).overlay !== undefined;
 }
 type TileBaseDefinition = {
-	id: string | undefined// = 'id'+Math.floor(Math.random()*1000000000)
-	, css: string
-	, action: (x: number, y: number) => void
+	id?: string// = 'id'+Math.floor(Math.random()*1000000000)
+	, css?: string// string
+	, action?: (x: number, y: number) => void | undefined
 };
 type TileGroup = {
 	xx: number
@@ -88,8 +88,8 @@ type TileRectangle = {
 	, y: number
 	, w: number
 	, h: number
-	, rx: number
-	, ry: number
+	, rx?: number
+	, ry?: number
 } & TileBaseDefinition;
 function isTileRectangle(t: TileGroup | TileRectangle | TileText | TilePath | TileLine): t is TileRectangle {
 	return (t as TileRectangle).h !== undefined;

@@ -1,5 +1,7 @@
 console.log('zvoog v2.02');
 //tsc --target es5 tilelevel.ts zvoog.ts
+function addZoomItem() {
+}
 function composeUI() {
     console.log('composeUI');
     var layers = [];
@@ -114,7 +116,21 @@ function composeUI() {
     var bgcontent = [];
     layers.push({
         g: document.getElementById('backGroundGroup'),
-        groups: [{ id: '', css: '', xx: 0, yy: 0, ww: 200 * 32 * note32th120width, hh: (128 + 2) * noteLineHeight, action: null, showZoom: 0.1, hideZoom: 1001, content: bgcontent }]
+        groups: [{ xx: 0, yy: 0, ww: 200 * 32 * note32th120width, hh: (128 + 2) * noteLineHeight,
+                action: null, showZoom: 0.1, hideZoom: 1001,
+                content: bgcontent
+            }]
+    });
+    layers.push({
+        g: document.getElementById('buttonsGroup'),
+        groups: [{ xx: 0, yy: 0, ww: 200 * 32 * note32th120width, hh: (128 + 2) * noteLineHeight,
+                action: null,
+                showZoom: 0.1, hideZoom: 1001,
+                content: [{ x: 44, y: 10, w: 20, h: 20, css: 'zvoogSpot1', action: function () {
+                            console.log('click spot', tl);
+                            tl.startSlideTo(-44 * tl.tapSize, -10 * tl.tapSize, 1.5, function () { console.log('done slide'); });
+                        } }]
+            }]
     });
     //bgcontent.push({ id: '', css: 'zvoogBackgroundFill', x: 0, y: 0, w: 200 * 32 * note32th120width, h: (128 + 2) * noteLineHeight, rx: 0, ry: 0, action: null });
     bgcontent.push({ id: '', css: '', xx: 0, yy: 0, ww: 200 * 32 * note32th120width, hh: (128 + 2) * noteLineHeight, action: null,

@@ -153,3 +153,9 @@ body {
 	fill: #d8d8f0;
 	font-size:0.125cm;
 }
+
+.zvoogSpot1 {
+	fill: rgba(255,0,0,0.5);
+	stroke: #00ff00;
+	stroke-width:0.1cm;
+}
