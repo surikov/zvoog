@@ -125,11 +125,23 @@ function composeUI() {
         g: document.getElementById('buttonsGroup'),
         groups: [{ xx: 0, yy: 0, ww: 200 * 32 * note32th120width, hh: (128 + 2) * noteLineHeight,
                 action: null,
-                showZoom: 0.1, hideZoom: 1001,
+                showZoom: 1.5, hideZoom: 200,
                 content: [{ x: 44, y: 10, w: 20, h: 20, css: 'zvoogSpot1', action: function () {
                             console.log('click spot', tl);
-                            tl.startSlideTo(-44 * tl.tapSize, -10 * tl.tapSize, 1.5, function () { console.log('done slide'); });
+                            tl.startSlideTo(-44 * tl.tapSize, -10 * tl.tapSize, 1.4, function () { console.log('done slide'); });
                         } }]
+            }]
+    });
+    layers.push({
+        g: document.getElementById('buttonsGroup'),
+        groups: [{ xx: 0, yy: 0, ww: 200 * 32 * note32th120width, hh: (128 + 2) * noteLineHeight,
+                action: null,
+                showZoom: 0.1, hideZoom: 1.5,
+                content: [{ x: 44, y: 10, w: 5, h: 5, css: 'zvoogSpot1' },
+                    { x: 54, y: 10, w: 5, h: 5, css: 'zvoogSpot1' },
+                    { x: 44, y: 20, w: 5, h: 5, css: 'zvoogSpot1' },
+                    { x: 54, y: 20, w: 5, h: 5, css: 'zvoogSpot1' }
+                ]
             }]
     });
     //bgcontent.push({ id: '', css: 'zvoogBackgroundFill', x: 0, y: 0, w: 200 * 32 * note32th120width, h: (128 + 2) * noteLineHeight, rx: 0, ry: 0, action: null });
