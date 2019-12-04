@@ -78,9 +78,9 @@ type TileGroup = {
 	, hh: number
 	, showZoom: number
 	, hideZoom: number
-	, content: (TileGroup | TileRectangle | TileText | TilePath | TileLine)[]
+	, content: (TileGroup | TileRectangle | TileText | TilePath | TileLine | TilePolygon)[]
 } & TileBaseDefinition;
-function isTileGroup(t: TileGroup | TileRectangle | TileText | TilePath | TileLine): t is TileGroup {
+function isTileGroup(t: TileGroup | TileRectangle | TileText | TilePath | TileLine | TilePolygon): t is TileGroup {
 	return (t as TileGroup).content !== undefined;
 }
 type TileRectangle = {
@@ -91,7 +91,7 @@ type TileRectangle = {
 	, rx?: number
 	, ry?: number
 } & TileBaseDefinition;
-function isTileRectangle(t: TileGroup | TileRectangle | TileText | TilePath | TileLine): t is TileRectangle {
+function isTileRectangle(t: TileGroup | TileRectangle | TileText | TilePath | TileLine | TilePolygon): t is TileRectangle {
 	return (t as TileRectangle).h !== undefined;
 }
 type TileText = {
@@ -99,16 +99,16 @@ type TileText = {
 	, y: number
 	, text: string
 } & TileBaseDefinition;
-function isTileText(t: TileGroup | TileRectangle | TileText | TilePath | TileLine): t is TileText {
+function isTileText(t: TileGroup | TileRectangle | TileText | TilePath | TileLine | TilePolygon): t is TileText {
 	return (t as TileText).text !== undefined;
 }
 type TilePath = {
-	x: number
-	, y: number
-	, scale: number
+	x?: number
+	, y?: number
+	, scale?: number
 	, points: string//path definition
 } & TileBaseDefinition;
-function isTilePath(t: TileGroup | TileRectangle | TileText | TilePath | TileLine): t is TilePath {
+function isTilePath(t: TileGroup | TileRectangle | TileText | TilePath | TileLine | TilePolygon): t is TilePath {
 	return (t as TilePath).points !== undefined;
 }
 type TileLine = {
@@ -117,8 +117,17 @@ type TileLine = {
 	, y1: number
 	, y2: number
 } & TileBaseDefinition;
-function isTileLine(t: TileGroup | TileRectangle | TileText | TilePath | TileLine): t is TileLine {
+function isTileLine(t: TileGroup | TileRectangle | TileText | TilePath | TileLine | TilePolygon): t is TileLine {
 	return (t as TileLine).x1 !== undefined;
+}
+type TilePolygon = {
+	x?: number
+	, y?: number
+	, scale?: number
+	, dots:number[]
+} & TileBaseDefinition;
+function isTilePolygon(t: TileGroup | TileRectangle | TileText | TilePath | TileLine | TilePolygon): t is TilePolygon {
+	return (t as TilePolygon).dots !== undefined;
 }
 type TileSVGElement = SVGElement & {
 	onClickFunction: (x: number, y: number) => void
@@ -622,6 +631,11 @@ class TileLevel {
 	vectorNormSquared(xy: TilePoint): number {
 		return xy.x * xy.x + xy.y * xy.y;
 	}
+	startSlideCenter(x: number, y: number, z: number, w: number, h: number, action: () => void) {
+		let dx=(z*this.viewWidth/this.tapSize-w)/2;
+		let dy=(z*this.viewHeight/this.tapSize-h)/2;
+		this.startSlideTo((dx-x)* this.tapSize,(dy-y)* this.tapSize,z,action)
+	}
 	startSlideTo(x: number, y: number, z: number, action: () => void) {
 		this.startStepSlideTo(10, x, y, z, action);
 	}
@@ -868,7 +882,7 @@ class TileLevel {
 		}
 		return null;
 	}
-	addElement(g: SVGElement, d: TileGroup | TileRectangle | TileText | TilePath | TileLine, layer: TileModelLayer | TileLayerStickLeft | TileLayerStickTop | TileLayerStickBottom | TileLayerStickRight | TileLayerOverlay) {
+	addElement(g: SVGElement, d: TileGroup | TileRectangle | TileText | TilePath | TileLine | TilePolygon, layer: TileModelLayer | TileLayerStickLeft | TileLayerStickTop | TileLayerStickBottom | TileLayerStickRight | TileLayerOverlay) {
 		
 		let element: TileSVGElement = null;
 		//if (d.draw == 'rectangle') {
@@ -883,6 +897,9 @@ class TileLevel {
 		//if (d.draw == 'path') {
 		if (isTilePath(d)) {
 			element = this.tilePath(g, d.x * this.tapSize, d.y * this.tapSize, d.scale, d.points, d.css);
+		}
+		if (isTilePolygon(d)) {
+			element = this.tilePolygon(g, d.x * this.tapSize, d.y * this.tapSize, d.scale, d.dots, d.css);
 		}
 		//if (d.draw == 'line') {
 		if (isTileLine(d)) {
@@ -905,8 +922,8 @@ class TileLevel {
 				let click: () => void = function () {
 					if (me.clicked) {
 						if (element) {
+							//console.log('click',element);
 							if (element.onClickFunction) {
-								//console.log(element.getBoundingClientRect());
 								let xx: number = element.getBoundingClientRect().left - me.svg.getBoundingClientRect().left;
 								let yy: number = element.getBoundingClientRect().top - me.svg.getBoundingClientRect().top;
 								element.onClickFunction(me.translateZ * (me.clickX - xx) / me.tapSize, me.translateZ * (me.clickY - yy) / me.tapSize);
@@ -918,6 +935,31 @@ class TileLevel {
 				element.ontouchend = click;
 			}
 		}
+	}
+	tilePolygon(g: SVGElement, x: number, y: number, z: number, dots: number[], cssClass: string): TileSVGElement {
+		let polygon: TileSVGElement = document.createElementNS(this.svgns, 'polygon') as TileSVGElement;
+		let points:string='';
+		let dlmtr='';
+		for(let i=0;i<dots.length;i=i+2){
+			points=points+dlmtr+dots[i]* this.tapSize+','+dots[i+1]* this.tapSize;
+			dlmtr=', ';
+		}
+		polygon.setAttributeNS(null, 'points', points);
+		let t: string = "";
+		if ((x) || (y)) {
+			t = 'translate(' + x  + ',' + y  + ')';
+		}
+		if (z) {
+			t = t + ' scale(' + z + ')';
+		}
+		if (t.length > 0) {
+			polygon.setAttributeNS(null, 'transform', t);
+		}
+		if (cssClass) {
+			polygon.classList.add(cssClass);
+		}
+		g.appendChild(polygon);
+		return polygon;
 	}
 	tilePath(g: SVGElement, x: number, y: number, z: number, data: string, cssClass: string): TileSVGElement {
 		let path: TileSVGElement = document.createElementNS(this.svgns, 'path') as TileSVGElement;
@@ -993,7 +1035,7 @@ class TileLevel {
 			group.removeChild(group.children[0]);
 		}
 	}
-	autoID(definition: (TileGroup | TileRectangle | TileText | TilePath | TileLine)[]) {
+	autoID(definition: (TileGroup | TileRectangle | TileText | TilePath | TileLine | TilePolygon)[]) {
 		if (definition) {
 			if (definition.length) {
 				for (let i: number = 0; i < definition.length; i++) {

@@ -48,6 +48,9 @@ function isTilePath(t) {
 function isTileLine(t) {
     return t.x1 !== undefined;
 }
+function isTilePolygon(t) {
+    return t.dots !== undefined;
+}
 var TileLevel = /** @class */ (function () {
     function TileLevel(svgObject, inWidth, inHeight, minZoom, curZoom, maxZoom, layers) {
         this.svg = null;
@@ -564,6 +567,11 @@ var TileLevel = /** @class */ (function () {
     TileLevel.prototype.vectorNormSquared = function (xy) {
         return xy.x * xy.x + xy.y * xy.y;
     };
+    TileLevel.prototype.startSlideCenter = function (x, y, z, w, h, action) {
+        var dx = (z * this.viewWidth / this.tapSize - w) / 2;
+        var dy = (z * this.viewHeight / this.tapSize - h) / 2;
+        this.startSlideTo((dx - x) * this.tapSize, (dy - y) * this.tapSize, z, action);
+    };
     TileLevel.prototype.startSlideTo = function (x, y, z, action) {
         this.startStepSlideTo(10, x, y, z, action);
     };
@@ -836,6 +844,9 @@ var TileLevel = /** @class */ (function () {
         if (isTilePath(d)) {
             element = this.tilePath(g, d.x * this.tapSize, d.y * this.tapSize, d.scale, d.points, d.css);
         }
+        if (isTilePolygon(d)) {
+            element = this.tilePolygon(g, d.x * this.tapSize, d.y * this.tapSize, d.scale, d.dots, d.css);
+        }
         //if (d.draw == 'line') {
         if (isTileLine(d)) {
             element = this.tileLine(g, d.x1 * this.tapSize, d.y1 * this.tapSize, d.x2 * this.tapSize, d.y2 * this.tapSize, d.css);
@@ -857,8 +868,8 @@ var TileLevel = /** @class */ (function () {
                 var click = function () {
                     if (me_1.clicked) {
                         if (element) {
+                            //console.log('click',element);
                             if (element.onClickFunction) {
-                                //console.log(element.getBoundingClientRect());
                                 var xx = element.getBoundingClientRect().left - me_1.svg.getBoundingClientRect().left;
                                 var yy = element.getBoundingClientRect().top - me_1.svg.getBoundingClientRect().top;
                                 element.onClickFunction(me_1.translateZ * (me_1.clickX - xx) / me_1.tapSize, me_1.translateZ * (me_1.clickY - yy) / me_1.tapSize);
@@ -870,6 +881,31 @@ var TileLevel = /** @class */ (function () {
                 element.ontouchend = click;
             }
         }
+    };
+    TileLevel.prototype.tilePolygon = function (g, x, y, z, dots, cssClass) {
+        var polygon = document.createElementNS(this.svgns, 'polygon');
+        var points = '';
+        var dlmtr = '';
+        for (var i = 0; i < dots.length; i = i + 2) {
+            points = points + dlmtr + dots[i] * this.tapSize + ',' + dots[i + 1] * this.tapSize;
+            dlmtr = ', ';
+        }
+        polygon.setAttributeNS(null, 'points', points);
+        var t = "";
+        if ((x) || (y)) {
+            t = 'translate(' + x + ',' + y + ')';
+        }
+        if (z) {
+            t = t + ' scale(' + z + ')';
+        }
+        if (t.length > 0) {
+            polygon.setAttributeNS(null, 'transform', t);
+        }
+        if (cssClass) {
+            polygon.classList.add(cssClass);
+        }
+        g.appendChild(polygon);
+        return polygon;
     };
     TileLevel.prototype.tilePath = function (g, x, y, z, data, cssClass) {
         var path = document.createElementNS(this.svgns, 'path');
