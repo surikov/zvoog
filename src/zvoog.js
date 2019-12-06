@@ -1,9 +1,11 @@
 console.log('zvoog v2.02');
-//tsc --target es5 tilelevel.ts zvoog.ts
+//tsc --target es5 songProject.ts tilelevel.ts zvoog.ts
 function addZoomItem() {
 }
 function composeUI() {
     console.log('composeUI');
+    var testProj = { title: 'test', tracks: [] };
+    console.log('testProj', testProj);
     var layers = [];
     var tl = new TileLevel(document.getElementById('contentSVG'), 100, 100, 0.1, 10, 1000, layers);
     /*layers.push(
