@@ -5,7 +5,7 @@ function addZoomItem(){
 }
 function composeUI() {
 	console.log('composeUI');
-let testProj:SongProject={title:'test',tracks:[]};
+let testProj:SongProject={title:'test',channels:[],fx:[]};
 console.log('testProj',testProj);
 	let layers: (TileModelLayer | TileLayerStickLeft | TileLayerStickTop | TileLayerStickBottom | TileLayerStickRight | TileLayerOverlay)[] = [];
 	var tl: TileLevel = new TileLevel((document.getElementById('contentSVG') as any) as SVGElement

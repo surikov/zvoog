@@ -2,7 +2,7 @@ console.log('songProject v2.03');
 
 type MeasureTempo={
 	bpm: number;
-	divisor: number;
+	step: number;
 };
 type NotePitch={
 	key: number;
@@ -17,7 +17,7 @@ type TimeSignature={
 type ScaleMode={
 	whiteKeys:number[];
 };
-type GridMode={
+type MeterMode={
 	positions:TimeSignature[];
 };
 type ChordNote={
@@ -36,15 +36,28 @@ type TrackMeasure={
 	tempo:MeasureTempo;
 	meter:TimeSignature;
 	chords:MeasureChord[];
-	modeId:number;
-	gridId:number;
+	mode:ScaleMode;
+	grid:MeterMode;
 };
 type SongTrack={
 	title: string;
 	measures:TrackMeasure[];
 };
-type SongProject = {
+type ChannelSynth={
+	title: string;
+};
+type ChannelFx={
+	title: string;
+};
+type SongChannel={
 	title: string;
 	tracks:SongTrack[];
+	synth:ChannelSynth;
+	fx:ChannelFx[];
+};
+type SongProject = {
+	title: string;
+	channels:SongChannel[];
+	fx:ChannelFx[];
 };
 
