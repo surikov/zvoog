@@ -153,6 +153,66 @@ body {
 	fill: #d8d8f0;
 	font-size:0.125cm;
 }
+.zvoogTap256 {
+	fill: none;
+	stroke: magenta;
+	stroke-width:25.6cm;
+}
+.zvoogTap128 {
+	fill: none;
+	stroke: magenta;
+	stroke-width:12.8cm;
+}
+.zvoogTap64 {
+	fill: none;
+	stroke: magenta;
+	stroke-width:6.4cm;
+}
+.zvoogTap32 {
+	fill: none;
+	stroke: magenta;
+	stroke-width:3.2cm;
+}
+.zvoogTap16 {
+	fill: none;
+	stroke: magenta;
+	stroke-width:1.6cm;
+}
+.zvoogTap8 {
+	fill: none;
+	stroke: magenta;
+	stroke-width:0.8cm;
+}
+.zvoogTap4 {
+	fill: none;
+	stroke: magenta;
+	stroke-width:0.4cm;
+}
+.zvoogTap2 {
+	fill: none;
+	stroke: magenta;
+	stroke-width:0.2cm;
+}
+.zvoogTap1 {
+	fill: none;
+	stroke: magenta;
+	stroke-width:0.1cm;
+}
+.zvoogTap05 {
+	fill: none;
+	stroke: magenta;
+	stroke-width:0.05cm;
+}
+.zvoogTap025 {
+	fill: none;
+	stroke: magenta;
+	stroke-width:0.025cm;
+}
+.zvoogTap0125 {
+	fill: none;
+	stroke: magenta;
+	stroke-width:0.0125cm;
+}
 
 .zvoogSpot1 {
 	fill: rgba(255,0,0,0.5);
