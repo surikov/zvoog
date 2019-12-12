@@ -942,7 +942,7 @@ var TileLevel = /** @class */ (function () {
             rect.classList.add(cssClass);
         }
         g.appendChild(rect);
-        console.log(cssClass, rect);
+        //console.log(cssClass,rect);
         return rect;
     };
     TileLevel.prototype.tileLine = function (g, x1, y1, x2, y2, cssClass) {

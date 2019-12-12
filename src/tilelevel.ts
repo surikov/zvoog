@@ -996,7 +996,7 @@ class TileLevel {
 			rect.classList.add(cssClass);
 		}
 		g.appendChild(rect);
-		console.log(cssClass,rect);
+		//console.log(cssClass,rect);
 		return rect;
 	}
 	tileLine(g: SVGElement, x1: number, y1: number, x2: number, y2: number, cssClass: string): TileSVGElement {

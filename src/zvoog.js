@@ -4,7 +4,7 @@ function addZoomItem() {
 }
 function composeUI() {
     console.log('composeUI');
-    var testProj = { title: 'test', channels: [], fx: [] };
+    var testProj = createRandomSongProject();
     console.log('testProj', testProj);
     var layers = [];
     var tl = new TileLevel(document.getElementById('contentSVG'), 100, 100, 0.1, 10, 1000, layers);

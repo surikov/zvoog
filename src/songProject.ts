@@ -1,63 +1,84 @@
 console.log('songProject v2.03');
 
-type MeasureTempo={
+type MeasureTempo = {
 	bpm: number;
-	step: number;
+	fraction: number;
 };
-type NotePitch={
+type NotePitch = {
 	key: number;
 	shift: number;
-	octave:number;
-	duration:TimeSignature;
+	octave: number;
+	duration: TimeSignature;
 };
-type TimeSignature={
-	divident: number;
-	divisor: number;
+type TimeSignature = {
+	count: number;
+	fraction: number;
 };
-type ScaleMode={
-	whiteKeys:number[];
+type ScaleMode = {
+	whiteKeys: number[];
 };
-type MeterMode={
-	positions:TimeSignature[];
+type GridMode = {
+	positions: TimeSignature[];
 };
-type ChordNote={
+type ChordNote = {
 	title: string;
-	pitches:NotePitch[];
-	ornaments:number[];
+	pitches: NotePitch[];
+	ornaments: number[];
 };
-type MeasureChord={
+type MeasureChord = {
 	title: string;
-	position:TimeSignature;
-	notes:ChordNote[];
-	effects:number[];
+	position: TimeSignature;
+	notes: ChordNote[];
+	effects: number[];
 };
-type TrackMeasure={
+type TrackMeasure = {
 	title: string;
-	tempo:MeasureTempo;
-	meter:TimeSignature;
-	chords:MeasureChord[];
-	mode:ScaleMode;
-	grid:MeterMode;
+	tempo: MeasureTempo;
+	meter: TimeSignature;
+	chords: MeasureChord[];
+	mode: ScaleMode;
+
 };
-type SongTrack={
+type SongTrack = {
 	title: string;
-	measures:TrackMeasure[];
+	measures: TrackMeasure[];
 };
-type ChannelSynth={
-	title: string;
-};
-type ChannelFx={
+type ChannelSynth = {
 	title: string;
 };
-type SongChannel={
+type ChannelFx = {
 	title: string;
-	tracks:SongTrack[];
-	synth:ChannelSynth;
-	fx:ChannelFx[];
+};
+type SongChannel = {
+	title: string;
+	tracks: SongTrack[];
+	synth: ChannelSynth;
+	fx: ChannelFx[];
 };
 type SongProject = {
 	title: string;
-	channels:SongChannel[];
-	fx:ChannelFx[];
+	channels: SongChannel[];
+	fx: ChannelFx[];
+	grid: GridMode;
 };
 
+function createRandomSongProject(): SongProject {
+	let gridMode: GridMode = { positions: [] };
+	let testProj: SongProject = { title: 'test', channels: [], fx: [], grid: gridMode };
+	let chanCount = Math.ceil(Math.random() * 5 + 1);
+	let measureTempo:MeasureTempo={bpm:120,fraction:4};
+	let meter:TimeSignature={count:4,fraction:4};
+	let scaleMode:ScaleMode={whiteKeys:[]};
+	for (let c = 0; c < chanCount; c++) {
+		let channelSynth: ChannelSynth = { title: "synth" + c };
+		let songChannel: SongChannel = { title: "channel" + c, tracks: [], synth: channelSynth, fx: [] };
+		testProj.channels.push(songChannel);
+		let songTrack: SongTrack = { title: "track" + c, measures: [] };
+		songChannel.tracks.push(songTrack);
+		for(var m=0;m<200;m++){
+			let trackMeasure:TrackMeasure={title:"meausre"+c+"x"+m,tempo:measureTempo,meter:meter,chords:[],mode:scaleMode};
+			songTrack.measures.push(trackMeasure);
+		}
+	}
+	return testProj;
+}
