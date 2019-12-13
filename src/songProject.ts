@@ -76,8 +76,13 @@ function createRandomSongProject(): SongProject {
 		let songTrack: SongTrack = { title: "track" + c, measures: [] };
 		songChannel.tracks.push(songTrack);
 		for(var m=0;m<200;m++){
-			let trackMeasure:TrackMeasure={title:"meausre"+c+"x"+m,tempo:measureTempo,meter:meter,chords:[],mode:scaleMode};
+			let trackMeasure:TrackMeasure={title:"meausгre"+c+"x"+m,tempo:measureTempo,meter:meter,chords:[],mode:scaleMode};
 			songTrack.measures.push(trackMeasure);
+			for(var a=0;a<5;a++){
+				let chord:MeasureChord={title:'chord'+};
+				trackMeasure.chords.push(chord);
+				
+			}
 		}
 	}
 	return testProj;
