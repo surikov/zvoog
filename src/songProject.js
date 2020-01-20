@@ -1,20 +1,88 @@
 console.log('songProject v2.03');
+function createEmptyRhythmPattern() {
+    return {
+        positions: []
+    };
+}
+function createEmptyChannelSynth() {
+    return {
+        title: ''
+    };
+}
+function createEmptyChannelFx() {
+    return {
+        title: ''
+    };
+}
+function createSongChannel() {
+    return {
+        title: '',
+        tracks: [],
+        synth: createEmptyChannelSynth(),
+        fx: []
+    };
+}
+function createEmptySong() {
+    return {
+        title: '',
+        channels: [],
+        fx: [],
+        rhythmPattern: createEmptyRhythmPattern()
+    };
+}
 function createRandomSongProject() {
-    var gridMode = { positions: [] };
-    var testProj = { title: 'test', channels: [], fx: [], grid: gridMode };
+    var rhythmPattern = {
+        positions: []
+    };
+    var testProj = {
+        title: 'test',
+        channels: [],
+        fx: [],
+        rhythmPattern: rhythmPattern
+    };
     var chanCount = Math.ceil(Math.random() * 5 + 1);
-    var measureTempo = { bpm: 120, fraction: 4 };
-    var meter = { count: 4, fraction: 4 };
-    var scaleMode = { whiteKeys: [] };
+    var measureTempo = {
+        bpm: 120,
+        fraction: 4
+    };
+    var meter = {
+        count: 4,
+        fraction: 4
+    };
+    var scaleMode = {
+        whiteKeys: []
+    };
     for (var c = 0; c < chanCount; c++) {
-        var channelSynth = { title: "synth" + c };
-        var songChannel = { title: "channel" + c, tracks: [], synth: channelSynth, fx: [] };
+        var channelSynth = {
+            title: "synth" + c
+        };
+        var songChannel = {
+            title: "channel" + c,
+            tracks: [],
+            synth: channelSynth,
+            fx: []
+        };
         testProj.channels.push(songChannel);
-        var songTrack = { title: "track" + c, measures: [] };
+        var songTrack = {
+            title: "track" + c,
+            measures: []
+        };
         songChannel.tracks.push(songTrack);
         for (var m = 0; m < 200; m++) {
-            var trackMeasure = { title: "meausre" + c + "x" + m, tempo: measureTempo, meter: meter, chords: [], mode: scaleMode };
+            var trackMeasure = {
+                title: "meausгre" + c + "x" + m,
+                tempo: measureTempo,
+                meter: meter,
+                chords: [],
+                mode: scaleMode
+            };
             songTrack.measures.push(trackMeasure);
+            for (var a = 0; a < 5; a++) {
+                /*let chord: MeasureChord = {
+                    title: 'chord'
+                };
+                trackMeasure.chords.push(chord);*/
+            }
         }
     }
     return testProj;
