@@ -1,0 +1,53 @@
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport"
+		content="initial-scale=1.0, width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
+	<link href="https://fonts.googleapis.com/css2?family=Oswald&display=swap" rel="stylesheet">
+	<link rel="stylesheet" type="text/css" href="./base/zvoogcolors.css">
+	<link rel="stylesheet" type="text/css" href="./base/zvoogui.css">
+	<script type='text/javascript' src='./build/zvoogdaw.js'></script>
+</head>
+
+<body>
+	<input type="file" id="filesinput" name="filesarr[]" />
+	<svg id="contentSVG" class='contentSVG' viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"
+		xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1">
+		<defs>
+			<linearGradient x1='0%' y1='0%' x2='100%' y2='100%' id="buttonGradient">
+				<stop offset="0%" stop-color="#6699cc" />
+				<stop offset="100%" stop-color="#99cc99" />
+			</linearGradient>
+		</defs>
+		<g id='backgroundGroup'></g>
+		<g id='keyPatternGroup'></g>
+		<g id='meterPatternGroup'></g>
+		<!--<g id='gridGroup'></g>-->
+		<g id='labelsGroup'></g>
+		<g id='otherVoicesGroup'></g>
+		<g id='secondaryVoicesGroup'></g>
+		<g id='mainVoiceGroup'></g>
+		<g id='workButtonsGroup'></g>
+		<g id='overButtonsGroup'></g>
+		<g id='popupGroup'></g>
+	</svg>
+	<div id='mainMenuDiv' class='mainMenu'>
+		<div class='menuContentDiv' id='subDivMenu'>
+			<a href='javascript:void(0)' id='closeMainMenuButton' onclick='zvoogApp.closeLayersMenu();'>
+				<div class='menuHeaderDiv'>
+					<span id='menuTitleText'>Menu title</span>
+				</div>
+			</a>
+			<div class='mainMenuRows' id='menuItemRows'>
+				<div class='mainMenuButtonRow'>&nbsp;</div>
+			</div>
+		</div>
+	</div>
+	<script>
+		var zvoogApp = new ZvoogApp();
+		zvoogApp.start();
+	</script>
+</body>
+
+</html>

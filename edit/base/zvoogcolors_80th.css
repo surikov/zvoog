@@ -1,0 +1,10 @@
+:root {
+	--background-color: #3d144c;
+	--spot-color: #1685f8;
+	--main-color: #faeb2c;
+	--aux-color: #f52789;
+	--grid-color: #e900ff;
+	--black-opacity: 10%;
+	--white-opacity: 2%;
+	--grid-opacity: 50%;
+}
