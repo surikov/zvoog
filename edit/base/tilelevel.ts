@@ -285,18 +285,18 @@ class TileLevel {
 		});*/
 		this.svg.addEventListener("wheel", this.rakeMouseWheel.bind(this), {
 			capture: false,
-			passive: true
+			passive: false
 		});
 		/*this.svg.addEventListener("DOMMouseScroll", this.rakeMouseWheel, {
 			capture: false
 		});*/
 		this.svg.addEventListener("touchstart", this.rakeTouchStart.bind(this), {
 			capture: false,
-			passive: true
+			passive: false
 		});
 		this.svg.addEventListener("touchmove", this.rakeTouchMove.bind(this), {
 			capture: false,
-			passive: true
+			passive: false
 		});
 		this.svg.addEventListener("touchend", this.rakeTouchEnd.bind(this), {
 			capture: false
