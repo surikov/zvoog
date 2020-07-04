@@ -439,7 +439,7 @@ class TileLevel {
 		}
 	}
 	rakeTouchStart(touchEvent: TouchEvent) {
-		console.log('rakeTouchStart',touchEvent.touches.length);
+		//console.log('rakeTouchStart',touchEvent.touches.length);
 		this.slidingLockTo = -1;
 		touchEvent.preventDefault();
 		this.startedTouch = true;
@@ -458,7 +458,7 @@ class TileLevel {
 		this.clicked = false;
 	}
 	rakeTouchMove(touchEvent: TouchEvent) {
-		console.log('rakeTouchMove',touchEvent.touches.length);
+		//console.log('rakeTouchMove',touchEvent.touches.length);
 		touchEvent.preventDefault();
 		if (this.startedTouch) {
 			if (touchEvent.touches.length < 2) {
@@ -516,7 +516,7 @@ class TileLevel {
 		}
 	}
 	rakeTouchEnd(touchEvent: TouchEvent) {
-		console.log('rakeTouchEnd',touchEvent.touches.length);
+		//console.log('rakeTouchEnd',touchEvent.touches.length);
 		touchEvent.preventDefault();
 		this.allTilesOK = false;
 		if (!this.twoZoom) {

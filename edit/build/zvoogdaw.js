@@ -2065,7 +2065,7 @@ var TileLevel = /** @class */ (function () {
         }
     };
     TileLevel.prototype.rakeTouchStart = function (touchEvent) {
-        console.log('rakeTouchStart', touchEvent.touches.length);
+        //console.log('rakeTouchStart',touchEvent.touches.length);
         this.slidingLockTo = -1;
         touchEvent.preventDefault();
         this.startedTouch = true;
@@ -2085,7 +2085,7 @@ var TileLevel = /** @class */ (function () {
         this.clicked = false;
     };
     TileLevel.prototype.rakeTouchMove = function (touchEvent) {
-        console.log('rakeTouchMove', touchEvent.touches.length);
+        //console.log('rakeTouchMove',touchEvent.touches.length);
         touchEvent.preventDefault();
         if (this.startedTouch) {
             if (touchEvent.touches.length < 2) {
@@ -2146,7 +2146,7 @@ var TileLevel = /** @class */ (function () {
         }
     };
     TileLevel.prototype.rakeTouchEnd = function (touchEvent) {
-        console.log('rakeTouchEnd', touchEvent.touches.length);
+        //console.log('rakeTouchEnd',touchEvent.touches.length);
         touchEvent.preventDefault();
         this.allTilesOK = false;
         if (!this.twoZoom) {
