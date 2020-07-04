@@ -72,6 +72,28 @@
 		</svg>
 		<script>
 			composeUI();
+			function dumpClient(){
+				var r='client';
+				try{
+					/*var performance = window.performance || window.mozPerformance || window.msPerformance || window.webkitPerformance || {};
+					for (var value in performance) {
+						r=r+' | '+value;
+					}*/
+					var canvas  = document.createElement('canvas');
+					var gl = canvas.getContext("experimental-webgl");
+					var dbgRenderInfo = gl.getExtension("WEBGL_debug_renderer_info");
+					if (dbgRenderInfo != null) {
+						r=r+' | renderer: '+gl.getParameter(dbgRenderInfo.UNMASKED_RENDERER_WEBGL);
+					}
+					r=r+' | CPU cores count: '+navigator.hardwareConcurrency;
+					r=r+' | userAgent: '+navigator.userAgent;
+					r=r+' | screen: '+window.screen.availWidth+'x'+window.screen.availHeight;
+				}catch(ex){
+					r=r+' | error: '+ex;
+				}
+				return r;
+			}
+			console.log(dumpClient());
 		</script>
 	</body>
 </html>

@@ -13,8 +13,24 @@ function createRandomSongProject() {
         var songTrack = { title: "track" + c, measures: [] };
         songChannel.tracks.push(songTrack);
         for (var m = 0; m < 200; m++) {
-            var trackMeasure = { title: "meausre" + c + "x" + m, tempo: measureTempo, meter: meter, chords: [], mode: scaleMode };
+            var trackMeasure = { title: "meausгre" + c + "x" + m, tempo: measureTempo, meter: meter, chords: [], mode: scaleMode };
             songTrack.measures.push(trackMeasure);
+            for (var a = 0; a < 5; a++) {
+                var pos = {
+                    count: Math.round(Math.random() * 31),
+                    fraction: 16
+                };
+                var chord = { title: 'chord' + c + 'x' + m + 'a', notes: [], effects: [], position: pos };
+                trackMeasure.chords.push(chord);
+                for (var n = 0; n < 3; n++) {
+                    var note = {
+                        title: '',
+                        pitches: [],
+                        ornaments: []
+                    };
+                    chord.notes.push(note);
+                }
+            }
         }
     }
     return testProj;

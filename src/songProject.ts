@@ -66,22 +66,33 @@ function createRandomSongProject(): SongProject {
 	let gridMode: GridMode = { positions: [] };
 	let testProj: SongProject = { title: 'test', channels: [], fx: [], grid: gridMode };
 	let chanCount = Math.ceil(Math.random() * 5 + 1);
-	let measureTempo:MeasureTempo={bpm:120,fraction:4};
-	let meter:TimeSignature={count:4,fraction:4};
-	let scaleMode:ScaleMode={whiteKeys:[]};
+	let measureTempo: MeasureTempo = { bpm: 120, fraction: 4 };
+	let meter: TimeSignature = { count: 4, fraction: 4 };
+	let scaleMode: ScaleMode = { whiteKeys: [] };
 	for (let c = 0; c < chanCount; c++) {
 		let channelSynth: ChannelSynth = { title: "synth" + c };
 		let songChannel: SongChannel = { title: "channel" + c, tracks: [], synth: channelSynth, fx: [] };
 		testProj.channels.push(songChannel);
 		let songTrack: SongTrack = { title: "track" + c, measures: [] };
 		songChannel.tracks.push(songTrack);
-		for(var m=0;m<200;m++){
-			let trackMeasure:TrackMeasure={title:"meausгre"+c+"x"+m,tempo:measureTempo,meter:meter,chords:[],mode:scaleMode};
+		for (var m = 0; m < 200; m++) {
+			let trackMeasure: TrackMeasure = { title: "meausгre" + c + "x" + m, tempo: measureTempo, meter: meter, chords: [], mode: scaleMode };
 			songTrack.measures.push(trackMeasure);
-			for(var a=0;a<5;a++){
-				let chord:MeasureChord={title:'chord'+};
+			for (var a = 0; a < 5; a++) {
+				let pos: TimeSignature = {
+					count: Math.round(Math.random() * 31),
+					fraction: 16
+				}
+				let chord: MeasureChord = { title: 'chord' + c + 'x' + m + 'a', notes: [], effects: [], position: pos };
 				trackMeasure.chords.push(chord);
-				
+				for (var n = 0; n < 3; n++) {
+					var note: ChordNote = {
+						title: '',
+						pitches: [],
+						ornaments: []
+					};
+					chord.notes.push(note);
+				}
 			}
 		}
 	}

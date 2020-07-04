@@ -1,122 +1,102 @@
-console.log('ZvoogStatye v1.03');
-
-function ZvoogState(tag) {
-	this.tag = tag;
-	this._value = '';
-	this._binded = [];
-	this._changes = [];
-	this.nestLimit = 10;
-	//this._lock = [];
-	this._action = null;
-	this.action = function (afterChange) {
-		this._action = afterChange;
-		return this;
-	};
-	this.bind = function (zvoogState) {
-		if (this._binded.indexOf(zvoogState) < 0) {
-			this._binded.push(zvoogState);
-			zvoogState.bind(this);
-		}
-		return this;
-	};
-	this.unbind = function (zvoogState) {
-		var n = this._binded.indexOf(zvoogState);
-		if (n > -1) {
-			var c = this._binded[n];
-			this._binded.splice(n, 1);
-			c.unbind(this);
-		}
-		return this;
-	};
-	this.set = function (newText) {
-		console.log('set', this.tag, 'to <',newText,'> from <',this._value,'>');
-		if (ZvoogState.lock.length > 0) {
-			//console.log('	delay', this.tag, newText,'from <',this._value,'> to',ZvoogState.lock[0].tag);
-			ZvoogState.lock[0]._changes.push(newText);
-		} else {
-			this._changes = [newText];
-			//this._lock=[this];
-			this.change(true);
-			ZvoogState.lock = [];
-		}
-	};
-	this.change = function (root) {
-		//console.log('	start changes', this.tag, 'size',this._changes.length);
-		var nestCounter=0;
-		while (this._changes.length > 0) {
-		//for (var i = 0; i < this.nestLimit; i++) {
-			//if (this._changes.length > 0) {
-				nestCounter++;
-				if(this.nestLimit<nestCounter){
-					console.log('nesting error');
-					break;
-				}
-				var t = this._changes.shift();
-				//console.log('		changes', this.tag, 'to <',t,'>');
-				//console.log('try change', this.tag, t, 'from', this._value);
-				//if (!(this._value == t)) {
-					//console.log('change', this.tag, t, 'binded', this._binded.length);
-					this._value = t;
-					if (this._action) {
-						this._action();
-					}
-					if(root){
-						ZvoogState.lock = [];
-					}
-					ZvoogState.lock.push(this);
-					//console.log('lock', this.tag);
-					for (var i = 0; i < this._binded.length; i++) {
-						//console.log('relay', this._binded[i].tag);
-						if (ZvoogState.lock.indexOf(this._binded[i]) < 0) {
-							//console.log('next', this._binded[i].tag);
-							this._binded[i]._changes = [t];
-							this._binded[i].change();
-						}
-					}
-				//}
-			//}else{
-			//	break;
-			//}
-		}
-	};
-	/*this.set = function (newText) {
-	this.change(newText);
-	this.relay(newText, [this]);
-	};
-	this.change = function (newText) {
-	var t = '' + newText;
-	if (!(this._value == t)) {
-	console.log('change', t);
-	this._value = t;
-	if (this._action) {
-	this._action();
-	}
-	}
-	};
-	this.relay = function (newValue, stopList) {
-	for (var i = 0; i < this._binded.length; i++) {
-	if (stopList.indexOf(this._binded[i]) < 0) {
-	this._binded[i].change(newValue);
-	stopList.push(this._binded[i]);
-	this._binded[i].relay(newValue, stopList);
-	}
-	}
-	return this;
-	};*/
-	this.value = function () {
-		return this._value;
-	};
-	this.numeric = function () {
-		if (this._value) {
-			var r = 1 * this._value;
-			if (!(r)) {
-				r = 0;
-			}
-			return r;
-		} else {
-			return 0;
-		}
-	};
-	return this;
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+console.log('ZvoogState v2.03');
+function cloneMeasureTempo(s) {
+    var t = {
+        bpm: s.bpm,
+        fraction: s.fraction
+    };
+    return t;
 }
-ZvoogState.lock = [];
+function cloneTimeSignature(s) {
+    var t = {
+        count: s.count,
+        fraction: s.fraction
+    };
+    return t;
+}
+function clonePoint(p) {
+    var t = {
+        at: cloneTimeSignature(p.at),
+        pitch: p.pitch
+    };
+    return t;
+}
+function cloneValue(v) {
+    var t = {
+        start: clonePoint(v.start),
+        end: clonePoint(v.end)
+    };
+    return t;
+}
+function cloneMeasure(m) {
+    var t = {
+        tempo: cloneMeasureTempo(m.tempo),
+        meter: m.meter,
+        values: []
+    };
+    for (var i = 0; i < m.values.length; i++) {
+        t.values.push(cloneValue(m.values[i]));
+    }
+    return t;
+}
+function cloneStateChannel(c) {
+    var t = {
+        title: c.title,
+        measures: []
+    };
+    for (var i = 0; i < c.measures.length; i++) {
+        t.measures.push(cloneMeasure(c.measures[i]));
+    }
+    return t;
+}
+function cloneZvoogState(s) {
+    var n = {
+        title: s.title,
+        channels: []
+    };
+    for (var i = 0; i < s.channels.length; i++) {
+        n.channels.push(cloneStateChannel(s.channels[i]));
+    }
+    return n;
+}
+var ZvoogDispatcher = /** @class */ (function () {
+    function ZvoogDispatcher() {
+        console.log('ZvoogDispatcher');
+    }
+    ZvoogDispatcher.prototype.registerRoute = function (from, to) {
+    };
+    return ZvoogDispatcher;
+}());
+var ZvoogNode = /** @class */ (function () {
+    function ZvoogNode() {
+        console.log('ZvoogNode');
+    }
+    return ZvoogNode;
+}());
+var ZvoogNodeButton = /** @class */ (function (_super) {
+    __extends(ZvoogNodeButton, _super);
+    function ZvoogNodeButton() {
+        var _this = _super.call(this) || this;
+        console.log('ZvoogNodeButton');
+        return _this;
+    }
+    ZvoogNodeButton.prototype.uiClick = function () {
+        console.log('uiClick');
+    };
+    return ZvoogNodeButton;
+}(ZvoogNode));
+var d = new ZvoogDispatcher();
+var b = new ZvoogNodeButton();
+b.uiClick();
