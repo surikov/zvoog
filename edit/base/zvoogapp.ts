@@ -47,9 +47,9 @@ class ZvoogApp {
 		//console.log(this.currentSong);
 		var menuDiv: HTMLElement | null = document.getElementById('mainMenuDiv');
 		if (menuDiv) {
-			menuDiv.addEventListener("touchstart", this.preventTouch.bind(this), { capture: false, passive: false });
-			menuDiv.addEventListener("touchmove", this.preventTouch.bind(this), { capture: false, passive: false });
-			menuDiv.addEventListener("touchend", this.preventTouch.bind(this), { capture: false, passive: false });
+			menuDiv.addEventListener("touchstart", this.preventTouch.bind(this), { capture: true, passive: false });
+			menuDiv.addEventListener("touchmove", this.preventTouch.bind(this), { capture: true, passive: false });
+			menuDiv.addEventListener("touchend", this.preventTouch.bind(this), { capture: true, passive: false });
 		}
 		let layers: (TileModelLayer | TileLayerStickLeft | TileLayerStickTop | TileLayerStickBottom | TileLayerStickRight | TileLayerOverlay)[]
 			= this.createLayers();
@@ -63,6 +63,7 @@ class ZvoogApp {
 		if (filesinput) filesinput.addEventListener('change', this.handleFileSelect.bind(this), false);
 	}
 	preventTouch(touchEvent: TouchEvent) {
+		//alert('catch');
 		if (touchEvent.touches.length > 1) {
 			touchEvent.preventDefault();
 		}

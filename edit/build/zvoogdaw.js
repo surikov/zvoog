@@ -4008,9 +4008,9 @@ var ZvoogApp = /** @class */ (function () {
         //console.log(this.currentSong);
         var menuDiv = document.getElementById('mainMenuDiv');
         if (menuDiv) {
-            menuDiv.addEventListener("touchstart", this.preventTouch.bind(this), { capture: false, passive: false });
-            menuDiv.addEventListener("touchmove", this.preventTouch.bind(this), { capture: false, passive: false });
-            menuDiv.addEventListener("touchend", this.preventTouch.bind(this), { capture: false, passive: false });
+            menuDiv.addEventListener("touchstart", this.preventTouch.bind(this), { capture: true, passive: false });
+            menuDiv.addEventListener("touchmove", this.preventTouch.bind(this), { capture: true, passive: false });
+            menuDiv.addEventListener("touchend", this.preventTouch.bind(this), { capture: true, passive: false });
         }
         var layers = this.createLayers();
         this.tileLevel = new TileLevel(document.getElementById('contentSVG'), 100, 100, this.minZoom, 20, this.maxZoom - 0.001, layers);
@@ -4022,6 +4022,7 @@ var ZvoogApp = /** @class */ (function () {
             filesinput.addEventListener('change', this.handleFileSelect.bind(this), false);
     };
     ZvoogApp.prototype.preventTouch = function (touchEvent) {
+        //alert('catch');
         if (touchEvent.touches.length > 1) {
             touchEvent.preventDefault();
         }
