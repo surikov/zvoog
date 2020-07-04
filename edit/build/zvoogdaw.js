@@ -2008,7 +2008,7 @@ var TileLevel = /** @class */ (function () {
     TileLevel.prototype.rakeMouseWheel = function (e) {
         this.slidingLockTo = -1;
         //console.log('rakeMouseWheel',e.wheelDelta,e.detail,e.deltaX,e.deltaY,e.deltaZ,e);
-        //e.preventDefault();
+        e.preventDefault();
         //let wheelVal = e.wheelDelta || -e.detail;
         var wheelVal = e.deltaY;
         var min = Math.min(1, wheelVal);
@@ -2085,7 +2085,7 @@ var TileLevel = /** @class */ (function () {
     };
     TileLevel.prototype.rakeTouchStart = function (touchEvent) {
         this.slidingLockTo = -1;
-        //touchEvent.preventDefault();
+        touchEvent.preventDefault();
         this.startedTouch = true;
         if (touchEvent.touches.length < 2) {
             this.twoZoom = false;
@@ -2103,7 +2103,7 @@ var TileLevel = /** @class */ (function () {
         this.clicked = false;
     };
     TileLevel.prototype.rakeTouchMove = function (touchEvent) {
-        //touchEvent.preventDefault();
+        touchEvent.preventDefault();
         if (this.startedTouch) {
             if (touchEvent.touches.length < 2) {
                 if (this.twoZoom) {

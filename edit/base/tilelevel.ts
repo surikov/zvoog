@@ -377,7 +377,7 @@ class TileLevel {
 	rakeMouseWheel(e: WheelEvent) {
 		this.slidingLockTo = -1;
 		//console.log('rakeMouseWheel',e.wheelDelta,e.detail,e.deltaX,e.deltaY,e.deltaZ,e);
-		//e.preventDefault();
+		e.preventDefault();
 		//let wheelVal = e.wheelDelta || -e.detail;
 		let wheelVal: number = e.deltaY;
 		let min: number = Math.min(1, wheelVal);
@@ -458,7 +458,7 @@ class TileLevel {
 	}
 	rakeTouchStart(touchEvent: TouchEvent) {
 		this.slidingLockTo = -1;
-		//touchEvent.preventDefault();
+		touchEvent.preventDefault();
 		this.startedTouch = true;
 		if (touchEvent.touches.length < 2) {
 			this.twoZoom = false;
@@ -475,7 +475,7 @@ class TileLevel {
 		this.clicked = false;
 	}
 	rakeTouchMove(touchEvent: TouchEvent) {
-		//touchEvent.preventDefault();
+		touchEvent.preventDefault();
 		if (this.startedTouch) {
 			if (touchEvent.touches.length < 2) {
 				if (this.twoZoom) {
