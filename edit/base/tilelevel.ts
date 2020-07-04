@@ -276,13 +276,13 @@ class TileLevel {
 		this.mn = minZoom;
 		this.translateZ = curZoom;
 
-		this.svg.addEventListener("wheel", this.rakeMouseWheel.bind(this), {capture:false,passive:false});
-		this.svg.addEventListener("touchstart", this.rakeTouchStart.bind(this), {capture:false,passive:false});
-		this.svg.addEventListener("touchmove", this.rakeTouchMove.bind(this),{capture:false,passive:false});
-		this.svg.addEventListener("touchend", this.rakeTouchEnd.bind(this), {capture:false,passive:false});
-		this.svg.addEventListener('mousedown', this.rakeMouseDown.bind(this), {capture:false,passive:false});
-		this.svg.addEventListener('mousemove', this.rakeMouseMove.bind(this), {capture:false,passive:false});
-		this.svg.addEventListener('mouseup', this.rakeMouseUp.bind(this), {capture:false,passive:false});
+		this.svg.addEventListener("wheel", this.rakeMouseWheel.bind(this), { capture: false, passive: false });
+		this.svg.addEventListener("touchstart", this.rakeTouchStart.bind(this), { capture: false, passive: false });
+		this.svg.addEventListener("touchmove", this.rakeTouchMove.bind(this), { capture: false, passive: false });
+		this.svg.addEventListener("touchend", this.rakeTouchEnd.bind(this), { capture: false, passive: false });
+		this.svg.addEventListener('mousedown', this.rakeMouseDown.bind(this), { capture: false, passive: false });
+		this.svg.addEventListener('mousemove', this.rakeMouseMove.bind(this), { capture: false, passive: false });
+		this.svg.addEventListener('mouseup', this.rakeMouseUp.bind(this), { capture: false, passive: false });
 		window.addEventListener('resize', this.onAfterResize.bind(this));
 
 		this.setModel(layers);
@@ -533,7 +533,7 @@ class TileLevel {
 						//if (speed > 1) {
 						//	this.moveTail(speed);
 						//} else {
-						//	this.slideToContentPosition();
+						this.slideToContentPosition();
 						//}
 					}
 				} else {

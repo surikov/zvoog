@@ -12,13 +12,14 @@ class ZvoogApp {
 	firstAnchor: TileAnchor;
 	secondAnchor: TileAnchor;
 	otherAnchor: TileAnchor;
-	keyPatternAnchor: TileAnchor;
+	keyZoomAnchor: TileAnchor;
+	keyWholeAnchor: TileAnchor;
 	meterPatternAnchor: TileAnchor;
 	workButtonsGroup: TileAnchor;
 	popupMenuGroup: TileAnchor;
 	popupSubMenuGroup: TileAnchor;
 	popupSubSubMenuGroup: TileAnchor;
-	backgroundAnchor: TileAnchor;
+	//backgroundAnchor: TileAnchor;
 
 	popupLayer: TileModelLayer;
 
@@ -296,7 +297,7 @@ class ZvoogApp {
 						, this.patternDuration(chunk) * this.lengthOfSecond * 4
 						, 120 * this.noteLineWidth
 						, this.minZoom
-						, 25
+						, this.maxZoom
 					);
 					/*chunkAnchor.content.push(this.tileLevel.rectangle(this.gridIndentLeft + nextMeasureX
 						, this.gridIndentUp
@@ -371,9 +372,10 @@ class ZvoogApp {
 	}
 	resetGrid() {
 		//this.gridAnchor.content.length = 0;
-		this.keyPatternAnchor.content.length = 0;
+		this.keyZoomAnchor.content.length = 0;
+		this.keyWholeAnchor.content.length = 0;
 		this.meterPatternAnchor.content.length = 0;
-		this.backgroundAnchor.content.length = 0;
+		/*this.backgroundAnchor.content.length = 0;
 
 
 		this.backgroundAnchor.content.push({
@@ -384,7 +386,7 @@ class ZvoogApp {
 			, rx: 32
 			, ry: 32
 			, css: 'fillBack'
-		});
+		});*/
 		var nextMeasureX = 0;
 		if (this.currentSong.tracks.length > this.currentSong.selectedTrack) {
 			var track: ZvoogTrack = this.currentSong.tracks[this.currentSong.selectedTrack];
@@ -459,19 +461,20 @@ class ZvoogApp {
 				}
 			}
 		}
-		this.keyPatternAnchor.ww = nextMeasureX;
+		this.keyZoomAnchor.ww = nextMeasureX;
+		this.keyWholeAnchor.ww = nextMeasureX;
 		for (var k = 0; k < 120; k++) {
 			if (this.currentSong.keyPattern[k]) {
 				var css = 'keyFillWhite';
 				if (this.currentSong.keyPattern[k] > 1) { css = 'keyFillBlack'; }
 				if (this.currentSong.keyPattern[k] > 2) { css = 'keyFillWhite'; }
-				this.keyPatternAnchor.content.push({
+				this.keyZoomAnchor.content.push({
 					x: this.gridIndentLeft, y: this.gridIndentUp + (120 - k - 1) * this.noteLineWidth
 					, w: nextMeasureX, h: 0.9 * this.noteLineWidth, css: css
 				});
 				if (k > 0) {
 					if (this.currentSong.keyPattern[k] > 2) {
-						this.keyPatternAnchor.content.push({
+						this.keyZoomAnchor.content.push({
 							x: this.gridIndentLeft, y: this.gridIndentUp + (120 - k - 0.05) * this.noteLineWidth
 							, w: nextMeasureX, h: 0.1 * this.noteLineWidth, css: 'meterLine'
 						});
@@ -479,26 +482,42 @@ class ZvoogApp {
 				}
 			}
 		}
+		for (var k = 0; k < 10; k++) {
+			var css = 'keyFillWhite';
+			if(k%2){
+				css = 'keyFillBlack';
+			}
+			this.keyWholeAnchor.content.push({
+				x: this.gridIndentLeft, y: this.gridIndentUp + (120 - k*12-12 ) * this.noteLineWidth
+				, w: nextMeasureX, h: 12 * this.noteLineWidth, css: css
+			});
+		}
+
 	}
+	resetTrackVoiceName(){
+
+	}
+	
 	createLayers(): (TileModelLayer | TileLayerStickLeft | TileLayerStickTop | TileLayerStickBottom | TileLayerStickRight | TileLayerOverlay)[] {
 		let layers: (TileModelLayer | TileLayerStickLeft | TileLayerStickTop | TileLayerStickBottom | TileLayerStickRight | TileLayerOverlay)[] = [];
 		this.overButtonsAnchor = { xx: 0, yy: 0, ww: 1, hh: 1, showZoom: this.minZoom, hideZoom: this.maxZoom, content: [] };
-		this.keyPatternAnchor = { xx: 0, yy: this.gridIndentUp, ww: 1, hh: 120 * this.noteLineWidth, showZoom: this.minZoom, hideZoom: 25, content: [] };
+		this.keyZoomAnchor = { xx: 0, yy: this.gridIndentUp, ww: 1, hh: 120 * this.noteLineWidth, showZoom: this.minZoom, hideZoom: 25, content: [] };
+		this.keyWholeAnchor = { xx: 0, yy: this.gridIndentUp, ww: 1, hh: 120 * this.noteLineWidth, showZoom: 25, hideZoom: this.maxZoom, content: [] };
 
 		this.meterPatternAnchor = { xx: 0, yy: 0, ww: 1, hh: 1, showZoom: this.minZoom, hideZoom: this.maxZoom, content: [] };
 		//this.gridAnchor = { xx: 0, yy: 0, ww: 1, hh: 1, showZoom: this.minZoom, hideZoom: this.maxZoom, content: [] };
-		this.firstAnchor = { xx: 0, yy: 0, ww: 1, hh: 1, showZoom: this.minZoom, hideZoom: this.maxZoom, content: [] };
-		this.secondAnchor = { xx: 0, yy: 0, ww: 1, hh: 1, showZoom: this.minZoom, hideZoom: this.maxZoom, content: [] };
-		this.otherAnchor = { xx: 0, yy: 0, ww: 1, hh: 1, showZoom: this.minZoom, hideZoom: this.maxZoom, content: [] };
+		this.firstAnchor = { xx: 0, yy: 0, ww: 1, hh: 1, showZoom: this.minZoom, hideZoom: 100, content: [] };
+		this.secondAnchor = { xx: 0, yy: 0, ww: 1, hh: 1, showZoom: this.minZoom, hideZoom: 50, content: [] };
+		this.otherAnchor = { xx: 0, yy: 0, ww: 1, hh: 1, showZoom: this.minZoom, hideZoom: 25, content: [] };
 		this.workButtonsGroup = { xx: 0, yy: 0, ww: 1, hh: 1, showZoom: this.minZoom, hideZoom: this.maxZoom, content: [] };
-		this.backgroundAnchor = { xx: 0, yy: 0, ww: 1, hh: 1, showZoom: this.minZoom, hideZoom: this.maxZoom, content: [] };
+		//this.backgroundAnchor = { xx: 0, yy: 0, ww: 1, hh: 1, showZoom: this.minZoom, hideZoom: this.maxZoom, content: [] };
 
 		this.popupMenuGroup = { xx: 0, yy: 0, ww: 1, hh: 1, showZoom: this.minZoom, hideZoom: this.maxZoom, content: [] };
 		this.popupSubMenuGroup = { xx: 0, yy: 0, ww: 1, hh: 1, showZoom: this.minZoom, hideZoom: this.maxZoom, content: [] };
 		this.popupSubSubMenuGroup = { xx: 0, yy: 0, ww: 1, hh: 1, showZoom: this.minZoom, hideZoom: this.maxZoom, content: [] };
 		layers.push({ g: (document.getElementById('overButtonsGroup') as any) as SVGElement, anchors: [this.overButtonsAnchor], overlay: 1 });
-		layers.push({ g: (document.getElementById('keyPatternGroup') as any) as SVGElement, anchors: [this.keyPatternAnchor] });
-		layers.push({ g: (document.getElementById('backgroundGroup') as any) as SVGElement, anchors: [this.backgroundAnchor] });
+		layers.push({ g: (document.getElementById('keyPatternGroup') as any) as SVGElement, anchors: [this.keyZoomAnchor,this.keyWholeAnchor] });
+		//layers.push({ g: (document.getElementById('backgroundGroup') as any) as SVGElement, anchors: [this.backgroundAnchor] });
 		layers.push({ g: (document.getElementById('meterPatternGroup') as any) as SVGElement, anchors: [this.meterPatternAnchor] });
 		//layers.push({ g: (document.getElementById('gridGroup') as any) as SVGElement, anchors: [this.gridAnchor] });
 		layers.push({ g: (document.getElementById('otherVoicesGroup') as any) as SVGElement, anchors: [this.otherAnchor] });
@@ -557,14 +576,18 @@ class ZvoogApp {
 		this.secondAnchor.hh = this.tileLevel.innerHeight / this.tileLevel.tapSize;
 		this.otherAnchor.ww = this.tileLevel.innerWidth / this.tileLevel.tapSize;
 		this.otherAnchor.hh = this.tileLevel.innerHeight / this.tileLevel.tapSize;
-		this.keyPatternAnchor.ww = this.tileLevel.innerWidth / this.tileLevel.tapSize;
-		this.keyPatternAnchor.hh = this.tileLevel.innerHeight / this.tileLevel.tapSize;
+		this.keyZoomAnchor.ww = this.tileLevel.innerWidth / this.tileLevel.tapSize;
+		this.keyZoomAnchor.hh = this.tileLevel.innerHeight / this.tileLevel.tapSize;
+		this.keyWholeAnchor.ww = this.tileLevel.innerWidth / this.tileLevel.tapSize;
+		this.keyWholeAnchor.hh = this.tileLevel.innerHeight / this.tileLevel.tapSize;
+
+
 		this.meterPatternAnchor.ww = this.tileLevel.innerWidth / this.tileLevel.tapSize;
 		this.meterPatternAnchor.hh = this.tileLevel.innerHeight / this.tileLevel.tapSize;
 		this.workButtonsGroup.ww = this.tileLevel.innerWidth / this.tileLevel.tapSize;
 		this.workButtonsGroup.hh = this.tileLevel.innerHeight / this.tileLevel.tapSize;
-		this.backgroundAnchor.ww = this.tileLevel.innerWidth / this.tileLevel.tapSize;
-		this.backgroundAnchor.hh = this.tileLevel.innerHeight / this.tileLevel.tapSize;
+		//this.backgroundAnchor.ww = this.tileLevel.innerWidth / this.tileLevel.tapSize;
+		//this.backgroundAnchor.hh = this.tileLevel.innerHeight / this.tileLevel.tapSize;
 
 
 	}
