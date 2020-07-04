@@ -4006,7 +4006,7 @@ var ZvoogApp = /** @class */ (function () {
         var testSong = new TestSong();
         this.currentSong = testSong.createRandomSchedule();
         //console.log(this.currentSong);
-        var menuDiv = document.getElementById('contentSVG');
+        var menuDiv = document.getElementById('mainMenuDiv');
         if (menuDiv) {
             menuDiv.addEventListener("touchstart", this.preventTouch.bind(this), { capture: false, passive: false });
             menuDiv.addEventListener("touchmove", this.preventTouch.bind(this), { capture: false, passive: false });
