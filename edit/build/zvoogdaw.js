@@ -1808,21 +1808,13 @@ var TileLevel = /** @class */ (function () {
         this.mx = maxZoom;
         this.mn = minZoom;
         this.translateZ = curZoom;
-        //this.setupTapSize();
-        this.svg.addEventListener('mousedown', this.rakeMouseDown.bind(this), false);
-        /*this.svg.addEventListener("mousewheel", this.rakeMouseWheel, {
-            capture: false,
-            passive: true
-        });*/
-        this.svg.addEventListener("wheel", this.rakeMouseWheel.bind(this), false);
-        /*this.svg.addEventListener("DOMMouseScroll", this.rakeMouseWheel, {
-            capture: false
-        });*/
-        this.svg.addEventListener("touchstart", this.rakeTouchStart.bind(this), false);
-        this.svg.addEventListener("touchmove", this.rakeTouchMove.bind(this), false);
-        this.svg.addEventListener("touchend", this.rakeTouchEnd.bind(this), false);
-        this.svg.addEventListener('mousemove', this.rakeMouseMove.bind(this), false);
-        this.svg.addEventListener('mouseup', this.rakeMouseUp.bind(this), false);
+        this.svg.addEventListener("wheel", this.rakeMouseWheel.bind(this), { capture: false, passive: false });
+        this.svg.addEventListener("touchstart", this.rakeTouchStart.bind(this), { capture: false, passive: false });
+        this.svg.addEventListener("touchmove", this.rakeTouchMove.bind(this), { capture: false, passive: false });
+        this.svg.addEventListener("touchend", this.rakeTouchEnd.bind(this), { capture: false, passive: false });
+        this.svg.addEventListener('mousedown', this.rakeMouseDown.bind(this), { capture: false, passive: false });
+        this.svg.addEventListener('mousemove', this.rakeMouseMove.bind(this), { capture: false, passive: false });
+        this.svg.addEventListener('mouseup', this.rakeMouseUp.bind(this), { capture: false, passive: false });
         window.addEventListener('resize', this.onAfterResize.bind(this));
         this.setModel(layers);
         this.startLoop();
@@ -1993,6 +1985,7 @@ var TileLevel = /** @class */ (function () {
         //}
     };
     TileLevel.prototype.rakeMouseWheel = function (e) {
+        //console.log('rakeMouseWheel',e);
         this.slidingLockTo = -1;
         //console.log('rakeMouseWheel',e.wheelDelta,e.detail,e.deltaX,e.deltaY,e.deltaZ,e);
         e.preventDefault();
@@ -2017,7 +2010,7 @@ var TileLevel = /** @class */ (function () {
     };
     TileLevel.prototype.rakeMouseDown = function (mouseEvent) {
         this.slidingLockTo = -1;
-        //console.log('rakeMouseDown',this);
+        //console.log('rakeMouseDown',mouseEvent);
         mouseEvent.preventDefault();
         //this.svg.addEventListener('mousemove', this.rakeMouseMove.bind(this), true);
         //this.svg.addEventListener('mouseup', this.rakeMouseUp.bind(this), false);
@@ -2030,6 +2023,7 @@ var TileLevel = /** @class */ (function () {
         this.startDragZoom();
     };
     TileLevel.prototype.rakeMouseMove = function (mouseEvent) {
+        //console.log('rakeMouseMove',mouseEvent);
         if (this.mouseDownMode) {
             mouseEvent.preventDefault();
             var dX = mouseEvent.offsetX - this.startMouseScreenX;
@@ -2043,7 +2037,7 @@ var TileLevel = /** @class */ (function () {
         }
     };
     TileLevel.prototype.rakeMouseUp = function (mouseEvent) {
-        //console.log('rakeMouseUp',this);
+        //console.log('rakeMouseUp',mouseEvent);
         if (this.mouseDownMode) {
             this.mouseDownMode = false;
             mouseEvent.preventDefault();
@@ -2071,6 +2065,7 @@ var TileLevel = /** @class */ (function () {
         }
     };
     TileLevel.prototype.rakeTouchStart = function (touchEvent) {
+        console.log('rakeTouchStart', touchEvent.touches.length);
         this.slidingLockTo = -1;
         touchEvent.preventDefault();
         this.startedTouch = true;
@@ -2090,6 +2085,7 @@ var TileLevel = /** @class */ (function () {
         this.clicked = false;
     };
     TileLevel.prototype.rakeTouchMove = function (touchEvent) {
+        console.log('rakeTouchMove', touchEvent.touches.length);
         touchEvent.preventDefault();
         if (this.startedTouch) {
             if (touchEvent.touches.length < 2) {
@@ -2150,6 +2146,7 @@ var TileLevel = /** @class */ (function () {
         }
     };
     TileLevel.prototype.rakeTouchEnd = function (touchEvent) {
+        console.log('rakeTouchEnd', touchEvent.touches.length);
         touchEvent.preventDefault();
         this.allTilesOK = false;
         if (!this.twoZoom) {

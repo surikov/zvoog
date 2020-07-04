@@ -275,21 +275,14 @@ class TileLevel {
 		this.mx = maxZoom;
 		this.mn = minZoom;
 		this.translateZ = curZoom;
-		//this.setupTapSize();
-		this.svg.addEventListener('mousedown', this.rakeMouseDown.bind(this), false);
-		/*this.svg.addEventListener("mousewheel", this.rakeMouseWheel, {
-			capture: false,
-			passive: true
-		});*/
-		this.svg.addEventListener("wheel", this.rakeMouseWheel.bind(this), false);
-		/*this.svg.addEventListener("DOMMouseScroll", this.rakeMouseWheel, {
-			capture: false
-		});*/
-		this.svg.addEventListener("touchstart", this.rakeTouchStart.bind(this), false);
-		this.svg.addEventListener("touchmove", this.rakeTouchMove.bind(this),false);
-		this.svg.addEventListener("touchend", this.rakeTouchEnd.bind(this), false);
-		this.svg.addEventListener('mousemove', this.rakeMouseMove.bind(this), false);
-		this.svg.addEventListener('mouseup', this.rakeMouseUp.bind(this), false);
+
+		this.svg.addEventListener("wheel", this.rakeMouseWheel.bind(this), {capture:false,passive:false});
+		this.svg.addEventListener("touchstart", this.rakeTouchStart.bind(this), {capture:false,passive:false});
+		this.svg.addEventListener("touchmove", this.rakeTouchMove.bind(this),{capture:false,passive:false});
+		this.svg.addEventListener("touchend", this.rakeTouchEnd.bind(this), {capture:false,passive:false});
+		this.svg.addEventListener('mousedown', this.rakeMouseDown.bind(this), {capture:false,passive:false});
+		this.svg.addEventListener('mousemove', this.rakeMouseMove.bind(this), {capture:false,passive:false});
+		this.svg.addEventListener('mouseup', this.rakeMouseUp.bind(this), {capture:false,passive:false});
 		window.addEventListener('resize', this.onAfterResize.bind(this));
 
 		this.setModel(layers);
@@ -362,6 +355,7 @@ class TileLevel {
 		//}
 	}
 	rakeMouseWheel(e: WheelEvent) {
+		//console.log('rakeMouseWheel',e);
 		this.slidingLockTo = -1;
 		//console.log('rakeMouseWheel',e.wheelDelta,e.detail,e.deltaX,e.deltaY,e.deltaZ,e);
 		e.preventDefault();
@@ -386,7 +380,7 @@ class TileLevel {
 	}
 	rakeMouseDown(mouseEvent: MouseEvent) {
 		this.slidingLockTo = -1;
-		//console.log('rakeMouseDown',this);
+		//console.log('rakeMouseDown',mouseEvent);
 		mouseEvent.preventDefault();
 		//this.svg.addEventListener('mousemove', this.rakeMouseMove.bind(this), true);
 		//this.svg.addEventListener('mouseup', this.rakeMouseUp.bind(this), false);
@@ -399,6 +393,7 @@ class TileLevel {
 		this.startDragZoom();
 	}
 	rakeMouseMove(mouseEvent: MouseEvent) {
+		//console.log('rakeMouseMove',mouseEvent);
 		if (this.mouseDownMode) {
 			mouseEvent.preventDefault();
 			let dX: number = mouseEvent.offsetX - this.startMouseScreenX;
@@ -412,7 +407,7 @@ class TileLevel {
 		}
 	}
 	rakeMouseUp(mouseEvent: MouseEvent) {
-		//console.log('rakeMouseUp',this);
+		//console.log('rakeMouseUp',mouseEvent);
 		if (this.mouseDownMode) {
 			this.mouseDownMode = false;
 			mouseEvent.preventDefault();
@@ -444,6 +439,7 @@ class TileLevel {
 		}
 	}
 	rakeTouchStart(touchEvent: TouchEvent) {
+		console.log('rakeTouchStart',touchEvent.touches.length);
 		this.slidingLockTo = -1;
 		touchEvent.preventDefault();
 		this.startedTouch = true;
@@ -462,6 +458,7 @@ class TileLevel {
 		this.clicked = false;
 	}
 	rakeTouchMove(touchEvent: TouchEvent) {
+		console.log('rakeTouchMove',touchEvent.touches.length);
 		touchEvent.preventDefault();
 		if (this.startedTouch) {
 			if (touchEvent.touches.length < 2) {
@@ -519,6 +516,7 @@ class TileLevel {
 		}
 	}
 	rakeTouchEnd(touchEvent: TouchEvent) {
+		console.log('rakeTouchEnd',touchEvent.touches.length);
 		touchEvent.preventDefault();
 		this.allTilesOK = false;
 		if (!this.twoZoom) {
