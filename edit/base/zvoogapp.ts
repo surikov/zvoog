@@ -63,7 +63,6 @@ class ZvoogApp {
 		if (filesinput) filesinput.addEventListener('change', this.handleFileSelect.bind(this), false);
 	}
 	preventTouch(touchEvent: TouchEvent) {
-		//alert('catch');
 		if (touchEvent.touches.length > 1) {
 			touchEvent.preventDefault();
 		}

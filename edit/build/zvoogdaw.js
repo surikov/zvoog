@@ -4022,7 +4022,6 @@ var ZvoogApp = /** @class */ (function () {
             filesinput.addEventListener('change', this.handleFileSelect.bind(this), false);
     };
     ZvoogApp.prototype.preventTouch = function (touchEvent) {
-        //alert('catch');
         if (touchEvent.touches.length > 1) {
             touchEvent.preventDefault();
         }
