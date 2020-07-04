@@ -44,7 +44,13 @@ class ZvoogApp {
 		let testSong: TestSong = new TestSong();
 
 		this.currentSong = testSong.createRandomSchedule();
-		console.log(this.currentSong);
+		//console.log(this.currentSong);
+		var menuDiv: HTMLElement | null = document.getElementById('contentSVG');
+		if (menuDiv) {
+			menuDiv.addEventListener("touchstart", this.preventTouch.bind(this), { capture: false, passive: false });
+			menuDiv.addEventListener("touchmove", this.preventTouch.bind(this), { capture: false, passive: false });
+			menuDiv.addEventListener("touchend", this.preventTouch.bind(this), { capture: false, passive: false });
+		}
 		let layers: (TileModelLayer | TileLayerStickLeft | TileLayerStickTop | TileLayerStickBottom | TileLayerStickRight | TileLayerOverlay)[]
 			= this.createLayers();
 		this.tileLevel = new TileLevel((document.getElementById('contentSVG') as any) as SVGElement, 100, 100
@@ -55,6 +61,11 @@ class ZvoogApp {
 		this.resetWholeProject();
 		var filesinput: HTMLElement | null = document.getElementById('filesinput');
 		if (filesinput) filesinput.addEventListener('change', this.handleFileSelect.bind(this), false);
+	}
+	preventTouch(touchEvent: TouchEvent) {
+		if (touchEvent.touches.length > 1) {
+			touchEvent.preventDefault();
+		}
 	}
 	handleFileSelect(event) {
 		var file = event.target.files[0];
@@ -282,7 +293,7 @@ class ZvoogApp {
 					var chunkAnchor: TileAnchor = this.tileLevel.anchor(
 						this.gridIndentLeft + nextMeasureX
 						, this.gridIndentUp
-						, this.patternDuration(chunk) * this.lengthOfSecond*4
+						, this.patternDuration(chunk) * this.lengthOfSecond * 4
 						, 120 * this.noteLineWidth
 						, this.minZoom
 						, 25
@@ -348,11 +359,11 @@ class ZvoogApp {
 				, noteY + slide * this.noteLineWidth
 				, css));*/
 			anchor.content.push(this.tileLevel.line(
-					noteX  + 0.5 * this.noteLineWidth - dx
-					, noteY
-					, noteX + iWidth - 0.5 * this.noteLineWidth
-					, noteY + slide * this.noteLineWidth
-					, css));
+				noteX + 0.5 * this.noteLineWidth - dx
+				, noteY
+				, noteX + iWidth - 0.5 * this.noteLineWidth
+				, noteY + slide * this.noteLineWidth
+				, css));
 			//anchor.content.push(this.tileLevel.text(noteX + 0.5 * this.noteLineWidth, noteY, '.' + i, 'fontSize2 debug'));
 			noteY = noteY + slide * this.noteLineWidth;
 			noteX = noteX + iWidth;// - 0.5 * this.noteLineWidth;

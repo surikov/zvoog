@@ -4005,7 +4005,13 @@ var ZvoogApp = /** @class */ (function () {
         console.log('ZvoogApp start');
         var testSong = new TestSong();
         this.currentSong = testSong.createRandomSchedule();
-        console.log(this.currentSong);
+        //console.log(this.currentSong);
+        var menuDiv = document.getElementById('contentSVG');
+        if (menuDiv) {
+            menuDiv.addEventListener("touchstart", this.preventTouch.bind(this), { capture: false, passive: false });
+            menuDiv.addEventListener("touchmove", this.preventTouch.bind(this), { capture: false, passive: false });
+            menuDiv.addEventListener("touchend", this.preventTouch.bind(this), { capture: false, passive: false });
+        }
         var layers = this.createLayers();
         this.tileLevel = new TileLevel(document.getElementById('contentSVG'), 100, 100, this.minZoom, 20, this.maxZoom - 0.001, layers);
         this.tileLevel.afterResizeCallback = this.afterResizeCallback.bind(this);
@@ -4014,6 +4020,11 @@ var ZvoogApp = /** @class */ (function () {
         var filesinput = document.getElementById('filesinput');
         if (filesinput)
             filesinput.addEventListener('change', this.handleFileSelect.bind(this), false);
+    };
+    ZvoogApp.prototype.preventTouch = function (touchEvent) {
+        if (touchEvent.touches.length > 1) {
+            touchEvent.preventDefault();
+        }
     };
     ZvoogApp.prototype.handleFileSelect = function (event) {
         var file = event.target.files[0];
