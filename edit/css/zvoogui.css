@@ -184,34 +184,56 @@ a {
 .fontSize05 {
 	font-size: 0.5cm;
 }
-.overLabel {
+.overLabelVoice {
 	font-size: 1cm;
 	fill: var(--aux-color);
 	fill-opacity: var(--grid-opacity);
+	transform: rotate(90deg);
 }
 
-.overLabel2 {
+.overLabelTrack {
 	font-size: 2cm;
 	fill: var(--aux-color);
 	fill-opacity: var(--grid-opacity);
+	transform: rotate(90deg);
 }
 .octaveLabel16 {
-	font-size: 16cm;
-	fill: var(--aux-color);
-	fill-opacity: var(--grid-opacity);
-}
-.octaveLabel8 {
 	font-size: 8cm;
 	fill: var(--aux-color);
 	fill-opacity: var(--grid-opacity);
 }
-.octaveLabel4 {
+.octaveLabel8 {
 	font-size: 4cm;
 	fill: var(--aux-color);
 	fill-opacity: var(--grid-opacity);
 }
-.octaveLabel2 {
+.octaveLabel4 {
 	font-size: 2cm;
+	fill: var(--aux-color);
+	fill-opacity: var(--grid-opacity);
+}
+.octaveLabel2 {
+	font-size: 1cm;
+	fill: var(--aux-color);
+	fill-opacity: var(--grid-opacity);
+}
+.barNum256{
+	font-size: 256cm;
+	fill: var(--aux-color);
+	fill-opacity: var(--grid-opacity);
+}
+.barNum64{
+	font-size: 64cm;
+	fill: var(--aux-color);
+	fill-opacity: var(--grid-opacity);
+}
+.barNum16{
+	font-size: 16cm;
+	fill: var(--aux-color);
+	fill-opacity: var(--grid-opacity);
+}
+.barNum4{
+	font-size: 4cm;
 	fill: var(--aux-color);
 	fill-opacity: var(--grid-opacity);
 }
