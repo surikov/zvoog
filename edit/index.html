@@ -5,7 +5,7 @@
 	<meta name="viewport"
 		content="initial-scale=1.0, width=device-width, height=device-height, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0, shrink-to-fit=no" />
 	<link href="https://fonts.googleapis.com/css2?family=Oswald&display=swap" rel="stylesheet">
-	<link rel="stylesheet" type="text/css" href="./css/zvoogcolors_80th.css">
+	<link rel="stylesheet" type="text/css" href="./css/zvoogcolors_tina.css">
 	<link rel="stylesheet" type="text/css" href="./css/zvoogui.css">
 	<script type='text/javascript' src='./build/zvoogdaw.js'></script>
 	<title>Zvoog</title>
@@ -25,7 +25,9 @@
 		<g id='keyPatternGroup'></g>
 		<g id='meterPatternGroup'></g>
 		<!--<g id='gridGroup'></g>-->
-		<g id='labelsGroup'></g>
+		<g id='labelsStaticGroup'></g>
+		<g id='labelsBottomGroup'></g>
+		<g id='labelsRightGroup'></g>
 		<g id='otherVoicesGroup'></g>
 		<g id='secondaryVoicesGroup'></g>
 		<g id='mainVoiceGroup'></g>
@@ -36,11 +38,9 @@
 	</svg>
 	<div id='mainMenuDiv' class='mainMenu'>
 		<div class='menuContentDiv' id='subDivMenu'>
-			<a href='javascript:void(0)' id='closeMainMenuButton' onclick='zvoogApp.closeLayersMenu();'>
-				<div class='menuHeaderDiv'>
-					<span id='menuTitleText'>Menu title</span>
-				</div>
-			</a>
+			<div class='menuHeaderDiv' onclick='zvoogApp.closeLayersMenu();'>
+				<span id='menuTitleText'>Menu title</span>
+			</div>
 			<div class='mainMenuRows' id='menuItemRows'>
 				<div class='mainMenuButtonRow'>&nbsp;</div>
 			</div>

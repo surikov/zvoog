@@ -184,7 +184,37 @@ a {
 .fontSize05 {
 	font-size: 0.5cm;
 }
+.overLabel {
+	font-size: 1cm;
+	fill: var(--aux-color);
+	fill-opacity: var(--grid-opacity);
+}
 
+.overLabel2 {
+	font-size: 2cm;
+	fill: var(--aux-color);
+	fill-opacity: var(--grid-opacity);
+}
+.octaveLabel16 {
+	font-size: 16cm;
+	fill: var(--aux-color);
+	fill-opacity: var(--grid-opacity);
+}
+.octaveLabel8 {
+	font-size: 8cm;
+	fill: var(--aux-color);
+	fill-opacity: var(--grid-opacity);
+}
+.octaveLabel4 {
+	font-size: 4cm;
+	fill: var(--aux-color);
+	fill-opacity: var(--grid-opacity);
+}
+.octaveLabel2 {
+	font-size: 2cm;
+	fill: var(--aux-color);
+	fill-opacity: var(--grid-opacity);
+}
 .mainMenu {
 	height: 100%;
 	width: 0;
