@@ -217,6 +217,11 @@ a {
 	fill: var(--aux-color);
 	fill-opacity: var(--grid-opacity);
 }
+.menuSmallIcon {
+	fill: var(--main-color);
+	width: 0.5cm;
+	height: 0.5cm;
+}
 .barNum256{
 	font-size: 256cm;
 	fill: var(--aux-color);
