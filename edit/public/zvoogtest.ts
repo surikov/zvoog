@@ -37,6 +37,7 @@ class ZvoogFilterSourceEmpty implements ZvoogSource, ZvoogEffect {
 }
 class TestSong {
 	createRandomCurve(duration: number): ZvoogCurve {
+		//console.log('createRandomCurve',duration);
 		let cu: ZvoogCurve = {
 			duration: duration
 			, points: []
@@ -44,7 +45,7 @@ class TestSong {
 		var curPoint: number = 0;
 		while (curPoint < duration) {
 			//var delta = Math.round(Math.random() * 5000 + 5000);
-			var delta: number = 384 * Math.random() > 0.5 ? 1 / 4 : 1 / 2;//{ count: Math.random() > 0.5 ? 0.25 : 0.5, division: duration.division };
+			var delta: number = 384 * (Math.random() > 0.5 ? 1 / 4 : 2);//{ count: Math.random() > 0.5 ? 0.25 : 0.5, division: duration.division };
 			var po: ZvoogPoint = { duration: delta, velocity: Math.floor(Math.random() * 127) };
 			cu.points.push(po);
 			curPoint = curPoint + delta;
