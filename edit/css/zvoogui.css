@@ -222,6 +222,7 @@ a {
 	width: 0.5cm;
 	height: 0.5cm;
 }
+
 .barNum256{
 	font-size: 256cm;
 	fill: var(--aux-color);
@@ -302,7 +303,7 @@ a {
 .subMenuButtonRow {
 	margin: 0px;
 	padding-top:0.1cm;
-	padding-left:0.9cm;
+	padding-left:0.5cm;
 	padding-right:0.0cm;
 	font-size: 75%;
 	text-overflow: ellipsis;
@@ -324,7 +325,7 @@ a {
 .subMenuSelected1 {
 	margin: 0px;
 	padding-top:0.1cm;
-	padding-left:0.9cm;
+	padding-left:0.5cm;
 	padding-right:0.0cm;
 	font-size: 75%;
 	text-overflow: ellipsis;
@@ -346,7 +347,7 @@ a {
 .subMenuSelected2 {
 	margin: 0px;
 	padding-top:0.1cm;
-	padding-left:0.9cm;
+	padding-left:0.5cm;
 	padding-right:0.0cm;
 	font-size: 75%;
 	text-overflow: ellipsis;
