@@ -222,6 +222,11 @@ a {
 	width: 0.5cm;
 	height: 0.5cm;
 }
+.menuRowIcon {
+	fill: var(--main-color);
+	width: 100;
+	height: 100;
+}
 
 .barNum256{
 	font-size: 256cm;
