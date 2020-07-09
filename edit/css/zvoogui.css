@@ -223,11 +223,15 @@ a {
 	height: 0.5cm;
 }
 .menuRowIcon {
-	fill: var(--main-color);
-	width: 100;
-	height: 100;
+	fill: pink;
+	width: 0.5cm;
+	height: 0.5cm;
+	stroke: #ff0000;
+	background-color: green;
 }
-
+img.menuRowIcon{
+	fill: var(--aux-color);
+}
 .barNum256{
 	font-size: 256cm;
 	fill: var(--aux-color);
@@ -304,6 +308,11 @@ a {
 	overflow: hidden;
 	white-space: nowrap;
 	color: var(--grid-color);
+	display: flex;
+	flex-direction: row;
+	justify-content: flex-start;
+	flex-wrap: nowrap;
+	align-items: baseline;
 }
 .subMenuButtonRow {
 	margin: 0px;
@@ -315,6 +324,11 @@ a {
 	overflow: hidden;
 	white-space: nowrap;
 	color: var(--grid-color);
+	display: flex;
+	flex-direction: row;
+	justify-content: flex-start;
+	flex-wrap: nowrap;
+	align-items: baseline;
 }
 .mainMenuSelected1 {
 	margin: 0px;
@@ -326,6 +340,11 @@ a {
 	overflow: hidden;
 	white-space: nowrap;
 	color: var(--aux-color);
+	display: flex;
+	flex-direction: row;
+	justify-content: flex-start;
+	flex-wrap: nowrap;
+	align-items: baseline;
 }
 .subMenuSelected1 {
 	margin: 0px;
@@ -337,6 +356,11 @@ a {
 	overflow: hidden;
 	white-space: nowrap;
 	color: var(--aux-color);
+	display: flex;
+	flex-direction: row;
+	justify-content: flex-start;
+	flex-wrap: nowrap;
+	align-items: baseline;
 }
 .mainMenuSelected2 {
 	margin: 0px;
@@ -348,6 +372,11 @@ a {
 	overflow: hidden;
 	white-space: nowrap;
 	color: var(--main-color);
+	display: flex;
+	flex-direction: row;
+	justify-content: flex-start;
+	flex-wrap: nowrap;
+	align-items: baseline;
 }
 .subMenuSelected2 {
 	margin: 0px;
@@ -359,4 +388,9 @@ a {
 	overflow: hidden;
 	white-space: nowrap;
 	color: var(--main-color);
+	display: flex;
+	flex-direction: row;
+	justify-content: flex-start;
+	flex-wrap: nowrap;
+	align-items: baseline;
 }
