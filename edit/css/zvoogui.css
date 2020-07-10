@@ -97,10 +97,8 @@ a {
 }
 
 .popupFill {
-	fill: #ffffff;
+	fill: var(--spot-color);
 	fill-opacity: 75%;
-	stroke: #000000;
-	stroke-opacity: 75%;
 }
 
 .fog {
