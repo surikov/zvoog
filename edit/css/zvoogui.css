@@ -97,12 +97,25 @@ a {
 }
 
 .popupFill {
-	fill: var(--spot-color);
+	fill: var(--background-color);
 	fill-opacity: 75%;
 }
 
+.popupShadow1 {
+	fill: #000000;
+	fill-opacity: 30%;
+}
+.popupShadow2 {
+	fill: #000000;
+	fill-opacity: 20%;
+}
+.popupShadow3 {
+	fill: #000000;
+	fill-opacity: 10%;
+}
+
 .fog {
-	fill: #ffffff;
+	fill: #999999;
 	fill-opacity: 50%;
 }
 
@@ -118,10 +131,11 @@ a {
 }
 
 .fillButtonSpot {
-	fill: var(--spot-color);
+	fill2: var(--spot-color);
 	stroke2: var(--main-color);
 	stroke2-opacity: 100%;
 	stroke2-width: 2px;
+	fill:url(#buttonGradient)
 }
 
 .fillColorContent {
