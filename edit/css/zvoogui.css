@@ -198,14 +198,14 @@ a {
 }
 .overLabelVoice {
 	font-size: 1cm;
-	fill: var(--aux-color);
+	fill: var(--main-color);
 	fill-opacity: var(--grid-opacity);
 	transform: rotate(90deg);
 }
 
 .overLabelTrack {
-	font-size: 2cm;
-	fill: var(--aux-color);
+	font-size: 1.3cm;
+	fill: var(--grid-color);
 	fill-opacity: var(--grid-opacity);
 	transform: rotate(90deg);
 }
