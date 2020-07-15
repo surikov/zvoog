@@ -159,42 +159,52 @@ a {
 
 .fontSize256 {
 	font-size: 256cm;
+	pointer-events: none;
 }
 
 .fontSize128 {
 	font-size: 128cm;
+	pointer-events: none;
 }
 
 .fontSize64 {
 	font-size: 64cm;
+	pointer-events: none;
 }
 
 .fontSize32 {
 	font-size: 32cm;
+	pointer-events: none;
 }
 
 .fontSize16 {
 	font-size: 16cm;
+	pointer-events: none;
 }
 
 .fontSize8 {
 	font-size: 8cm;
+	pointer-events: none;
 }
 
 .fontSize4 {
 	font-size: 4cm;
+	pointer-events: none;
 }
 
 .fontSize2 {
 	font-size: 2cm;
+	pointer-events: none;
 }
 
 .fontSize1 {
 	font-size: 1cm;
+	pointer-events: none;
 }
 
 .fontSize05 {
 	font-size: 0.5cm;
+	pointer-events: none;
 }
 .overLabelVoice {
 	font-size: 1cm;
