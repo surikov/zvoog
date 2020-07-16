@@ -239,7 +239,7 @@ class TestSong {
 			, tracks: []
 			, effects: []
 			, macros: [
-
+/*
 				{
 					key: undoRedoBunch, point: { x: 0, y: 0, z: 100 }, properties: {
 						commands: [
@@ -248,7 +248,7 @@ class TestSong {
 							, { key: undoRedoChangeProjectTitle, properties: { oldTitle: 'Another title', newTitle: t }, point: { x: 0, y: 0, z: 100 } }
 						]
 					}
-				}
+				}*/
 
 			]
 			, macroPosition: 2
