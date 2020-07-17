@@ -127,8 +127,7 @@ type ZvoogSchedule = {
 	, keyPattern: number[]
 	, horizontal: boolean
 	, locked: boolean
-	, selectedTrack: number
-	, selectedVoice: number
+	, selectedLayer: {a:number,b:number,c:number,d:number}
 };
 type ZvoogValue = {
 	data: string

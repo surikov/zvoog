@@ -66,7 +66,7 @@ class TestSong {
 		return lin;
 	}
 	createRandomEffect(songlenseconds: number): ZvoogTrackEffect {
-		let plugin: ZvoogEffect = new ZvoogFilterSourceEmpty();
+		let plugin: ZvoogEffect = new ZvoogFxGain();
 		let parameters: ZvoogParameterLine[] = [];
 		let parCount: number = Math.round(Math.random() * 5);
 		for (var i = 0; i < parCount; i++) {
@@ -274,10 +274,10 @@ class TestSong {
 			, keyPattern: this.createKeyPattern()
 			, horizontal: true
 			, locked: false
-			, selectedTrack: 0
-			, selectedVoice: 0
+			, selectedLayer: {a:0,b:0,c:0,d:0}
 		};
 		var mainFxCount = Math.round(Math.random() * 3);
+		//console.log('mainFxCount',mainFxCount);
 		for (var i = 0; i < mainFxCount; i++) {
 			s.effects.push(this.createRandomEffect(songlenseconds));
 		}
@@ -289,8 +289,8 @@ class TestSong {
 		var vc: number = 0;
 		if (s.tracks.length > 1) tc = 1;
 		if (s.tracks[tc].voices.length > 1) vc = 1;
-		s.selectedTrack = tc;
-		s.selectedVoice = vc;
+		s.selectedLayer.a = tc;
+		s.selectedLayer.b = vc;
 		return s;
 	}
 }
