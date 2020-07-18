@@ -141,6 +141,10 @@ a {
 .fillColorContent {
 	fill: var(--main-color);
 }
+.fillDisabledColorContent {
+	fill: var(--main-color);
+	text-decoration: line-through;
+}
 
 .fillColorAuxiliary2222222222222222222222222222 {
 	fill: var(--aux-color);
@@ -206,6 +210,7 @@ a {
 	font-size: 0.5cm;
 	pointer-events: none;
 }
+
 .overLabelVoice {
 	font-size: 1cm;
 	fill: var(--main-color);

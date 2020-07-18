@@ -1,14 +1,28 @@
 
+class ZvoogParameterEmpty implements ZvoogParameter {
+	label(): string {
+		return 'Empty parameter';
+	}
+	cancelScheduledValues(cancelTime: number): void {
+		//
+	}
+	linearRampToValueAtTime(value: number, endTime: number): void {
+		//
+	}
+	setValueAtTime(value: number, startTime: number): void {
+		//
+	}
+}
 class ZvoogFilterSourceEmpty implements ZvoogSource, ZvoogEffect {
 	base: GainNode;
-	params: ZvoogParameter[] = [];
+	params: ZvoogParameter[];
 	vals: ZvoogValue[] = [];
 	constructor() {
 		//
 	}
 	prepare(audioContext: AudioContext): void {
 		this.base = audioContext.createGain();
-		//this.params = [];
+		this.params = [new ZvoogParameterEmpty(), new ZvoogParameterEmpty()];
 	}
 	getInput(): AudioNode {
 		return this.base;
@@ -32,7 +46,7 @@ class ZvoogFilterSourceEmpty implements ZvoogSource, ZvoogEffect {
 		return 0;
 	}
 	label(): string {
-		return 'stub';
+		return 'Empty filter or source';
 	}
 }
 class TestSong {
@@ -59,16 +73,16 @@ class TestSong {
 		var curPoint: number = 0;
 		while (curPoint < songlenseconds) {
 			//var delta = Math.round(Math.random() * 24000 + 3000);
-			var delta: number = Math.round(Math.random() * songlenseconds);
+			var delta: number = 1+Math.round(Math.random() * songlenseconds);
 			lin.segments.push(this.createRandomCurve(delta));
 			curPoint = curPoint + delta;
 		}
 		return lin;
 	}
 	createRandomEffect(songlenseconds: number): ZvoogTrackEffect {
-		let plugin: ZvoogEffect = new ZvoogFxGain();
+		let plugin: ZvoogEffect = new ZvoogFilterSourceEmpty();
 		let parameters: ZvoogParameterLine[] = [];
-		let parCount: number = Math.round(Math.random() * 5);
+		let parCount: number = 1+Math.round(Math.random() * 5);
 		for (var i = 0; i < parCount; i++) {
 			parameters.push(this.createRandomLine(songlenseconds));
 		}
@@ -85,7 +99,7 @@ class TestSong {
 		}
 		var pi: ZvoogPitch = {
 			duration: d
-			, pitch: (pre > 0) ?pre+ Math.floor(Math.random() * 21 -10) : Math.floor(Math.random() * 120)
+			, pitch: (pre > 0) ? pre + Math.floor(Math.random() * 21 - 10) : Math.floor(Math.random() * 120)
 			//,pitch: (pre > 0) ?pre+ 0 : Math.floor(Math.random() * 120)
 		};
 		//console.log(pre,pi.pitch);
@@ -158,7 +172,7 @@ class TestSong {
 			, clefHint: Math.round(Math.random() * 3)
 			, keyHint: Math.round(Math.random() * 22 - 11)
 		};
-		let chCount: number = 1+Math.round(Math.random() * 2);
+		let chCount: number = 1 + Math.round(Math.random() * 2);
 		for (var i = 0; i < chCount; i++) {
 			p.chords.push(this.createRandomChord(count, division));
 		}
@@ -174,11 +188,11 @@ class TestSong {
 			, effects: []
 			, title: this.createRandomName() + 'voice '
 		};
-		let parCount: number = Math.round(Math.random() * 5);
+		let parCount: number = 1+Math.round(Math.random() * 5);
 		for (var i = 0; i < parCount; i++) {
 			v.source.parameters.push(this.createRandomLine(songlenseconds));
 		}
-		var mainFxCount = Math.round(Math.random() * 3);
+		var mainFxCount = 1+Math.round(Math.random() * 3);
 		for (var i = 0; i < mainFxCount; i++) {
 			v.effects.push(this.createRandomEffect(songlenseconds));
 		}
@@ -199,11 +213,11 @@ class TestSong {
 			, title: this.createRandomName() + 'track '
 			, strings: []
 		};
-		var mainFxCount = Math.round(Math.random() * 3);
+		var mainFxCount = 1+Math.round(Math.random() * 3);
 		for (var i = 0; i < mainFxCount; i++) {
 			t.effects.push(this.createRandomEffect(songlenseconds));
 		}
-		var mainVoxCount = Math.round(Math.random() * 3 + 1);
+		var mainVoxCount = 1+Math.round(Math.random() * 3 + 1);
 		for (var i = 0; i < mainVoxCount; i++) {
 			t.voices.push(this.createRandomVoice(songlenseconds, i));
 		}
@@ -239,16 +253,16 @@ class TestSong {
 			, tracks: []
 			, effects: []
 			, macros: [
-/*
-				{
-					key: undoRedoBunch, point: { x: 0, y: 0, z: 100 }, properties: {
-						commands: [
-							{ key: undoRedoChangeProjectTitle, properties: { oldTitle: 'old project title', newTitle: 'Next title' }, point: { x: 0, y: 0, z: 100 } }
-							, { key: undoRedoChangeProjectTitle, properties: { oldTitle: 'Next title', newTitle: 'Another title' }, point: { x: 0, y: 0, z: 100 } }
-							, { key: undoRedoChangeProjectTitle, properties: { oldTitle: 'Another title', newTitle: t }, point: { x: 0, y: 0, z: 100 } }
-						]
-					}
-				}*/
+				/*
+								{
+									key: undoRedoBunch, point: { x: 0, y: 0, z: 100 }, properties: {
+										commands: [
+											{ key: undoRedoChangeProjectTitle, properties: { oldTitle: 'old project title', newTitle: 'Next title' }, point: { x: 0, y: 0, z: 100 } }
+											, { key: undoRedoChangeProjectTitle, properties: { oldTitle: 'Next title', newTitle: 'Another title' }, point: { x: 0, y: 0, z: 100 } }
+											, { key: undoRedoChangeProjectTitle, properties: { oldTitle: 'Another title', newTitle: t }, point: { x: 0, y: 0, z: 100 } }
+										]
+									}
+								}*/
 
 			]
 			, macroPosition: 2
@@ -274,9 +288,9 @@ class TestSong {
 			, keyPattern: this.createKeyPattern()
 			, horizontal: true
 			, locked: false
-			, selectedLayer: {a:0,b:0,c:0,d:0}
+			, selectedLayer: { level1: 0, level2: 0, level3: 0, level4: 0 }
 		};
-		var mainFxCount = Math.round(Math.random() * 3);
+		var mainFxCount = 1+Math.round(Math.random() * 3);
 		//console.log('mainFxCount',mainFxCount);
 		for (var i = 0; i < mainFxCount; i++) {
 			s.effects.push(this.createRandomEffect(songlenseconds));
@@ -289,8 +303,8 @@ class TestSong {
 		var vc: number = 0;
 		if (s.tracks.length > 1) tc = 1;
 		if (s.tracks[tc].voices.length > 1) vc = 1;
-		s.selectedLayer.a = tc;
-		s.selectedLayer.b = vc;
+		s.selectedLayer.level1 = tc;
+		s.selectedLayer.level2 = vc;
 		return s;
 	}
 }

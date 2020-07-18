@@ -28,15 +28,25 @@ type UndoRedoCommand = {
 	, key: string
 	, point: XYZ
 };
-var undoRedoChangeProjectTitle: string = 'changeProjectTitle';
+enum UndoRedoKeys {
+	undoRedoChangeProjectTitle = 'changeProjectTitle'
+	,undoRedoChangeProjectDescription = 'changeProjectDescription'
+	,undoRedoSelectLayer = 'selectLayer'
+	, undoRedoBunch = 'bunch'
+};
+//var undoRedoChangeProjectTitle: string = 'changeProjectTitle';
 type UndoRedoChangeProjectTitleProperties = { newTitle: string, oldTitle: string };
-var undoRedoChangeProjectDescription: string = 'changeProjectDescription';
+//var undoRedoChangeProjectDescription: string = 'changeProjectDescription';
 type UndoRedoProjectDescriptionProperties = { newDescription: string, oldDescription: string };
-var undoRedoMoveTrack: string = 'moveTrack';
+//var undoRedoMoveTrack: string = 'moveTrack';
 //type UndoRedoMoveTrackProperties = { oldTrackPosition: number, newTrackPosition: number };
-var undoRedoMoveVoice: string = 'moveVoice';
-type UndoRedoMoveVoiceProperties = { oldTrackPosition: number, newTrackPosition: number, newVoicePosition: number, oldVoicePosition: number };
-var undoRedoBunch: string = 'bunch';
+//var undoRedoMoveVoice: string = 'moveVoice';
+//type UndoRedoMoveVoiceProperties = { oldTrackPosition: number, newTrackPosition: number, newVoicePosition: number, oldVoicePosition: number };
+
+//var undoRedoSelectLayer: string = 'moveVoice';
+type UndoRedoSelectLayerProperties = { oldSelection: ZvoogLayerSelection, newSelection: ZvoogLayerSelection };
+
+//var undoRedoBunch: string = 'bunch';
 type UndoRedoBunchProperties = { commands: UndoRedoCommand[] };
 
 type ZvoogMeter = {
@@ -111,7 +121,12 @@ type ZvoogGridStep = {
 	duration: number;
 	power: number;
 };
-
+type ZvoogLayerSelection={
+	level1:number
+	,level2:number
+	,level3:number
+	,level4:number
+};
 type ZvoogSchedule = {
 	tracks: ZvoogTrack[]
 	//, duration: number
@@ -127,7 +142,7 @@ type ZvoogSchedule = {
 	, keyPattern: number[]
 	, horizontal: boolean
 	, locked: boolean
-	, selectedLayer: {a:number,b:number,c:number,d:number}
+	, selectedLayer: ZvoogLayerSelection
 };
 type ZvoogValue = {
 	data: string
