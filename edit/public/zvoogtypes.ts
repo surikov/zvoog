@@ -6,6 +6,13 @@ function duration2time(bpm: number, duration384: number): number {
 	var part = 384 / (4 * duration384);
 	return n4 / part;
 }
+function durations2time(measures:ZvoogMeasure[]): number{
+	var t=0;
+	for(var i=0;i<measures.length;i++){
+		t=t+duration2time(measures[i].tempo,duration384(measures[i].meter));
+	}
+	return t;
+}
 function time2Duration(time: number, bpm: number): number {
 	var n4 = 60 / bpm;
 	var n384=n4/96;
@@ -84,10 +91,12 @@ type ZvoogChord = {
 	, fretHint: ZvoogFrets[]
 	, text: string
 };
-type ZvoogPattern = {
+type ZvoogMeasure = {
 	meter: ZvoogMeter//ZvoogMeter
 	, tempo: number
-	, chords: ZvoogChord[]
+};
+type ZvoogPattern = {
+	chords: ZvoogChord[]
 	, title: string
 	, clefHint: number
 	, keyHint: number
@@ -133,6 +142,7 @@ type ZvoogSchedule = {
 	, effects: ZvoogTrackEffect[]
 	//, patterns: ZvoogPattern[]
 	//, curves: ZvoogCurve[]
+	,timeline:ZvoogMeasure[]
 	, title: string
 	, description: string
 	, macros: UndoRedoCommand[]

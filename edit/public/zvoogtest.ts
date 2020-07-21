@@ -66,25 +66,30 @@ class TestSong {
 		}
 		return cu;
 	}
-	createRandomLine(songlenseconds: number): ZvoogParameterLine {
+	//createRandomLine(songlenseconds: number): ZvoogParameterLine {
+	createRandomLine(measures: ZvoogMeasure[]): ZvoogParameterLine {
+
 		let lin: ZvoogParameterLine = {
 			segments: []
 		};
 		var curPoint: number = 0;
+		var songlenseconds = durations2time(measures);
 		while (curPoint < songlenseconds) {
 			//var delta = Math.round(Math.random() * 24000 + 3000);
-			var delta: number = 1+Math.round(Math.random() * songlenseconds);
+			var delta: number = 1 + Math.round(Math.random() * songlenseconds);
 			lin.segments.push(this.createRandomCurve(delta));
 			curPoint = curPoint + delta;
 		}
 		return lin;
 	}
-	createRandomEffect(songlenseconds: number): ZvoogTrackEffect {
+	//createRandomEffect(songlenseconds: number): ZvoogTrackEffect {
+	createRandomEffect(measures: ZvoogMeasure[]): ZvoogTrackEffect {
+
 		let plugin: ZvoogEffect = new ZvoogFilterSourceEmpty();
 		let parameters: ZvoogParameterLine[] = [];
-		let parCount: number = 1+Math.round(Math.random() * 5);
+		let parCount: number = 1 + Math.round(Math.random() * 5);
 		for (var i = 0; i < parCount; i++) {
-			parameters.push(this.createRandomLine(songlenseconds));
+			parameters.push(this.createRandomLine(measures));
 		}
 		let fx: ZvoogTrackEffect = { plugin: plugin, parameters: parameters };
 		return fx;
@@ -159,26 +164,37 @@ class TestSong {
 		}
 		return ch;
 	}
-	createRandomChunk(count: number, division: number): ZvoogPattern {
+	//createRandomChunk(count: number, division: number): ZvoogPattern {
+	createRandomChunk(meausere: ZvoogMeasure): ZvoogPattern {
 		var p: ZvoogPattern = {
 			//meter: duration
-			meter: {
+			/*meter: {
 				count: count
 				, division: division
 			}
 			, tempo: Math.random() > 0.8 ? 120 : 100
-			, chords: []
+			,*/ chords: []
 			, title: '/' + Math.round(Math.random() * 1000)
 			, clefHint: Math.round(Math.random() * 3)
 			, keyHint: Math.round(Math.random() * 22 - 11)
 		};
 		let chCount: number = 1 + Math.round(Math.random() * 2);
 		for (var i = 0; i < chCount; i++) {
-			p.chords.push(this.createRandomChord(count, division));
+			p.chords.push(this.createRandomChord(meausere.meter.count, meausere.meter.division));
 		}
 		return p;
 	}
-	createRandomVoice(songlenseconds: number, voiceOrder: number): ZvoogVoice {
+	createRandomMeasure(count: number, division: number): ZvoogMeasure {
+		var p: ZvoogMeasure = {
+			meter: {
+				count: count
+				, division: division
+			}
+			, tempo: Math.random() > 0.8 ? 120 : 100
+		};
+		return p;
+	}
+	createRandomVoice(measures: ZvoogMeasure[], voiceOrder: number): ZvoogVoice {
 		let v: ZvoogVoice = {
 			chunks: []
 			, source: {
@@ -188,38 +204,42 @@ class TestSong {
 			, effects: []
 			, title: this.createRandomName() + 'voice '
 		};
-		let parCount: number = 1+Math.round(Math.random() * 5);
+		let parCount: number = 1 + Math.round(Math.random() * 5);
 		for (var i = 0; i < parCount; i++) {
-			v.source.parameters.push(this.createRandomLine(songlenseconds));
+			v.source.parameters.push(this.createRandomLine(measures));
 		}
-		var mainFxCount = 1+Math.round(Math.random() * 3);
+		var mainFxCount = 1 + Math.round(Math.random() * 3);
 		for (var i = 0; i < mainFxCount; i++) {
-			v.effects.push(this.createRandomEffect(songlenseconds));
+			v.effects.push(this.createRandomEffect(measures));
 		}
-		var curPoint: number = 0;
+		/*var curPoint: number = 0;
 		while (curPoint < songlenseconds) {
 			//var delta = Math.round(Math.random() * 5000 + 3000);
 			//var delta: number = Math.random() > 0.9 ? 3 * 384 / 4 : 4 * 384 / 4;
 			var cnt = Math.random() > 0.9 ? 3 : 4;
 			v.chunks.push(this.createRandomChunk(cnt, 4));
 			curPoint = curPoint + cnt * 384 / 4;
+		}*/
+		for (var i = 0; i < measures.length; i++) {
+			v.chunks.push(this.createRandomChunk(measures[i]));
 		}
 		return v;
 	}
-	createRandomTrack(songlenseconds: number, trackOrder: number): ZvoogTrack {
+	//createRandomTrack(songlenseconds: number, trackOrder: number): ZvoogTrack {
+	createRandomTrack(measures: ZvoogMeasure[], trackOrder: number): ZvoogTrack {
 		let t: ZvoogTrack = {
 			voices: []
 			, effects: []
 			, title: this.createRandomName() + 'track '
 			, strings: []
 		};
-		var mainFxCount = 1+Math.round(Math.random() * 3);
+		var mainFxCount = 1 + Math.round(Math.random() * 3);
 		for (var i = 0; i < mainFxCount; i++) {
-			t.effects.push(this.createRandomEffect(songlenseconds));
+			t.effects.push(this.createRandomEffect(measures));
 		}
-		var mainVoxCount = 1+Math.round(Math.random() * 3 + 1);
+		var mainVoxCount = 1 + Math.round(Math.random() * 3 + 1);
 		for (var i = 0; i < mainVoxCount; i++) {
-			t.voices.push(this.createRandomVoice(songlenseconds, i));
+			t.voices.push(this.createRandomVoice(measures, i));
 		}
 		return t;
 	}
@@ -243,13 +263,14 @@ class TestSong {
 	}
 	createRandomSchedule(): ZvoogSchedule {
 		//var duration: ZvoogMeter = { count: Math.round(Math.random() * 100 + 50) * 4, division: 4 };//Math.round(Math.random() * 2 + 1) * 60000;
-		var songlenseconds: number = Math.round(Math.random() * 200 + 150) * 50;//Math.round(Math.random() * 2 + 1) * 60000;
+		var songdurationseconds: number = Math.round(Math.random() * 200 + 150) * 50;//Math.round(Math.random() * 2 + 1) * 60000;
 		var t = this.createRandomName() + 'project';
 
 		let s: ZvoogSchedule = {
 			title: t
 			, description: this.createRandomName() + 'description'
 			//, duration: duration
+			, timeline: []
 			, tracks: []
 			, effects: []
 			, macros: [
@@ -290,14 +311,21 @@ class TestSong {
 			, locked: false
 			, selectedLayer: { level1: 0, level2: 0, level3: 0, level4: 0 }
 		};
-		var mainFxCount = 1+Math.round(Math.random() * 3);
+		var curPoint: number = 0;
+		while (curPoint < songdurationseconds) {
+			var cnt = Math.random() > 0.9 ? 3 : 4;
+			var measure: ZvoogMeasure = this.createRandomMeasure(cnt, 4);
+			s.timeline.push(measure);
+			curPoint = curPoint + cnt * 384 / 4;
+		}
+		var mainFxCount = 1 + Math.round(Math.random() * 3);
 		//console.log('mainFxCount',mainFxCount);
 		for (var i = 0; i < mainFxCount; i++) {
-			s.effects.push(this.createRandomEffect(songlenseconds));
+			s.effects.push(this.createRandomEffect(s.timeline));
 		}
 		var trkCount = Math.round(Math.random() * 5) + 1;
 		for (var i = 0; i < trkCount; i++) {
-			s.tracks.push(this.createRandomTrack(songlenseconds, i));
+			s.tracks.push(this.createRandomTrack(s.timeline, i));
 		}
 		var tc: number = 0;
 		var vc: number = 0;
