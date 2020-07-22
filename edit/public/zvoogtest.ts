@@ -50,7 +50,7 @@ class ZvoogFilterSourceEmpty implements ZvoogSource, ZvoogEffect {
 	}
 }
 class TestSong {
-	createRandomCurve(duration: number): ZvoogCurve {
+	/*createRandomCurve(duration: number): ZvoogCurve {
 		//console.log('createRandomCurve',duration);
 		let cu: ZvoogCurve = {
 			duration: duration
@@ -66,27 +66,44 @@ class TestSong {
 		}
 		return cu;
 	}
-	//createRandomLine(songlenseconds: number): ZvoogParameterLine {
-	createRandomLine(measures: ZvoogMeasure[]): ZvoogParameterLine {
+	createRandomPoint(duration: number):ZvoogPoint{
 
-		let lin: ZvoogParameterLine = {
-			segments: []
+	}*/
+	//createRandomLine(songlenseconds: number): ZvoogParameterLine {
+	createRandomLine(measures: ZvoogMeasure[]): ZvoogCurve {
+
+		let lin: ZvoogCurve = {
+			points: []
 		};
+		var m=0;
+		lin.points.push({ skipMeasures: 0,skip384:0, velocity: Math.floor(Math.random() * 127) });
+		for(let i=0;i<measures.length;i++){
+			m=m+1;
+			if(Math.random()>0.8){
+				lin.points.push({ skipMeasures: m,skip384:0, velocity: Math.floor(Math.random() * 127) });
+				m=0;
+			}
+		}
+
+
+
+/*
 		var curPoint: number = 0;
 		var songlenseconds = durations2time(measures);
 		while (curPoint < songlenseconds) {
 			//var delta = Math.round(Math.random() * 24000 + 3000);
 			var delta: number = 1 + Math.round(Math.random() * songlenseconds);
-			lin.segments.push(this.createRandomCurve(delta));
+			var po: ZvoogPoint = { duration: delta, velocity: Math.floor(Math.random() * 127) };
+			lin.points.push(po);
 			curPoint = curPoint + delta;
-		}
+		}*/
 		return lin;
 	}
 	//createRandomEffect(songlenseconds: number): ZvoogTrackEffect {
 	createRandomEffect(measures: ZvoogMeasure[]): ZvoogTrackEffect {
 
 		let plugin: ZvoogEffect = new ZvoogFilterSourceEmpty();
-		let parameters: ZvoogParameterLine[] = [];
+		let parameters: ZvoogCurve[] = [];
 		let parCount: number = 1 + Math.round(Math.random() * 5);
 		for (var i = 0; i < parCount; i++) {
 			parameters.push(this.createRandomLine(measures));

@@ -62,7 +62,7 @@ type ZvoogMeter = {
 };
 type ZvoogTrackSource = {
 	plugin: ZvoogSource
-	, parameters: ZvoogParameterLine[]
+	, parameters: ZvoogCurve[]
 };
 type ZvoogVoice = {
 	chunks: ZvoogPattern[]
@@ -112,19 +112,21 @@ type ZvoogPitch = {
 	, pitch: number
 };
 type ZvoogPoint = {
-	duration: number//ZvoogMeter
+	skipMeasures: number//ZvoogMeter
+	, skip384: number
 	, velocity: number
 };
 type ZvoogCurve = {
-	duration: number//ZvoogMeter
-	, points: ZvoogPoint[]
+	//duration: number//ZvoogMeter
+	 points: ZvoogPoint[]
 };
+/*
 type ZvoogParameterLine = {
 	segments: ZvoogCurve[]
-};
+};*/
 type ZvoogTrackEffect = {
 	plugin: ZvoogEffect
-	, parameters: ZvoogParameterLine[]
+	, parameters: ZvoogCurve[]
 };
 type ZvoogGridStep = {
 	duration: number;
