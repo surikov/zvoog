@@ -95,6 +95,36 @@ a {
 	stroke-width: 2.9cm;
 	stroke-linecap: round;
 }
+.firstJoint {
+	fill: var(--main-color);
+	fill-opacity: 75%;
+}
+.secondJoint {
+	fill: var(--aux-color);
+	fill-opacity: 15%;
+}
+.otherJoint {
+	fill: var(--grid-color);
+	fill-opacity: 0.05%;
+}
+.firstSegment {
+	stroke: var(--main-color);
+	stroke-opacity: 75%;
+	stroke-width: 2cm;
+	stroke-linecap: round;
+}
+.secondSegment {
+	stroke: var(--aux-color);
+	stroke-opacity: 50%;
+	stroke-width: 2cm;
+	stroke-linecap: round;
+}
+.otherSegment {
+	stroke: var(--grid-color);
+	stroke-opacity: 5%;
+	stroke-width: 2cm;
+	stroke-linecap: round;
+}
 
 .popupFill {
 	fill: var(--background-color);
