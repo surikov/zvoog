@@ -76,6 +76,10 @@ a {
 	fill: var(--grid-color);
 	fill-opacity: var(--grid-opacity);
 }
+.meterFarLine {
+	fill: var(--grid-color);
+	fill-opacity: var(--far-grid-opacity);
+}
 
 .firstLine {
 	stroke: var(--main-color);

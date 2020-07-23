@@ -3921,6 +3921,7 @@ var MidiParser = /** @class */ (function () {
             locked: false,
             selectedLayer: { level1: 0, level2: 0, level3: 0, level4: 0 }
         };
+        schedule.effects.push({ parameters: [{ points: [{ skipMeasures: 0, skip384: 0, velocity: 119 }] }], plugin: new ZvoogFxGain() });
         for (var o = 0; o < 10; o++) {
             schedule.keyPattern.push(3);
             schedule.keyPattern.push(2);
@@ -4158,31 +4159,34 @@ var ZvoogApp = /** @class */ (function () {
         this.popup = new ZvoogPopup(this);
         console.log('ZvoogApp init');
     }
-    ZvoogApp.prototype.start = function () {
-        console.log('ZvoogApp start');
-        var testSong = new TestSong();
-        this.currentSong = testSong.createRandomSchedule();
-        console.log(this.currentSong);
-        var audioContext = new AudioContext();
+    ZvoogApp.prototype.prepareSchedule = function () {
         for (var e = 0; e < this.currentSong.effects.length; e++) {
             var fx = this.currentSong.effects[e];
-            fx.plugin.prepare(audioContext);
+            fx.plugin.prepare(this.audioContext);
         }
         for (var e = 0; e < this.currentSong.tracks.length; e++) {
             var track = this.currentSong.tracks[e];
             for (var n = 0; n < track.effects.length; n++) {
                 var fx = track.effects[n];
-                fx.plugin.prepare(audioContext);
+                fx.plugin.prepare(this.audioContext);
             }
             for (var k = 0; k < track.voices.length; k++) {
                 var voice = track.voices[k];
-                voice.source.plugin.prepare(audioContext);
+                voice.source.plugin.prepare(this.audioContext);
                 for (var n = 0; n < voice.effects.length; n++) {
                     var fx = voice.effects[n];
-                    fx.plugin.prepare(audioContext);
+                    fx.plugin.prepare(this.audioContext);
                 }
             }
         }
+    };
+    ZvoogApp.prototype.start = function () {
+        console.log('ZvoogApp start');
+        var testSong = new TestSong();
+        this.currentSong = testSong.createRandomSchedule();
+        console.log(this.currentSong);
+        this.audioContext = new AudioContext();
+        this.prepareSchedule();
         var layers = this.createLayers();
         this.tileLevel = new TileLevel(document.getElementById('contentSVG'), 100, 100, this.minZoom, 20, this.maxZoom - 0.001, layers);
         this.tileLevel.afterResizeCallback = this.afterResizeCallback.bind(this);
@@ -4215,6 +4219,7 @@ var ZvoogApp = /** @class */ (function () {
         console.log('import', midiParser.dump());
         this.currentSong = midiParser.convert();
         console.log('song', this.currentSong);
+        this.prepareSchedule();
         this.resetWholeProject();
     };
     ZvoogApp.prototype.afterResizeCallback = function () {
@@ -4930,10 +4935,10 @@ var ZvoogApp = /** @class */ (function () {
                     thick = 0.25;
                 }
                 if (step.power > 1) {
-                    thick = 1;
+                    thick = 0.5;
                 }
                 if (step.power > 2) {
-                    thick = 2;
+                    thick = 1;
                 }
                 if (gduration > 0 || i > 0) {
                     measureAnchor.content.push({
@@ -4950,7 +4955,7 @@ var ZvoogApp = /** @class */ (function () {
             if (i) {
                 farMeasureAnchor.content.push({
                     x: this.gridIndentLeft + nextMeasureX,
-                    y: this.gridIndentUp, w: 3, h: 120 * this.noteLineWidth, css: 'meterLine'
+                    y: this.gridIndentUp, w: 3, h: 120 * this.noteLineWidth, css: 'meterFarLine'
                 });
             }
             if ((i + 1) % 20 == 0 && i > 0)
