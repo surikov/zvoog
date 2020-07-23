@@ -110,19 +110,19 @@ a {
 .firstSegment {
 	stroke: var(--main-color);
 	stroke-opacity: 75%;
-	stroke-width: 2cm;
+	stroke-width: 1cm;
 	stroke-linecap: round;
 }
 .secondSegment {
 	stroke: var(--aux-color);
 	stroke-opacity: 50%;
-	stroke-width: 2cm;
+	stroke-width: 1cm;
 	stroke-linecap: round;
 }
 .otherSegment {
 	stroke: var(--grid-color);
 	stroke-opacity: 5%;
-	stroke-width: 2cm;
+	stroke-width: 1cm;
 	stroke-linecap: round;
 }
 
@@ -154,10 +154,8 @@ a {
 	fill-opacity: 0.0001%;
 }
 
-.fillButtonSpot2_________________ {
-	fill2: #3ddddd;
-	shape-rendering2: crispEdges;
-	fill: url(#buttonGradient);
+.fillFlatSpot {
+	fill: var(--spot-color);
 }
 
 .fillButtonSpot {
