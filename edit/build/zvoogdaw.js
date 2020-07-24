@@ -10,6 +10,8 @@ var ZvoogIcons;
     ZvoogIcons["iconPathAdjust128"] = "M 15.927059,0 C 14.671096,0 13.651765,1.0170565 13.651765,2.2752941 V 91.193966 C 5.9453435,92.304309 0,98.932063 0,106.93882 c 0,8.78036 7.1444235,15.92706 15.927059,15.92706 8.782635,0 15.927059,-7.1467 15.927059,-15.92706 0,-8.006757 -5.945344,-14.634511 -13.651765,-15.744854 V 2.2752941 C 18.202353,1.0170565 17.183021,0 15.927059,0 Z M 63.708235,0 C 62.452273,0 61.432941,1.0170565 61.432941,2.2752941 V 44.670422 c -8.195609,0.901018 -14.59388,7.861498 -14.593877,16.291463 0,8.429964 6.398268,15.390444 14.593877,16.291461 v 43.337244 c 0,1.25824 1.019332,2.27529 2.275294,2.27529 1.255963,0 2.275294,-1.01705 2.275294,-2.27529 V 77.11114 c 7.736,-1.312845 13.651765,-8.044658 13.651765,-16.149255 0,-8.104598 -5.915765,-14.836413 -13.651765,-16.149257 V 2.2752941 C 65.983529,1.0170565 64.964198,0 63.708235,0 Z m 47.781175,0 c -8.78263,0 -15.927057,7.1466988 -15.927057,15.927059 0,8.00676 5.945347,14.634514 13.651767,15.744858 v 88.918673 c 0,1.25824 1.01933,2.27529 2.27529,2.27529 1.25596,0 2.2753,-1.01705 2.2753,-2.27529 V 31.671917 c 7.70642,-1.110344 13.65176,-7.738098 13.65176,-15.744858 C 127.41647,7.1466988 120.27205,0 111.48941,0 Z m 0,4.5505882 c 6.27299,0 11.37647,5.1034847 11.37647,11.3764708 0,6.272986 -5.10348,11.37647 -11.37647,11.37647 -6.27298,0 -11.37647,-5.103484 -11.37647,-11.37647 0,-6.2729861 5.10349,-11.3764708 11.37647,-11.3764708 z M 63.237179,49.114358 c 6.534645,0 11.847527,5.315157 11.847527,11.847527 0,6.532369 -5.315158,11.847527 -11.847527,11.847527 -6.53237,0 -11.847527,-5.315158 -11.847527,-11.847527 0,-6.53237 5.312882,-11.847527 11.847527,-11.847527 z m -47.31012,46.447995 c 6.272986,0 11.37647,5.103487 11.37647,11.376467 0,6.27299 -5.103484,11.37647 -11.37647,11.37647 -6.2729861,0 -11.3764708,-5.10348 -11.3764708,-11.37647 0,-6.27298 5.1034847,-11.376467 11.3764708,-11.376467 z";
     ZvoogIcons["iconPathGraph128"] = "M 114.9294,8.137553e-5 C 107.89597,-0.02485986 102.18414,5.6866828 102.1592,12.720111 c 0,3.317184 1.2721,6.509565 3.59163,8.878982 L 82.430779,68.264046 c -0.498825,-0.07482 -1.022394,-0.14955 -1.546161,-0.14955 -1.646118,0 -3.292438,0.323945 -4.813853,0.947475 L 57.963526,48.685177 c 1.047532,-1.870592 1.621083,-3.965559 1.646024,-6.135446 0,-7.05837 -5.711348,-12.770204 -12.769717,-12.770204 -7.05837,0 -12.770204,5.711834 -12.770204,12.770204 0.02494,3.042831 1.122258,5.985702 3.142499,8.280295 L 15.03976,89.613644 C 14.291522,89.464002 13.517955,89.389074 12.769717,89.389074 5.7113479,89.389074 0,95.100912 0,102.15928 c 0,7.05837 5.7113479,12.76972 12.769717,12.76972 7.058369,0 12.770204,-5.71135 12.770204,-12.76972 -0.02494,-3.042833 -1.122258,-5.986185 -3.142497,-8.280778 L 44.544947,55.09488 c 2.369418,0.473884 4.838794,0.22486 7.058565,-0.722907 L 69.71075,74.748767 c -1.047531,1.870593 -1.596239,3.9905 -1.62118,6.135447 -0.02494,7.058371 5.686602,12.794952 12.720033,12.819894 7.058362,0.02492 12.794944,-5.686603 12.819885,-12.720032 0,-3.317185 -1.272095,-6.534798 -3.59163,-8.929156 L 113.35791,25.389967 c 0.49883,0.07483 1.0224,0.14955 1.54616,0.14955 7.05837,0 12.7702,-5.711349 12.7702,-12.769718 0,-7.0583698 -5.6865,-12.76971762447 -12.74487,-12.76971762447 z";
     ZvoogIcons["iconPathSound128"] = "m 93.676212,14 c -0.8282,-3.98e-4 -1.617968,0.483906 -1.963957,1.295465 -0.457067,1.082078 0.0473,2.331039 1.129379,2.790231 18.503756,7.850915 30.460026,25.909559 30.460026,46.005604 0,20.784834 -12.53133,39.074 -31.921575,46.5869 -1.094834,0.42518 -1.637602,1.65803 -1.212424,2.75287 0.325262,0.84185 1.132237,1.35774 1.984719,1.35774 0.255107,0 0.511011,-0.0434 0.763992,-0.14118 C 113.95631,106.4906 127.55344,86.644875 127.55344,64.0913 127.55344,42.283913 114.5794,22.686656 94.502487,14.166085 94.232498,14.052882 93.952281,14.000133 93.676212,14 Z m -36.588571,2.254607 c -1.128317,0.01648 -2.252515,0.336455 -3.27188,0.950838 -0.09779,0.0574 -0.193158,0.12287 -0.278192,0.19515 L 24.734241,41.769448 H 2.1258907 C 0.95027316,41.769448 0,42.719721 0,43.895338 v 40.391924 c 0,0.565487 0.22315209,1.10553 0.62281955,1.503071 0.39966745,0.397542 0.93758425,0.62282 1.50307115,0.62282 l 22.5543723,-0.0083 28.790872,26.444917 c 0.106295,0.0978 0.22345,0.181 0.344626,0.25328 1.045938,0.63139 2.204615,0.95084 3.363225,0.95084 1.099086,-0.002 2.195648,-0.2856 3.205446,-0.85534 2.123765,-1.19902 3.39229,-3.38838 3.39229,-5.85867 V 22.968602 c 0,-2.468159 -1.268525,-4.657528 -3.39229,-5.858656 C 59.34806,16.5232 58.215957,16.238131 57.087641,16.254607 Z m 0.369539,4.276694 c 0.376283,0.05049 0.673973,0.184653 0.83873,0.278193 0.769572,0.435808 1.229031,1.242849 1.229031,2.159108 v 84.371288 c 0,0.91626 -0.459459,1.7233 -1.229031,2.15911 -0.329513,0.18495 -1.164988,0.5408 -2.125891,0.054 L 27.63658,83.340576 v -9.682767 c 0,-1.175618 -0.950274,-2.125891 -2.125891,-2.125891 -1.175618,0 -2.125891,0.950273 -2.125891,2.125891 v 8.495259 l -19.1330165,0.0083 V 46.021216 H 23.384798 v 8.503563 c 0,1.175618 0.950273,2.125891 2.125891,2.125891 1.175617,0 2.125891,-0.950273 2.125891,-2.125891 V 44.879392 L 56.13265,20.772125 c 0.490018,-0.257233 0.948248,-0.291314 1.32453,-0.240824 z m 24.186159,4.239325 c -0.826108,0.06079 -1.5805,0.602756 -1.864306,1.436637 -0.376283,1.109715 0.220993,2.320477 1.332833,2.698886 15.095951,5.125522 25.236654,19.266382 25.236654,35.189303 0,15.908041 -10.120641,30.0489 -25.186829,35.189304 -1.109715,0.378409 -1.705064,1.589074 -1.324528,2.703034 0.301877,0.88225 1.12526,1.43664 2.00963,1.43664 0.227471,0 0.457632,-0.0334 0.685103,-0.1121 16.790285,-5.729273 28.068404,-21.491092 28.068404,-39.221021 0,-17.74481 -11.300209,-33.504603 -28.122383,-39.216872 -0.277429,-0.09407 -0.559209,-0.124064 -0.834578,-0.103802 z M 69.901114,36.471328 c -0.821923,0.09875 -1.544029,0.67145 -1.789569,1.519681 -0.325259,1.126722 0.322272,2.307188 1.453246,2.63245 10.39348,3.003883 17.654859,12.653435 17.654859,23.467841 0,10.814407 -7.261379,20.46811 -17.654859,23.471994 -1.128848,0.325259 -1.778507,1.505728 -1.453246,2.63245 0.26999,0.93114 1.118087,1.536288 2.042849,1.536288 0.195582,0 0.394021,-0.02776 0.589603,-0.08304 C 82.948736,88.11789 91.46728,76.785 91.46728,64.091307 c 0,-12.69582 -8.52067,-24.02456 -20.723283,-27.553538 -0.28168,-0.08025 -0.568909,-0.09934 -0.842883,-0.06643 z";
+    ZvoogIcons["iconPathPlay128"] = "M 96.755617,64.055979 34.372965,21.033459 C 33.71257,20.579571 32.856422,20.532247 32.150852,20.900089 31.443132,21.272234 31,22.003617 31,22.803836 v 86.045034 c 0,0.80022 0.443132,1.53376 1.150852,1.9059 0.314065,0.16349 0.658245,0.24523 1.000274,0.24523 0.428074,0 0.853997,-0.12907 1.221839,-0.38075 L 96.755617,67.596733 c 0.582955,-0.402261 0.929286,-1.062657 0.929286,-1.770377 0,-0.707721 -0.348482,-1.368116 -0.929286,-1.770377 z";
+    ZvoogIcons["iconPathPause128"] = "M 29.182808,21.879923 C 27.424901,21.879923 26,23.304825 26,25.062731 V 107.81719 C 26,109.5751 27.424901,111 29.182808,111 h 25.462827 c 1.757906,0 3.183172,-1.4249 3.183172,-3.18281 V 25.062731 c 0,-1.757906 -1.425266,-3.182808 -3.183172,-3.182808 z m 44.560038,0 c -1.757906,0 -3.182807,1.424902 -3.182807,3.182808 v 82.754459 c 0,1.75791 1.424901,3.18281 3.182807,3.18281 h 25.462828 c 1.757906,0 3.182806,-1.4249 3.182806,-3.18281 V 25.062731 c 0,-1.757906 -1.42472,-3.182808 -3.182442,-3.182808 z";
 })(ZvoogIcons || (ZvoogIcons = {}));
 var ZvoogPopup = /** @class */ (function () {
     function ZvoogPopup(app) {
@@ -3810,7 +3812,7 @@ var MidiParser = /** @class */ (function () {
         var voice = {
             chunks: [],
             source: {
-                plugin: new ZvoogFilterSourceEmpty(),
+                plugin: new ZvoogDrumSource(drum),
                 parameters: []
             },
             effects: [],
@@ -3949,17 +3951,17 @@ var MidiParser = /** @class */ (function () {
             var miditrack = midisong.tracks[i];
             var track = {
                 voices: [],
-                effects: [],
+                effects: [{ parameters: [{ points: [{ skipMeasures: 0, skip384: 0, velocity: 119 }] }], plugin: new ZvoogFxGain() }],
                 title: 'track ' + i + ' ' + miditrack.title,
                 strings: []
             };
             var voice = {
                 chunks: [],
                 source: {
-                    plugin: new ZvoogFilterSourceEmpty(),
+                    plugin: new ZvoogInstrumentSource(miditrack.program),
                     parameters: []
                 },
-                effects: [],
+                effects: [{ parameters: [{ points: [{ skipMeasures: 0, skip384: 0, velocity: 119 }] }], plugin: new ZvoogFxGain() }],
                 title: 'MIDI ' + miditrack.program
             };
             var time = 0;
@@ -4156,6 +4158,7 @@ var ZvoogApp = /** @class */ (function () {
         this.noteLineWidth = 3;
         this.undoRedo = new ZvoogUndoRedo(this);
         this.lang = new ZvoogLang();
+        this.onAir = false;
         this.popup = new ZvoogPopup(this);
         console.log('ZvoogApp init');
     }
@@ -4284,6 +4287,16 @@ var ZvoogApp = /** @class */ (function () {
             this.addButtonIcon128(ZvoogIcons.iconPathUndo128, 0.1 + 1 + 0.1 + 1 + 0.1, 0.1, 1, this.overButtonsAnchor.content, function () { }, 'fillColorSub');
         }
         this.addButtonIcon128(ZvoogIcons.iconPathLayers128, 0.1, 0.1, 1, this.overButtonsAnchor.content, this.openLayersPopup, 'fillColorContent');
+        var playIcon = ZvoogIcons.iconPathPlay128;
+        if (this.onAir) {
+            playIcon = ZvoogIcons.iconPathPause128;
+        }
+        this.addButtonIcon128(playIcon, 0.1 + 1 + 0.1 + 1 + 0.1 + 1 + 0.1, 0.1, 1, this.overButtonsAnchor.content, this.togglePlay, 'fillColorContent');
+    };
+    ZvoogApp.prototype.togglePlay = function () {
+        this.onAir = !this.onAir;
+        this.resetWholeProject();
+        console.log('play', this.onAir);
     };
     ZvoogApp.prototype.isTrackActive = function (track) {
         if (track + 1 == this.currentSong.selectedLayer.level1) {
@@ -4429,10 +4442,17 @@ var ZvoogApp = /** @class */ (function () {
         var items = [];
         for (var k1 = 0; k1 < this.currentSong.tracks.length; k1++) {
             var track = this.currentSong.tracks[k1];
+            var kk1 = k1 + 1;
+            var kk2 = 0;
+            if (!this.isFxActive(k1)) {
+                if (this.currentSong.tracks[k1].voices.length) {
+                    kk2 = 1;
+                }
+            }
             items.push({
                 label: track.title, css: this.isTrackSelected(k1) ? 'fillColorContent' : 'fillColorOther',
                 padding: 0, path128: ZvoogIcons.iconPathWave128, subMenu: [],
-                action: this.createSelectLayerAction(k1 + 1, 0, 0, 0)
+                action: this.createSelectLayerAction(kk1, kk2, 0, 0)
             });
             if (this.isTrackActive(k1)) {
                 for (var k2 = 0; k2 < track.voices.length; k2++) {
@@ -4448,10 +4468,19 @@ var ZvoogApp = /** @class */ (function () {
                         action: this.createSelectLayerAction(k1 + 1, k2 + 1, 0, 0)
                     });
                     if (this.isVoiceActive(k1, k2)) {
+                        var kk1_1 = k1 + 1;
+                        var kk2_1 = k2 + 1;
+                        var kk3 = 1;
+                        var kk4 = 0;
+                        if (!this.isVoiceSourceActive(k1, k2)) {
+                            if (voice.source.parameters.length) {
+                                kk4 = 1;
+                            }
+                        }
                         items.push({
                             label: voice.source.plugin.label(), css: this.isVoiceSourceSelected(k1, k2) ? 'fillColorContent' : 'fillColorOther',
                             padding: 2, path128: ZvoogIcons.iconPathSound128, subMenu: [],
-                            action: this.createSelectLayerAction(k1 + 1, k2 + 1, 1, 0)
+                            action: this.createSelectLayerAction(kk1_1, kk2_1, kk3, kk4)
                         });
                         if (this.isVoiceSourceActive(k1, k2)) {
                             var pars = voice.source.plugin.getParams();
@@ -4468,10 +4497,19 @@ var ZvoogApp = /** @class */ (function () {
                         }
                         for (var k3 = 0; k3 < voice.effects.length; k3++) {
                             var effect = voice.effects[k3];
+                            var kk1_2 = k1 + 1;
+                            var kk2_2 = k2 + 1;
+                            var kk3_1 = k3 + 1 + 1;
+                            var kk4_1 = 0;
+                            if (!this.isVoiceFxActive(k1, k2, k3)) {
+                                if (effect.parameters.length) {
+                                    kk4_1 = 1;
+                                }
+                            }
                             items.push({
                                 label: effect.plugin.label(), css: this.isVoiceFxSelected(k1, k2, k3) ? 'fillColorContent' : 'fillColorOther',
                                 padding: 2, path128: ZvoogIcons.iconPathAdjust128, subMenu: [],
-                                action: this.createSelectLayerAction(k1 + 1, k2 + 1, k3 + 1 + 1, 0)
+                                action: this.createSelectLayerAction(kk1_2, kk2_2, kk3_1, kk4_1)
                             });
                             if (this.isVoiceFxActive(k1, k2, k3)) {
                                 var pars = effect.plugin.getParams();
@@ -4491,10 +4529,18 @@ var ZvoogApp = /** @class */ (function () {
                 }
                 for (var k2 = 0; k2 < track.effects.length; k2++) {
                     var plugin = track.effects[k2].plugin;
+                    var kk1_3 = k1 + 1;
+                    var kk2_3 = track.voices.length + k2 + 1;
+                    var kk3 = 0;
+                    if (!this.isTrackFxActive(k1, k2)) {
+                        if (track.effects[k2].parameters.length) {
+                            kk3 = 1;
+                        }
+                    }
                     items.push({
                         label: plugin.label(), css: this.isTrackFxSelected(k1, k2) ? 'fillColorContent' : 'fillColorOther',
                         padding: 1, path128: ZvoogIcons.iconPathAdjust128, subMenu: [],
-                        action: this.createSelectLayerAction(k1 + 1, track.voices.length + k2 + 1, 0, 0)
+                        action: this.createSelectLayerAction(kk1_3, kk2_3, kk3, 0)
                     });
                     if (this.isTrackFxActive(k1, k2)) {
                         var pars_1 = plugin.getParams();
@@ -4515,10 +4561,17 @@ var ZvoogApp = /** @class */ (function () {
         }
         for (var k1 = 0; k1 < this.currentSong.effects.length; k1++) {
             var effect = this.currentSong.effects[k1];
+            var kk1 = k1 + this.currentSong.tracks.length + 1;
+            var kk2 = 0;
+            if (!this.isFxActive(k1)) {
+                if (this.currentSong.effects[k1].parameters.length) {
+                    kk2 = 1;
+                }
+            }
             items.push({
                 label: effect.plugin.label(), css: this.isFxSelected(k1) ? 'fillColorContent' : 'fillColorOther',
                 padding: 0, path128: ZvoogIcons.iconPathAdjust128, subMenu: [],
-                action: this.createSelectLayerAction(k1 + this.currentSong.tracks.length + 1, 0, 0, 0)
+                action: this.createSelectLayerAction(kk1, kk2, 0, 0)
             });
             if (this.isFxActive(k1)) {
                 var pars_2 = effect.plugin.getParams();
