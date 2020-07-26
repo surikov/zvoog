@@ -83,7 +83,7 @@ a {
 
 .firstLine {
 	stroke: var(--main-color);
-	stroke-opacity: 75%;
+	stroke-opacity: 100%;
 	stroke-width: 2.9cm;
 	stroke-linecap: round;
 }
@@ -113,20 +113,20 @@ a {
 }
 .firstSegment {
 	stroke: var(--main-color);
-	stroke-opacity: 75%;
-	stroke-width: 1cm;
+	stroke-opacity: 100%;
+	stroke-width: 5cm;
 	stroke-linecap: round;
 }
 .secondSegment {
 	stroke: var(--aux-color);
 	stroke-opacity: 50%;
-	stroke-width: 1cm;
+	stroke-width: 5cm;
 	stroke-linecap: round;
 }
 .otherSegment {
 	stroke: var(--grid-color);
 	stroke-opacity: 5%;
-	stroke-width: 1cm;
+	stroke-width: 5cm;
 	stroke-linecap: round;
 }
 
@@ -160,6 +160,15 @@ a {
 
 .fillFlatSpot {
 	fill: var(--spot-color);
+}
+
+.fillSelectionSpot {
+	fill: var(--spot-color);
+	fill-opacity: 25%;
+}
+.fillSelectionFirst {
+	fill: var(--grid-color);
+	fill-opacity: 25%;
 }
 
 .fillButtonSpot {

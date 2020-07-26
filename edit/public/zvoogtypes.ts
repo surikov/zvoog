@@ -138,6 +138,10 @@ type ZvoogLayerSelection={
 	,level3:number
 	,level4:number
 };
+type ZvoogMeasureSelection={
+	from:number
+	,duration:number
+};
 type ZvoogSchedule = {
 	tracks: ZvoogTrack[]
 	//, duration: number
@@ -155,6 +159,7 @@ type ZvoogSchedule = {
 	, horizontal: boolean
 	, locked: boolean
 	, selectedLayer: ZvoogLayerSelection
+	, selectedMeasures: ZvoogMeasureSelection
 };
 type ZvoogValue = {
 	data: string

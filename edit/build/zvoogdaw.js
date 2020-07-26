@@ -708,7 +708,8 @@ var TestSong = /** @class */ (function () {
             keyPattern: this.createKeyPattern(),
             horizontal: true,
             locked: false,
-            selectedLayer: { level1: 0, level2: 0, level3: 0, level4: 0 }
+            selectedLayer: { level1: 0, level2: 0, level3: 0, level4: 0 },
+            selectedMeasures: { from: 0, duration: 0 }
         };
         var curPoint = 0;
         while (curPoint < songdurationseconds) {
@@ -1861,6 +1862,7 @@ var ZvoogDrumSource = /** @class */ (function () {
         }
     };
     ZvoogDrumSource.prototype.busy = function () {
+        //if(1==1)return 1;
         if (this.zones) {
             return 0;
         }
@@ -3921,7 +3923,8 @@ var MidiParser = /** @class */ (function () {
             keyPattern: [],
             horizontal: true,
             locked: false,
-            selectedLayer: { level1: 0, level2: 0, level3: 0, level4: 0 }
+            selectedLayer: { level1: 0, level2: 0, level3: 0, level4: 0 },
+            selectedMeasures: { from: 0, duration: 0 }
         };
         schedule.effects.push({ parameters: [{ points: [{ skipMeasures: 0, skip384: 0, velocity: 119 }] }], plugin: new ZvoogFxGain() });
         for (var o = 0; o < 10; o++) {
@@ -4183,6 +4186,40 @@ var ZvoogApp = /** @class */ (function () {
             }
         }
     };
+    ZvoogApp.prototype.isPluginsBusy = function () {
+        for (var e = 0; e < this.currentSong.effects.length; e++) {
+            var fx = this.currentSong.effects[e];
+            if (fx.plugin.busy()) {
+                this.currentSong.selectedLayer = { level1: e + 1 + this.currentSong.tracks.length, level2: 0, level3: 0, level4: 0 };
+                return true;
+            }
+        }
+        for (var e = 0; e < this.currentSong.tracks.length; e++) {
+            var track = this.currentSong.tracks[e];
+            for (var n = 0; n < track.effects.length; n++) {
+                var fx = track.effects[n];
+                if (fx.plugin.busy()) {
+                    this.currentSong.selectedLayer = { level1: e + 1, level2: n + 1, level3: 0, level4: 0 };
+                    return true;
+                }
+            }
+            for (var k = 0; k < track.voices.length; k++) {
+                var voice = track.voices[k];
+                if (voice.source.plugin.busy()) {
+                    this.currentSong.selectedLayer = { level1: e + 1, level2: k + 1, level3: 1, level4: 0 };
+                    return true;
+                }
+                for (var n = 0; n < voice.effects.length; n++) {
+                    var fx = voice.effects[n];
+                    if (fx.plugin.busy()) {
+                        this.currentSong.selectedLayer = { level1: e + 1, level2: k + 1, level3: 1 + n + 1, level4: 0 };
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    };
     ZvoogApp.prototype.start = function () {
         console.log('ZvoogApp start');
         var testSong = new TestSong();
@@ -4224,6 +4261,15 @@ var ZvoogApp = /** @class */ (function () {
         console.log('song', this.currentSong);
         this.prepareSchedule();
         this.resetWholeProject();
+    };
+    ZvoogApp.prototype.createRandomProject = function () {
+        var testSong = new TestSong();
+        this.currentSong = testSong.createRandomSchedule();
+        this.prepareSchedule();
+        this.resetWholeProject();
+        this.afterResizeCallback();
+    };
+    ZvoogApp.prototype.createEmptyProject = function () {
     };
     ZvoogApp.prototype.afterResizeCallback = function () {
         var cm = Math.floor(this.tileLevel.viewWidth / this.tileLevel.tapSize);
@@ -4271,7 +4317,7 @@ var ZvoogApp = /** @class */ (function () {
     ZvoogApp.prototype.resetButtons = function () {
         this.workButtonsGroup.content.length = 0;
         this.overButtonsAnchor.content.length = 0;
-        this.addButtonIcon128(ZvoogIcons.iconPathGear128, 160, 5, 11, this.workButtonsGroup.content, this.importTestMIDI, 'fillColorContent');
+        //this.addButtonIcon128(ZvoogIcons.iconPathGear128, 160, 5, 11, this.workButtonsGroup.content, this.importTestMIDI, 'fillColorContent');
         this.addMainTextButton(32, 32, 128, this.currentSong.title, 'fontSize128', this.workButtonsGroup.content, this.promptTitle);
         this.addMainTextButton(256, 224, 32, this.currentSong.description, 'fontSize16', this.workButtonsGroup.content, this.promptDescription);
         if (this.currentSong.macros.length > 0 && this.currentSong.macroPosition < this.currentSong.macros.length) {
@@ -4287,6 +4333,12 @@ var ZvoogApp = /** @class */ (function () {
             this.addButtonIcon128(ZvoogIcons.iconPathUndo128, 0.1 + 1 + 0.1 + 1 + 0.1, 0.1, 1, this.overButtonsAnchor.content, function () { }, 'fillColorSub');
         }
         this.addButtonIcon128(ZvoogIcons.iconPathLayers128, 0.1, 0.1, 1, this.overButtonsAnchor.content, this.openLayersPopup, 'fillColorContent');
+        //this.tileLevel.viewWidth/this.tileLevel.tapSize-1
+        this.addButtonIcon128(ZvoogIcons.iconPathLayers128, 0.1, 0.1, 1, this.overButtonsAnchor.content, this.openLayersPopup, 'fillColorContent');
+        /*this.overButtonsAnchor.content.push(this.tileLevel.rectangle(0,this.tileLevel.viewHeight/this.tileLevel.tapSize-1
+            ,this.tileLevel.viewWidth/this.tileLevel.tapSize,1
+            ,0,0,'fillSelectionSpot'));
+*/
         var playIcon = ZvoogIcons.iconPathPlay128;
         if (this.onAir) {
             playIcon = ZvoogIcons.iconPathPause128;
@@ -4294,9 +4346,23 @@ var ZvoogApp = /** @class */ (function () {
         this.addButtonIcon128(playIcon, 0.1 + 1 + 0.1 + 1 + 0.1 + 1 + 0.1, 0.1, 1, this.overButtonsAnchor.content, this.togglePlay, 'fillColorContent');
     };
     ZvoogApp.prototype.togglePlay = function () {
-        this.onAir = !this.onAir;
-        this.resetWholeProject();
         console.log('play', this.onAir);
+        if (this.onAir) {
+            this.onAir = false;
+            this.resetWholeProject();
+        }
+        else {
+            if (this.isPluginsBusy()) {
+                //this.resetWholeProject();
+                console.log(this.currentSong.selectedLayer);
+                this.openLayersPopup();
+            }
+            else {
+                this.onAir = true;
+                this.resetWholeProject();
+            }
+        }
+        console.log('now', this.onAir);
     };
     ZvoogApp.prototype.isTrackActive = function (track) {
         if (track + 1 == this.currentSong.selectedLayer.level1) {
@@ -4444,8 +4510,9 @@ var ZvoogApp = /** @class */ (function () {
             var track = this.currentSong.tracks[k1];
             var kk1 = k1 + 1;
             var kk2 = 0;
-            if (!this.isFxActive(k1)) {
+            if (!this.isTrackActive(k1)) {
                 if (this.currentSong.tracks[k1].voices.length) {
+                    //console.log(track.title);
                     kk2 = 1;
                 }
             }
@@ -4488,7 +4555,7 @@ var ZvoogApp = /** @class */ (function () {
                                 for (var k4 = 0; k4 < pars.length; k4++) {
                                     var zp = pars[k4];
                                     items.push({
-                                        label: zp.label(), css: this.isVoiceSourceParameterSelected(k1, k2, k4) ? 'fillColorContent' : this.isVoiceSourceSelected(k1, k2) ? 'fillColorOther' : 'fillColorSub',
+                                        label: zp.label(), css: this.isVoiceSourceParameterSelected(k1, k2, k4) ? 'fillColorContent' : 'fillColorSub',
                                         padding: 3, path128: ZvoogIcons.iconPathGraph128, subMenu: [],
                                         action: this.createSelectLayerAction(k1 + 1, k2 + 1, 1, k4 + 1)
                                     });
@@ -4517,7 +4584,7 @@ var ZvoogApp = /** @class */ (function () {
                                     for (var k4 = 0; k4 < pars.length; k4++) {
                                         var zp = pars[k4];
                                         items.push({
-                                            label: zp.label(), css: this.isVoiceFxParameterSelected(k1, k2, k3, k4) ? 'fillColorContent' : this.isVoiceFxSelected(k1, k2, k3) ? 'fillColorOther' : 'fillColorSub',
+                                            label: zp.label(), css: this.isVoiceFxParameterSelected(k1, k2, k3, k4) ? 'fillColorContent' : 'fillColorSub',
                                             padding: 3, path128: ZvoogIcons.iconPathGraph128, subMenu: [],
                                             action: this.createSelectLayerAction(k1 + 1, k2 + 1, k3 + 1 + 1, k4 + 1)
                                         });
@@ -4548,7 +4615,7 @@ var ZvoogApp = /** @class */ (function () {
                             for (var k3 = 0; k3 < pars_1.length; k3++) {
                                 var p = pars_1[k3];
                                 items.push({
-                                    label: p.label(), css: this.isTrackFxParameterSelected(k1, k2, k3) ? 'fillColorContent' : this.isTrackFxSelected(k1, k2) ? 'fillColorOther' : 'fillColorSub',
+                                    label: p.label(), css: this.isTrackFxParameterSelected(k1, k2, k3) ? 'fillColorContent' : 'fillColorSub',
                                     padding: 2, path128: ZvoogIcons.iconPathGraph128,
                                     subMenu: [],
                                     action: this.createSelectLayerAction(k1 + 1, track.voices.length + k2 + 1, k3 + 1, 0)
@@ -4579,7 +4646,7 @@ var ZvoogApp = /** @class */ (function () {
                     for (var k2 = 0; k2 < pars_2.length; k2++) {
                         var p = pars_2[k2];
                         items.push({
-                            label: p.label(), css: this.isFxParameterSelected(k1, k2) ? 'fillColorContent' : this.isFxSelected(k1) ? 'fillColorOther' : 'fillColorSub',
+                            label: p.label(), css: this.isFxParameterSelected(k1, k2) ? 'fillColorContent' : 'fillColorSub',
                             padding: 1, path128: ZvoogIcons.iconPathGraph128,
                             subMenu: [],
                             action: this.createSelectLayerAction(k1 + this.currentSong.tracks.length + 1, k2 + 1, 0, 0)
@@ -4598,6 +4665,12 @@ var ZvoogApp = /** @class */ (function () {
                 { label: 'margarin', css: 'fillColorOther', path128: ZvoogIcons.iconPathGear128, subMenu: [], padding: 0, action: function () { _this.setCSS('./css/zvoogcolors_margarin.css'); } },
                 { label: 'osen', css: 'fillColorOther', path128: ZvoogIcons.iconPathUndo128, subMenu: [], padding: 0, action: function () { _this.setCSS('./css/zvoogcolors_osen.css'); } },
                 { label: 'tina', css: 'fillColorOther', path128: ZvoogIcons.iconPathGear128, subMenu: [], padding: 0, action: function () { _this.setCSS('./css/zvoogcolors_tina.css'); } }
+            ]
+        }, {
+            label: 'New project', css: 'fillColorOther', path128: ZvoogIcons.iconPathGear128, padding: 0, subMenu: [
+                { label: 'Empty', css: 'fillColorOther', path128: ZvoogIcons.iconPathGear128, subMenu: [], padding: 0, action: this.createEmptyProject.bind(this) },
+                { label: 'Random', css: 'fillColorOther', path128: ZvoogIcons.iconPathGear128, subMenu: [], padding: 0, action: this.createRandomProject.bind(this) },
+                { label: 'Import MIDI', css: 'fillColorOther', path128: ZvoogIcons.iconPathGear128, subMenu: [], padding: 0, action: this.importTestMIDI }
             ]
         });
         return items;
@@ -4735,7 +4808,7 @@ var ZvoogApp = /** @class */ (function () {
                 for (var k2 = 0; k2 < pars.length; k2++) {
                     if (effect.parameters.length > k2) {
                         var curve = effect.parameters[k2];
-                        if (this.isFxActive(k1) && (!this.isFxSelected(k1))) {
+                        if (this.isFxActive(k1)) {
                             if (this.isFxParameterSelected(k1, k2)) {
                                 this.addParameterCurve(curve, this.firstAnchor, 'firstSegment', 'firstJoint', true);
                             }
@@ -4753,13 +4826,14 @@ var ZvoogApp = /** @class */ (function () {
         for (var k1 = 0; k1 < this.currentSong.tracks.length; k1++) {
             var track = this.currentSong.tracks[k1];
             for (var k2 = 0; k2 < track.effects.length; k2++) {
+                //console.log(track.title,this.isTrackFxActive(k1, k2));
                 var effect = track.effects[k2];
                 var pars = effect.plugin.getParams();
                 if (pars) {
                     for (var k3 = 0; k3 < pars.length; k3++) {
                         if (effect.parameters.length > k3) {
                             var curve = effect.parameters[k3];
-                            if (this.isTrackFxActive(k1, k2) && (!this.isTrackFxSelected(k1, k2))) {
+                            if (this.isTrackFxActive(k1, k2)) {
                                 if (this.isTrackFxParameterSelected(k1, k2, k3)) {
                                     this.addParameterCurve(curve, this.firstAnchor, 'firstSegment', 'firstJoint', true);
                                 }
@@ -4782,7 +4856,7 @@ var ZvoogApp = /** @class */ (function () {
                     for (var k4 = 0; k4 < pars.length; k4++) {
                         if (voice.source.parameters.length > k4) {
                             var curve = voice.source.parameters[k4];
-                            if (this.isVoiceSourceActive(k1, k2) && (!this.isVoiceSourceSelected(k1, k2))) {
+                            if (this.isVoiceSourceActive(k1, k2)) {
                                 if (this.isVoiceSourceParameterSelected(k1, k2, k4)) {
                                     this.addParameterCurve(curve, this.firstAnchor, 'firstSegment', 'firstJoint', true);
                                 }
@@ -4803,7 +4877,7 @@ var ZvoogApp = /** @class */ (function () {
                         for (var k4 = 0; k4 < pars_3.length; k4++) {
                             if (effect.parameters.length > k4) {
                                 var curve = effect.parameters[k4];
-                                if (this.isVoiceFxActive(k1, k2, k3) && (!this.isVoiceFxSelected(k1, k2, k3))) {
+                                if (this.isVoiceFxActive(k1, k2, k3)) {
                                     if (this.isVoiceFxParameterSelected(k1, k2, k3, k4)) {
                                         this.addParameterCurve(curve, this.firstAnchor, 'firstSegment', 'firstJoint', true);
                                     }
@@ -4948,12 +5022,20 @@ var ZvoogApp = /** @class */ (function () {
         this.labelsBottomAnchor64.content.length = 0;
         this.labelsBottomAnchor16.content.length = 0;
         this.labelsBottomAnchor4.content.length = 0;
+        this.bottomTogglesAnchor256.content.length = 0;
+        this.bottomTogglesAnchor64.content.length = 0;
+        this.bottomTogglesAnchor16.content.length = 0;
+        this.bottomTogglesAnchor4.content.length = 0;
         var nextMeasureX = 0;
         /*if (this.currentSong.tracks.length > this.currentSong.selectedLayer.level1) {
             let track: ZvoogTrack = this.currentSong.tracks[this.currentSong.selectedLayer.level1];
             if (track.voices.length > this.currentSong.selectedLayer.level2) {
                 let voice: ZvoogVoice = track.voices[this.currentSong.selectedLayer.level2];
 */
+        this.labelsBottomAnchor256.content.push(this.tileLevel.text(this.gridIndentLeft + 256 / 4, 0, '1', 'barNum256'));
+        this.bottomTogglesAnchor256.content.push(this.tileLevel.actionRectangle(this.createSelectionToggle(0), this.gridIndentLeft + nextMeasureX, -0.5 * 256, 0.5 * 256, 0.5 * 256, 0.5 * 0.5 * 256, 0.5 * 0.5 * 256, 'fillSelectionSpot'));
+        this.labelsBottomAnchor64.content.push(this.tileLevel.text(this.gridIndentLeft + 64 / 4, 0, '1', 'barNum64'));
+        this.bottomTogglesAnchor64.content.push(this.tileLevel.actionRectangle(this.createSelectionToggle(0), this.gridIndentLeft + nextMeasureX, -0.5 * 64, 0.5 * 64, 0.5 * 64, 0.5 * 0.5 * 64, 0.5 * 0.5 * 64, 'fillSelectionSpot'));
         for (var i = 0; i < this.currentSong.timeline.length; i++) {
             //for (let i = 0; i < voice.chunks.length; i++) {
             //let chunk: ZvoogPattern = voice.chunks[i];
@@ -5011,18 +5093,64 @@ var ZvoogApp = /** @class */ (function () {
                     y: this.gridIndentUp, w: 3, h: 120 * this.noteLineWidth, css: 'meterFarLine'
                 });
             }
-            if ((i + 1) % 20 == 0 && i > 0)
-                this.labelsBottomAnchor256.content.push(this.tileLevel.text(this.gridIndentLeft + nextMeasureX, 0, '' + (1 + i), 'barNum256'));
-            if ((i + 1) % 5 == 0)
-                this.labelsBottomAnchor64.content.push(this.tileLevel.text(this.gridIndentLeft + nextMeasureX, 0, '' + (1 + i), 'barNum64'));
-            this.labelsBottomAnchor16.content.push(this.tileLevel.text(this.gridIndentLeft + nextMeasureX, 0, '' + (1 + i), 'barNum16'));
-            this.labelsBottomAnchor4.content.push(this.tileLevel.text(this.gridIndentLeft + nextMeasureX, 0, '' + (1 + i), 'barNum4'));
+            //fillSelectionSpot
+            if ((i + 1) % 20 == 0) {
+                //console.log( -256 * this.tileLevel.tapSize,this.gridIndentLeft + nextMeasureX);
+                this.labelsBottomAnchor256.content.push(this.tileLevel.text(this.gridIndentLeft + nextMeasureX + 256 / 4, 0, '' + (1 + i), 'barNum256'));
+                this.bottomTogglesAnchor256.content.push(this.tileLevel.actionRectangle(this.createSelectionToggle(i), this.gridIndentLeft + nextMeasureX, -0.5 * 256, 0.5 * 256, 0.5 * 256, 0.5 * 0.5 * 256, 0.5 * 0.5 * 256, 'fillSelectionSpot'));
+            }
+            if ((i + 1) % 5 == 0) {
+                this.labelsBottomAnchor64.content.push(this.tileLevel.text(this.gridIndentLeft + nextMeasureX + 64 / 4, 0, '' + (1 + i), 'barNum64'));
+                this.bottomTogglesAnchor64.content.push(this.tileLevel.actionRectangle(this.createSelectionToggle(i), this.gridIndentLeft + nextMeasureX, -0.5 * 64, 0.5 * 64, 0.5 * 64, 0.5 * 0.5 * 64, 0.5 * 0.5 * 64, 'fillSelectionSpot'));
+            }
+            this.labelsBottomAnchor16.content.push(this.tileLevel.text(this.gridIndentLeft + nextMeasureX + 16 / 4, 0, '' + (1 + i), 'barNum16'));
+            this.bottomTogglesAnchor16.content.push(this.tileLevel.actionRectangle(this.createSelectionToggle(i), this.gridIndentLeft + nextMeasureX, -0.5 * 16, 0.5 * 16, 0.5 * 16, 0.5 * 0.5 * 16, 0.5 * 0.5 * 16, 'fillSelectionSpot'));
+            this.labelsBottomAnchor4.content.push(this.tileLevel.text(this.gridIndentLeft + nextMeasureX + 4 / 4, 0, '' + (1 + i), 'barNum4'));
+            this.bottomTogglesAnchor4.content.push(this.tileLevel.actionRectangle(this.createSelectionToggle(i), this.gridIndentLeft + nextMeasureX, -0.5 * 4, 0.5 * 4, 0.5 * 4, 0.5 * 0.5 * 4, 0.5 * 0.5 * 4, 'fillSelectionSpot'));
+            //console.log('check',i,this.currentSong.selectedMeasures);
+            if (i + 1 >= this.currentSong.selectedMeasures.from && i + 1 <= this.currentSong.selectedMeasures.from + this.currentSong.selectedMeasures.duration - 1) {
+                //console.log('selected',i,this.currentSong.selectedMeasures,this.gridIndentLeft + nextMeasureX);
+                this.meterPatternAnchor.content.push(this.tileLevel.rectangle(this.gridIndentLeft + nextMeasureX, this.gridIndentUp, this.patternDuration(measure) * this.lengthOfSecond, 120 * 3, 0, 0, 'fillSelectionSpot'));
+            }
+            else {
+                if (i + 1 == this.currentSong.selectedMeasures.from && this.currentSong.selectedMeasures.duration == 0) {
+                    this.meterPatternAnchor.content.push(this.tileLevel.rectangle(this.gridIndentLeft + nextMeasureX, this.gridIndentUp, this.patternDuration(measure) * this.lengthOfSecond, 120 * 3, 0, 0, 'fillSelectionFirst'));
+                }
+            }
             nextMeasureX = nextMeasureX + this.patternDuration(measure) * this.lengthOfSecond;
         }
-        //}
-        //}
         this.keyZoomAnchor.ww = nextMeasureX;
+        this.addFarBackground(nextMeasureX);
         this.keyWholeAnchor.ww = nextMeasureX;
+        this.addBlackWhiteKeys(nextMeasureX);
+    };
+    ZvoogApp.prototype.createSelectionToggle = function (n) {
+        var _this = this;
+        var me = this;
+        return function (x, y) {
+            if (_this.currentSong.selectedMeasures.from) {
+                if (_this.currentSong.selectedMeasures.duration) {
+                    _this.currentSong.selectedMeasures.from = 0;
+                    _this.currentSong.selectedMeasures.duration = 0;
+                }
+                else {
+                    if (_this.currentSong.selectedMeasures.from > n + 1) {
+                        _this.currentSong.selectedMeasures.duration = _this.currentSong.selectedMeasures.from - (n + 1) + 1;
+                        _this.currentSong.selectedMeasures.from = n + 1;
+                    }
+                    else {
+                        _this.currentSong.selectedMeasures.duration = n + 1 - _this.currentSong.selectedMeasures.from + 1;
+                    }
+                }
+            }
+            else {
+                _this.currentSong.selectedMeasures.from = n + 1;
+            }
+            _this.resetWholeProject();
+            console.log('toggle', n, _this.currentSong.selectedMeasures);
+        };
+    };
+    ZvoogApp.prototype.addFarBackground = function (w) {
         for (var k = 0; k < 120; k++) {
             if (this.currentSong.keyPattern[k]) {
                 var css = 'keyFillWhite';
@@ -5034,18 +5162,20 @@ var ZvoogApp = /** @class */ (function () {
                 }
                 this.keyZoomAnchor.content.push({
                     x: this.gridIndentLeft, y: this.gridIndentUp + (120 - k - 1) * this.noteLineWidth,
-                    w: nextMeasureX, h: 0.9 * this.noteLineWidth, css: css
+                    w: w, h: 0.9 * this.noteLineWidth, css: css
                 });
                 if (k > 0) {
                     if (this.currentSong.keyPattern[k] > 2) {
                         this.keyZoomAnchor.content.push({
                             x: this.gridIndentLeft, y: this.gridIndentUp + (120 - k - 0.05) * this.noteLineWidth,
-                            w: nextMeasureX, h: 0.1 * this.noteLineWidth, css: 'meterLine'
+                            w: w, h: 0.1 * this.noteLineWidth, css: 'meterLine'
                         });
                     }
                 }
             }
         }
+    };
+    ZvoogApp.prototype.addBlackWhiteKeys = function (w) {
         for (var k = 0; k < 10; k++) {
             var css = 'keyFillWhite';
             if (k % 2) {
@@ -5053,7 +5183,7 @@ var ZvoogApp = /** @class */ (function () {
             }
             this.keyWholeAnchor.content.push({
                 x: this.gridIndentLeft, y: this.gridIndentUp + (120 - k * 12 - 12) * this.noteLineWidth,
-                w: nextMeasureX, h: 12 * this.noteLineWidth, css: css
+                w: w, h: 12 * this.noteLineWidth, css: css
             });
             this.labelsOctaveAnchor16.content.push(this.tileLevel.text(0, this.gridIndentUp + (120 - k * 12) * this.noteLineWidth, '' + (1 + k), 'octaveLabel16'));
             this.labelsOctaveAnchor8.content.push(this.tileLevel.text(0, this.gridIndentUp + (120 - k * 12 - 0.25) * this.noteLineWidth, '' + (1 + k), 'octaveLabel8'));
@@ -5182,6 +5312,10 @@ var ZvoogApp = /** @class */ (function () {
         this.labelsBottomAnchor16 = { xx: 0, yy: 0, ww: 1, hh: 1, showZoom: 4, hideZoom: 16, content: [] };
         this.labelsBottomAnchor64 = { xx: 0, yy: 0, ww: 1, hh: 1, showZoom: 16, hideZoom: 64, content: [] };
         this.labelsBottomAnchor256 = { xx: 0, yy: 0, ww: 1, hh: 1, showZoom: 64, hideZoom: this.maxZoom, content: [] };
+        this.bottomTogglesAnchor4 = { xx: 0, yy: 0, ww: 1, hh: 1, showZoom: this.minZoom, hideZoom: 4, content: [] };
+        this.bottomTogglesAnchor16 = { xx: 0, yy: 0, ww: 1, hh: 1, showZoom: 4, hideZoom: 16, content: [] };
+        this.bottomTogglesAnchor64 = { xx: 0, yy: 0, ww: 1, hh: 1, showZoom: 16, hideZoom: 64, content: [] };
+        this.bottomTogglesAnchor256 = { xx: 0, yy: 0, ww: 1, hh: 1, showZoom: 64, hideZoom: 256, content: [] };
         this.keyZoomAnchor = { xx: 0, yy: this.gridIndentUp, ww: 1, hh: 120 * this.noteLineWidth, showZoom: this.minZoom, hideZoom: 25, content: [] };
         this.keyWholeAnchor = { xx: 0, yy: this.gridIndentUp, ww: 1, hh: 120 * this.noteLineWidth, showZoom: 25, hideZoom: this.maxZoom, content: [] };
         this.meterPatternAnchor = { xx: 0, yy: 0, ww: 1, hh: 1, showZoom: this.minZoom, hideZoom: this.maxZoom, content: [] };
@@ -5201,6 +5335,14 @@ var ZvoogApp = /** @class */ (function () {
                 this.labelsBottomAnchor16,
                 this.labelsBottomAnchor64,
                 this.labelsBottomAnchor256
+            ], stickBottom: 1
+        });
+        layers.push({
+            g: document.getElementById('bottomTogglesGroup'), anchors: [
+                this.bottomTogglesAnchor4,
+                this.bottomTogglesAnchor16,
+                this.bottomTogglesAnchor64,
+                this.bottomTogglesAnchor256
             ], stickBottom: 1
         });
         layers.push({
@@ -5298,6 +5440,14 @@ var ZvoogApp = /** @class */ (function () {
         this.labelsBottomAnchor64.hh = this.tileLevel.innerHeight / this.tileLevel.tapSize;
         this.labelsBottomAnchor256.ww = this.tileLevel.innerWidth / this.tileLevel.tapSize;
         this.labelsBottomAnchor256.hh = this.tileLevel.innerHeight / this.tileLevel.tapSize;
+        this.bottomTogglesAnchor4.ww = this.tileLevel.innerWidth / this.tileLevel.tapSize;
+        this.bottomTogglesAnchor4.hh = this.tileLevel.innerHeight / this.tileLevel.tapSize;
+        this.bottomTogglesAnchor16.ww = this.tileLevel.innerWidth / this.tileLevel.tapSize;
+        this.bottomTogglesAnchor16.hh = this.tileLevel.innerHeight / this.tileLevel.tapSize;
+        this.bottomTogglesAnchor64.ww = this.tileLevel.innerWidth / this.tileLevel.tapSize;
+        this.bottomTogglesAnchor64.hh = this.tileLevel.innerHeight / this.tileLevel.tapSize;
+        this.bottomTogglesAnchor256.ww = this.tileLevel.innerWidth / this.tileLevel.tapSize;
+        this.bottomTogglesAnchor256.hh = this.tileLevel.innerHeight / this.tileLevel.tapSize;
         this.meterPatternAnchor.ww = this.tileLevel.innerWidth / this.tileLevel.tapSize;
         this.meterPatternAnchor.hh = this.tileLevel.innerHeight / this.tileLevel.tapSize;
         this.workButtonsGroup.ww = this.tileLevel.innerWidth / this.tileLevel.tapSize;

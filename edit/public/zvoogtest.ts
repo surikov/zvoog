@@ -327,6 +327,7 @@ class TestSong {
 			, horizontal: true
 			, locked: false
 			, selectedLayer: { level1: 0, level2: 0, level3: 0, level4: 0 }
+			,selectedMeasures:{from:0,duration:0}
 		};
 		var curPoint: number = 0;
 		while (curPoint < songdurationseconds) {
