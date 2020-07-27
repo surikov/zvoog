@@ -70,6 +70,7 @@ var ZvoogPopup = /** @class */ (function () {
         this.app.addIcon128(content, mx + mr + item.padding * fontSize, my + i * 2 * fontSize + 0.333 * fontSize + mr, fontSize * 2, item.path128, item.css);
     };
     ZvoogPopup.prototype.showPopupMenu = function (popX, popY, mz, fontSize, items) {
+        //console.log('showPopupMenu',items);
         var mx = popX + 0.75 * mz;
         var my = popY + 0.5 * mz;
         var mr = this.calculateRound(mz); //items.length,fontSize,mw);
@@ -1958,9 +1959,9 @@ var TileLevel = /** @class */ (function () {
         this.mn = minZoom;
         this.translateZ = curZoom;
         this.svg.addEventListener("wheel", this.rakeMouseWheel.bind(this), { capture: false, passive: false });
-        this.svg.addEventListener("touchstart", this.rakeTouchStart.bind(this), { capture: false, passive: false });
-        this.svg.addEventListener("touchmove", this.rakeTouchMove.bind(this), { capture: false, passive: false });
-        this.svg.addEventListener("touchend", this.rakeTouchEnd.bind(this), { capture: false, passive: false });
+        this.svg.addEventListener("touchstart", this.rakeTouchStart.bind(this), { capture: true, passive: false });
+        this.svg.addEventListener("touchmove", this.rakeTouchMove.bind(this), { capture: true, passive: false });
+        this.svg.addEventListener("touchend", this.rakeTouchEnd.bind(this), { capture: true, passive: false });
         this.svg.addEventListener('mousedown', this.rakeMouseDown.bind(this), { capture: false, passive: false });
         this.svg.addEventListener('mousemove', this.rakeMouseMove.bind(this), { capture: false, passive: false });
         this.svg.addEventListener('mouseup', this.rakeMouseUp.bind(this), { capture: false, passive: false });
@@ -2196,9 +2197,17 @@ var TileLevel = /** @class */ (function () {
             //this.svg.removeEventListener('mousemove', this.rakeMouseMove, true);
             //this.svg.removeEventListener('mousemove', this.rakeMouseMove.bind(this));
             this.cancelDragZoom();
-            if (Math.abs(this.clickX - mouseEvent.offsetX) < this.clickLimit //
-                &&
-                    Math.abs(this.clickY - mouseEvent.offsetY) < this.clickLimit) {
+            this.clicked = false;
+            var diffX = Math.abs(this.clickX - this.startMouseScreenX);
+            var diffY = Math.abs(this.clickY - this.startMouseScreenY);
+            //if (Math.abs(this.clickX - this.startMouseScreenX) < this.translateZ * this.clickLimit //
+            //	&&
+            //	Math.abs(this.clickY - this.startMouseScreenY) < this.translateZ * this.clickLimit) {
+            if (diffX < this.clickLimit && diffY < this.clickLimit) {
+                //if (Math.abs(this.clickX - mouseEvent.offsetX) < this.clickLimit //
+                //	&&
+                //	Math.abs(this.clickY - mouseEvent.offsetY) < this.clickLimit) {
+                console.log('rakeMouseUp');
                 this.clicked = true;
                 //this.cancelDragZoom();
                 this.slideToContentPosition();
@@ -2221,6 +2230,7 @@ var TileLevel = /** @class */ (function () {
         this.slidingLockTo = -1;
         touchEvent.preventDefault();
         this.startedTouch = true;
+        this.clicked = false;
         if (touchEvent.touches.length < 2) {
             this.twoZoom = false;
             this.startMouseScreenX = touchEvent.touches[0].clientX;
@@ -2234,7 +2244,6 @@ var TileLevel = /** @class */ (function () {
         else {
             this.startTouchZoom(touchEvent);
         }
-        this.clicked = false;
     };
     TileLevel.prototype.rakeTouchMove = function (touchEvent) {
         //console.log('rakeTouchMove',touchEvent.touches.length);
@@ -2304,10 +2313,16 @@ var TileLevel = /** @class */ (function () {
         if (!this.twoZoom) {
             if (touchEvent.touches.length < 2) {
                 this.cancelDragZoom();
+                this.clicked = false;
                 if (this.startedTouch) {
-                    if (Math.abs(this.clickX - this.startMouseScreenX) < this.translateZ * this.clickLimit //
-                        &&
-                            Math.abs(this.clickY - this.startMouseScreenY) < this.translateZ * this.clickLimit) {
+                    //let diffLimit = this.clickLimit;
+                    var diffX = Math.abs(this.clickX - this.startMouseScreenX);
+                    var diffY = Math.abs(this.clickY - this.startMouseScreenY);
+                    //if (Math.abs(this.clickX - this.startMouseScreenX) < this.translateZ * this.clickLimit //
+                    //	&&
+                    //	Math.abs(this.clickY - this.startMouseScreenY) < this.translateZ * this.clickLimit) {
+                    if (diffX < this.clickLimit && diffY < this.clickLimit) {
+                        //console.log('rakeTouchEnd');
                         this.clicked = true;
                         this.slideToContentPosition();
                     }
@@ -2316,9 +2331,11 @@ var TileLevel = /** @class */ (function () {
                         //if (speed > 1) {
                         //	this.moveTail(speed);
                         //} else {
+                        this.clicked = false;
                         this.slideToContentPosition();
                         //}
                     }
+                    //console.log('tap',this.clicked,diffX,diffY,diffLimit);
                 }
                 else {
                     //console.log('touch ended already');
@@ -2416,12 +2433,12 @@ var TileLevel = /** @class */ (function () {
         this.checkAfterZoom();
     };
     TileLevel.prototype.checkAfterZoom = function () {
-        if (this.afterZoomCallback) {
-            this.onZoom.start(555, function () {
-                //console.log('afterZoom', this);
-                this.afterZoomCallback();
-            }.bind(this));
-        }
+        //if (this.afterZoomCallback) {
+        this.onZoom.start(555, function () {
+            //console.log('afterZoom', this);
+            this.afterZoomCallback();
+        }.bind(this));
+        //}
     };
     TileLevel.prototype.slideToContentPosition = function () {
         var a = this.calculateValidContentPosition();
@@ -2871,10 +2888,12 @@ var TileLevel = /** @class */ (function () {
                 element.onClickFunction = d.action;
                 var me_1 = this;
                 var click = function () {
+                    //console.log('click',me.clicked,element);
                     if (me_1.clicked) {
                         if (element) {
                             //console.log('click',element);
                             if (element.onClickFunction) {
+                                //console.log('click',element);
                                 var xx = element.getBoundingClientRect().left - me_1.svg.getBoundingClientRect().left;
                                 var yy = element.getBoundingClientRect().top - me_1.svg.getBoundingClientRect().top;
                                 element.onClickFunction(me_1.translateZ * (me_1.clickX - xx) / me_1.tapSize, me_1.translateZ * (me_1.clickY - yy) / me_1.tapSize);
@@ -5114,7 +5133,7 @@ var ZvoogApp = /** @class */ (function () {
             }
             else {
                 if (i + 1 == this.currentSong.selectedMeasures.from && this.currentSong.selectedMeasures.duration == 0) {
-                    this.meterPatternAnchor.content.push(this.tileLevel.rectangle(this.gridIndentLeft + nextMeasureX, this.gridIndentUp, this.patternDuration(measure) * this.lengthOfSecond, 120 * 3, 0, 0, 'fillSelectionFirst'));
+                    this.meterPatternAnchor.content.push(this.tileLevel.rectangle(this.gridIndentLeft + nextMeasureX, this.gridIndentUp, 1 / 8 * this.lengthOfSecond, 120 * 3, 0, 0, 'fillSelectionFirst'));
                 }
             }
             nextMeasureX = nextMeasureX + this.patternDuration(measure) * this.lengthOfSecond;

@@ -167,8 +167,8 @@ a {
 	fill-opacity: 25%;
 }
 .fillSelectionFirst {
-	fill: var(--grid-color);
-	fill-opacity: 25%;
+	fill: var(--spot-color);
+	fill-opacity: 75%;
 }
 
 .fillButtonSpot {
