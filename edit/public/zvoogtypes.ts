@@ -6,16 +6,16 @@ function duration2time(bpm: number, duration384: number): number {
 	var part = 384 / (4 * duration384);
 	return n4 / part;
 }
-function durations2time(measures:ZvoogMeasure[]): number{
-	var t=0;
-	for(var i=0;i<measures.length;i++){
-		t=t+duration2time(measures[i].tempo,duration384(measures[i].meter));
+function durations2time(measures: ZvoogMeasure[]): number {
+	var t = 0;
+	for (var i = 0; i < measures.length; i++) {
+		t = t + duration2time(measures[i].tempo, duration384(measures[i].meter));
 	}
 	return t;
 }
 function time2Duration(time: number, bpm: number): number {
 	var n4 = 60 / bpm;
-	var n384=n4/96;
+	var n384 = n4 / 96;
 	return Math.round(time / n384);
 }
 function duration384(meter: ZvoogMeter): number {
@@ -37,8 +37,8 @@ type UndoRedoCommand = {
 };
 enum UndoRedoKeys {
 	undoRedoChangeProjectTitle = 'changeProjectTitle'
-	,undoRedoChangeProjectDescription = 'changeProjectDescription'
-	,undoRedoSelectLayer = 'selectLayer'
+	, undoRedoChangeProjectDescription = 'changeProjectDescription'
+	, undoRedoSelectLayer = 'selectLayer'
 	, undoRedoBunch = 'bunch'
 };
 //var undoRedoChangeProjectTitle: string = 'changeProjectTitle';
@@ -118,7 +118,7 @@ type ZvoogPoint = {
 };
 type ZvoogCurve = {
 	//duration: number//ZvoogMeter
-	 points: ZvoogPoint[]
+	points: ZvoogPoint[]
 };
 /*
 type ZvoogParameterLine = {
@@ -132,15 +132,15 @@ type ZvoogGridStep = {
 	duration: number;
 	power: number;
 };
-type ZvoogLayerSelection={
-	level1:number
-	,level2:number
-	,level3:number
-	,level4:number
+type ZvoogLayerSelection = {
+	level1: number
+	, level2: number
+	, level3: number
+	, level4: number
 };
-type ZvoogMeasureSelection={
-	from:number
-	,duration:number
+type ZvoogMeasureSelection = {
+	from: number
+	, duration: number
 };
 type ZvoogSchedule = {
 	tracks: ZvoogTrack[]
@@ -148,7 +148,7 @@ type ZvoogSchedule = {
 	, effects: ZvoogTrackEffect[]
 	//, patterns: ZvoogPattern[]
 	//, curves: ZvoogCurve[]
-	,timeline:ZvoogMeasure[]
+	, timeline: ZvoogMeasure[]
 	, title: string
 	, description: string
 	, macros: UndoRedoCommand[]

@@ -1040,6 +1040,7 @@ var ZvoogPlayer = /** @class */ (function () {
             return null;
         }
         var duration = this.calculateDuration(tempo, pitches);
+        //console.log(duration,tempo, pitches);
         if (when > 0 && when + duration < audioContext.currentTime) {
             console.log('skip');
             return null;
@@ -1065,6 +1066,7 @@ var ZvoogPlayer = /** @class */ (function () {
         envelope.audioBufferSourceNode = audioContext.createBufferSource();
         envelope.audioBufferSourceNode.playbackRate.setValueAtTime(currentPlaybackRate, 0);
         envelope.audioBufferSourceNode.playbackRate.setValueAtTime(currentPlaybackRate, startWhen);
+        //console.log(pitches.length,audioContext.currentTime,'startWhen', startWhen.toFixed(3),'duration',duration);
         if (pitches.length > 1) {
             //console.log('start', duration, startWhen.toFixed(3), (startWhen + duration));
             var newWhen = startWhen;
@@ -1801,6 +1803,7 @@ var ZvoogInstrumentSource = /** @class */ (function () {
         this.player.cancelQueue(this.audioContext);
     };
     ZvoogInstrumentSource.prototype.schedule = function (when, tempo, chord) {
+        //console.log('schedule',when, tempo, chord);
         if (this.zones) {
             for (var i = 0; i < chord.length; i++) {
                 this.player.queueWaveTable(this.audioContext, this.base, this.zones, when, tempo, chord[i]);
@@ -2207,7 +2210,7 @@ var TileLevel = /** @class */ (function () {
                 //if (Math.abs(this.clickX - mouseEvent.offsetX) < this.clickLimit //
                 //	&&
                 //	Math.abs(this.clickY - mouseEvent.offsetY) < this.clickLimit) {
-                console.log('rakeMouseUp');
+                //console.log('rakeMouseUp');
                 this.clicked = true;
                 //this.cancelDragZoom();
                 this.slideToContentPosition();
@@ -3810,18 +3813,18 @@ var MidiParser = /** @class */ (function () {
     };
     MidiParser.prototype.takeMeasure = function (track, when, bpm, meter) {
         var q = 60 / bpm;
-        var duration = 1000 * q * meter * 4;
+        var duration = Math.floor(1000 * q * meter * 4);
         var idx = Math.floor(when / duration);
         for (var i = 0; i <= idx; i++) {
             if (track.measures.length < 1 + idx) {
                 var m = {
                     duration: duration,
-                    chords: []
+                    songchords: []
                 };
                 track.measures.push(m);
             }
         }
-        //console.log(when,track.measures.length,idx);
+        //console.log(when,track.measures.length,idx,meter,duration);
         return track.measures[idx];
     };
     MidiParser.prototype.takeDrumVoice = function (drum, drumVoices) {
@@ -4000,8 +4003,8 @@ var MidiParser = /** @class */ (function () {
                     clefHint: 0,
                     keyHint: 0
                 };
-                for (var c = 0; c < measure.chords.length; c++) {
-                    var midichord = measure.chords[c];
+                for (var c = 0; c < measure.songchords.length; c++) {
+                    var midichord = measure.songchords[c];
                     var chordtime = midichord.when - time;
                     //console.log(midichord.when - time,time2Duration(chordtime/1000, midisong.bpm))
                     var zvoogchord = {
@@ -4035,6 +4038,7 @@ var MidiParser = /** @class */ (function () {
                             }
                         }
                     }
+                    //console.log(m,c,midichord);
                     chunk.chords.push(zvoogchord);
                 }
                 voice.chunks.push(chunk);
@@ -4046,8 +4050,8 @@ var MidiParser = /** @class */ (function () {
             var fordrum = [];
             for (var m = 0; m < miditrack.measures.length; m++) {
                 var measure = miditrack.measures[m];
-                for (var c = 0; c < measure.chords.length; c++) {
-                    var chord = measure.chords[c];
+                for (var c = 0; c < measure.songchords.length; c++) {
+                    var chord = measure.songchords[c];
                     if (chord.channel == 9) {
                         //console.log(i, m, chord);
                         for (var n = 0; n < chord.notes.length; n++) {
@@ -4079,8 +4083,8 @@ var MidiParser = /** @class */ (function () {
                         keyHint: 0
                     };
                     zvoice.chunks.push(chunk);
-                    for (var c = 0; c < measure.chords.length; c++) {
-                        var midichord_1 = measure.chords[c];
+                    for (var c = 0; c < measure.songchords.length; c++) {
+                        var midichord_1 = measure.songchords[c];
                         if (midichord_1.channel == 9) {
                             var chordtime = midichord_1.when - time;
                             var zvoogchord = {
@@ -4139,9 +4143,9 @@ var MidiParser = /** @class */ (function () {
             for (var ch = 0; ch < miditrack.chords.length; ch++) {
                 var midichord = miditrack.chords[ch];
                 var newchord = { when: midichord.when, notes: [], channel: midichord.channel };
-                var measure = this.takeMeasure(tr, midichord.when, this.header.tempoBPM, this.header.meterCount / this.header.meterDivision);
+                var measure = this.takeMeasure(tr, Math.floor(midichord.when), this.header.tempoBPM, this.header.meterCount / this.header.meterDivision);
                 //tr.chords.push(newchord);
-                measure.chords.push(newchord);
+                measure.songchords.push(newchord);
                 for (var n = 0; n < midichord.notes.length; n++) {
                     var midinote = midichord.notes[n];
                     var newnote = { points: [] };
@@ -4180,7 +4184,11 @@ var ZvoogApp = /** @class */ (function () {
         this.noteLineWidth = 3;
         this.undoRedo = new ZvoogUndoRedo(this);
         this.lang = new ZvoogLang();
-        this.onAir = false;
+        //onAir: boolean = false;
+        this.tickDurationMs = 222;
+        this.lastSongPositionMs = 0;
+        this.audioTimeMs = 0;
+        this.nodesConnected = false;
         this.popup = new ZvoogPopup(this);
         console.log('ZvoogApp init');
     }
@@ -4205,7 +4213,7 @@ var ZvoogApp = /** @class */ (function () {
             }
         }
     };
-    ZvoogApp.prototype.isPluginsBusy = function () {
+    ZvoogApp.prototype.selectLockedPluginLayer = function () {
         for (var e = 0; e < this.currentSong.effects.length; e++) {
             var fx = this.currentSong.effects[e];
             if (fx.plugin.busy()) {
@@ -4243,7 +4251,14 @@ var ZvoogApp = /** @class */ (function () {
         console.log('ZvoogApp start');
         var testSong = new TestSong();
         this.currentSong = testSong.createRandomSchedule();
+        this.currentSong.effects[0].parameters[0].points = [];
+        this.currentSong.effects[0].parameters[0].points.push({ skipMeasures: 1, skip384: 55, velocity: 77 });
+        this.currentSong.effects[0].parameters[0].points.push({ skipMeasures: 3, skip384: 111, velocity: 3 });
+        this.currentSong.effects[0].parameters[0].points.push({ skipMeasures: 2, skip384: 33, velocity: 111 });
+        this.currentSong.effects[0].parameters[0].points.push({ skipMeasures: 4, skip384: 133, velocity: 22 });
+        console.log(this.currentSong.effects[0].parameters[0].points);
         console.log(this.currentSong);
+        this.nodesConnected = false;
         this.audioContext = new AudioContext();
         this.prepareSchedule();
         var layers = this.createLayers();
@@ -4255,6 +4270,233 @@ var ZvoogApp = /** @class */ (function () {
         if (filesinput)
             filesinput.addEventListener('change', this.handleFileSelect.bind(this), false);
         this.afterResizeCallback();
+        setInterval(this.movePlayTicker.bind(this), this.tickDurationMs);
+    };
+    ZvoogApp.prototype.movePlayTicker = function () {
+        //console.log(this.onAir);
+        if (this.audioTimeMs) {
+            var t = this.audioContext.currentTime * 1000;
+            //console.log(t);
+            if (this.audioTimeMs + 0.5 * this.tickDurationMs < t) {
+                var startSongSelectionMs = 0;
+                var endSongSelectionMs = Math.floor(1000 * durations2time(this.currentSong.timeline));
+                if (this.currentSong.selectedMeasures.duration) {
+                    for (var i = 0; i < this.currentSong.timeline.length; i++) {
+                        var m = this.currentSong.timeline[i];
+                        var measureDurationMS = Math.floor(1000 * duration2time(m.tempo, duration384(m.meter)));
+                        //console.log('len',len);
+                        if (i + 1 < this.currentSong.selectedMeasures.from) {
+                            startSongSelectionMs = startSongSelectionMs + measureDurationMS;
+                        }
+                        else {
+                            break;
+                        }
+                    }
+                    endSongSelectionMs = 0;
+                    for (var i = 0; i < this.currentSong.timeline.length; i++) {
+                        //console.log(i);
+                        var m = this.currentSong.timeline[i];
+                        var len = Math.floor(1000 * duration2time(m.tempo, duration384(m.meter)));
+                        if (i + 1 <= this.currentSong.selectedMeasures.from + this.currentSong.selectedMeasures.duration - 1) {
+                            //if (i + 1 >= this.currentSong.selectedMeasures.from) {
+                            //console.log(i,endSongSelection,len);
+                            endSongSelectionMs = endSongSelectionMs + len;
+                            //}
+                        }
+                        else {
+                            break;
+                        }
+                    }
+                    //console.log('selection',startSongSelection,endSongSelection);
+                }
+                //console.log('from', startSongSelection, 'to', endSongSelection);
+                this.audioTimeMs = this.audioTimeMs + this.tickDurationMs;
+                if (this.audioTimeMs < this.audioContext.currentTime * 1000) {
+                    this.audioTimeMs = this.audioContext.currentTime * 1000;
+                }
+                if (this.lastSongPositionMs + this.tickDurationMs > endSongSelectionMs) {
+                    var overFlowMs = (this.lastSongPositionMs + this.tickDurationMs - endSongSelectionMs);
+                    var tickRest = this.tickDurationMs - overFlowMs;
+                    //console.log(tickRest,overFlowMs,this.tickDurationMs);
+                    this.sendSongData(this.audioTimeMs, this.lastSongPositionMs, endSongSelectionMs);
+                    this.sendSongData(this.audioTimeMs + tickRest, startSongSelectionMs, startSongSelectionMs + overFlowMs);
+                    this.lastSongPositionMs = startSongSelectionMs + overFlowMs;
+                }
+                else {
+                    this.sendSongData(this.audioTimeMs, this.lastSongPositionMs, this.lastSongPositionMs + this.tickDurationMs);
+                    this.lastSongPositionMs = this.lastSongPositionMs + this.tickDurationMs;
+                }
+                if (this.lastSongPositionMs < startSongSelectionMs || this.lastSongPositionMs > endSongSelectionMs) {
+                    this.lastSongPositionMs = startSongSelectionMs;
+                }
+            }
+        }
+    };
+    //at = 0;
+    //fr=0;
+    ZvoogApp.prototype.cancelAllSources = function () {
+        for (var k1 = 0; k1 < this.currentSong.tracks.length; k1++) {
+            var track = this.currentSong.tracks[k1];
+            for (var k2 = 0; k2 < track.voices.length; k2++) {
+                var voice = track.voices[k2];
+                voice.source.plugin.cancelSchedule();
+            }
+        }
+    };
+    ZvoogApp.prototype.cancelAllParameters = function () {
+        for (var i = 0; i < this.currentSong.timeline.length; i++) {
+            for (var k1 = 0; k1 < this.currentSong.tracks.length; k1++) {
+                var track = this.currentSong.tracks[k1];
+                for (var k2 = 0; k2 < track.voices.length; k2++) {
+                    var voice = track.voices[k2];
+                    var pars = voice.source.plugin.getParams();
+                    if (pars) {
+                        for (var k4 = 0; k4 < pars.length; k4++) {
+                            var zp = pars[k4];
+                            zp.cancelScheduledValues(0);
+                        }
+                    }
+                    for (var k3 = 0; k3 < voice.effects.length; k3++) {
+                        var effect = voice.effects[k3];
+                        var pars = effect.plugin.getParams();
+                        if (pars) {
+                            for (var k4 = 0; k4 < pars.length; k4++) {
+                                var zp = pars[k4];
+                                zp.cancelScheduledValues(0);
+                            }
+                        }
+                    }
+                }
+                for (var k2 = 0; k2 < track.effects.length; k2++) {
+                    var plugin = track.effects[k2].plugin;
+                    var pars_1 = plugin.getParams();
+                    if (pars_1) {
+                        for (var k3 = 0; k3 < pars_1.length; k3++) {
+                            var p = pars_1[k3];
+                            p.cancelScheduledValues(0);
+                        }
+                    }
+                }
+            }
+            for (var k1 = 0; k1 < this.currentSong.effects.length; k1++) {
+                var effect = this.currentSong.effects[k1];
+                var pars_2 = effect.plugin.getParams();
+                if (pars_2) {
+                    for (var k2 = 0; k2 < pars_2.length; k2++) {
+                        var p = pars_2[k2];
+                        p.cancelScheduledValues(0);
+                    }
+                }
+            }
+        }
+    };
+    ZvoogApp.prototype.sendSongData = function (audioTime, fromMs, toMs) {
+        console.log('sendSongData', Math.floor(audioTime), 'selection', fromMs, toMs);
+        //console.log('sendSongData', Math.floor(audioTime)-this.at, 'selection',fromMs,toMs);
+        //this.at=audioTime;
+        //this.fr=fromMs;
+        var curMs = 0;
+        for (var i = 0; i < this.currentSong.timeline.length; i++) {
+            var measure = this.currentSong.timeline[i];
+            var measureDurationMs = Math.round(1000 * duration2time(measure.tempo, duration384(measure.meter)));
+            if (fromMs < curMs + measureDurationMs && toMs >= curMs) {
+                for (var k1 = 0; k1 < this.currentSong.tracks.length; k1++) {
+                    var track = this.currentSong.tracks[k1];
+                    for (var k2 = 0; k2 < track.voices.length; k2++) {
+                        var voice = track.voices[k2];
+                        if (voice.chunks.length > i) {
+                            var chunk = voice.chunks[i];
+                            for (var ch = 0; ch < chunk.chords.length; ch++) {
+                                var chord = chunk.chords[ch];
+                                var tt = 1000 * duration2time(measure.tempo, chord.when);
+                                if (fromMs <= curMs + tt && toMs > curMs + tt) {
+                                    var chordpitches = [];
+                                    for (var n = 0; n < chord.values.length; n++) {
+                                        var v = chord.values[n];
+                                        chordpitches.push(v.envelope);
+                                    }
+                                    var chordAudioTime = (audioTime + curMs + tt - fromMs) / 1000;
+                                    //console.log('chord', Math.round(chordAudioTime * 1000), 'when', chord.when, (Math.round(chordAudioTime * 1000) - this.ttt));
+                                    //this.ttt = Math.round(chordAudioTime * 1000);
+                                    voice.source.plugin.schedule(chordAudioTime, measure.tempo, chordpitches);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            curMs = curMs + measureDurationMs;
+        }
+        this.sendParametersData(audioTime, fromMs, toMs);
+    };
+    ZvoogApp.prototype.sendParametersData = function (audioTime, fromMs, toMs) {
+        for (var k1 = 0; k1 < this.currentSong.tracks.length; k1++) {
+            var track = this.currentSong.tracks[k1];
+            for (var k2 = 0; k2 < track.voices.length; k2++) {
+                var voice = track.voices[k2];
+                var pars = voice.source.plugin.getParams();
+                if (pars) {
+                    for (var k4 = 0; k4 < pars.length; k4++) {
+                        var zp = pars[k4];
+                    }
+                }
+                for (var k3 = 0; k3 < voice.effects.length; k3++) {
+                    var effect = voice.effects[k3];
+                    var pars = effect.plugin.getParams();
+                    if (pars) {
+                        for (var k4 = 0; k4 < pars.length; k4++) {
+                            var zp = pars[k4];
+                        }
+                    }
+                }
+            }
+            for (var k2 = 0; k2 < track.effects.length; k2++) {
+                var plugin = track.effects[k2].plugin;
+                var pars_3 = plugin.getParams();
+                if (pars_3) {
+                    for (var k3 = 0; k3 < pars_3.length; k3++) {
+                        var p = pars_3[k3];
+                    }
+                }
+            }
+        }
+        for (var k1 = 0; k1 < this.currentSong.effects.length; k1++) {
+            var effect = this.currentSong.effects[k1];
+            var pars_4 = effect.plugin.getParams();
+            if (pars_4) {
+                for (var k2 = 0; k2 < pars_4.length; k2++) {
+                    //console.log(audioTime, fromMs, toMs,k1,k2,effect.parameters.length);
+                    if (effect.parameters.length > k2) {
+                        var points = effect.parameters[k2].points;
+                        var p = pars_4[k2];
+                        if (k1 == 0 && k2 == 0) {
+                            this.sendParameterPoints(audioTime, fromMs, toMs, p, points);
+                        }
+                    }
+                }
+            }
+        }
+    };
+    ZvoogApp.prototype.sendParameterPoints = function (audioTime, fromMs, toMs, parameter, points) {
+        //console.log(audioTime, fromMs, toMs);
+        var measureS = 0;
+        var measureIndex = 0;
+        var s384 = 0;
+        for (var i = 0; i < points.length; i++) {
+            var point = points[i];
+            var curMeasure = this.currentSong.timeline[0];
+            for (var m = 0; m < point.skipMeasures; m++) {
+                measureS = measureS + this.patternDuration(this.currentSong.timeline[measureIndex]);
+                curMeasure = this.currentSong.timeline[measureIndex];
+                measureIndex++;
+                s384 = 0;
+            }
+            s384 = s384 + point.skip384;
+            var seconds = measureS + duration2time(curMeasure.tempo, s384);
+            if (seconds * 1000 >= fromMs && seconds * 1000 < toMs) {
+                console.log(seconds * 1000, point);
+            }
+        }
     };
     ZvoogApp.prototype.preventTouch = function (touchEvent) {
         if (touchEvent.touches.length > 1) {
@@ -4277,13 +4519,15 @@ var ZvoogApp = /** @class */ (function () {
         var midiParser = new MidiParser(arrayBuffer);
         console.log('import', midiParser.dump());
         this.currentSong = midiParser.convert();
-        console.log('song', this.currentSong);
+        this.nodesConnected = false;
+        console.log('import midi', this.currentSong);
         this.prepareSchedule();
         this.resetWholeProject();
     };
     ZvoogApp.prototype.createRandomProject = function () {
         var testSong = new TestSong();
         this.currentSong = testSong.createRandomSchedule();
+        this.nodesConnected = false;
         this.prepareSchedule();
         this.resetWholeProject();
         this.afterResizeCallback();
@@ -4359,29 +4603,67 @@ var ZvoogApp = /** @class */ (function () {
             ,0,0,'fillSelectionSpot'));
 */
         var playIcon = ZvoogIcons.iconPathPlay128;
-        if (this.onAir) {
+        if (this.audioTimeMs) {
             playIcon = ZvoogIcons.iconPathPause128;
         }
         this.addButtonIcon128(playIcon, 0.1 + 1 + 0.1 + 1 + 0.1 + 1 + 0.1, 0.1, 1, this.overButtonsAnchor.content, this.togglePlay, 'fillColorContent');
     };
     ZvoogApp.prototype.togglePlay = function () {
-        console.log('play', this.onAir);
-        if (this.onAir) {
-            this.onAir = false;
+        console.log('play', this.audioTimeMs);
+        if (this.audioTimeMs) {
+            this.audioTimeMs = 0;
+            this.cancelAllSources();
+            this.cancelAllParameters();
             this.resetWholeProject();
         }
         else {
-            if (this.isPluginsBusy()) {
+            if (this.selectLockedPluginLayer()) {
                 //this.resetWholeProject();
                 console.log(this.currentSong.selectedLayer);
                 this.openLayersPopup();
             }
             else {
-                this.onAir = true;
+                if (this.audioContext.state == 'suspended') {
+                    this.audioContext.resume();
+                }
+                this.connectNodes();
+                this.lastSongPositionMs = 0;
+                this.audioTimeMs = this.audioContext.currentTime * 1000;
                 this.resetWholeProject();
             }
         }
-        console.log('now', this.onAir);
+        console.log('now', this.audioTimeMs, this.audioContext);
+    };
+    ZvoogApp.prototype.connectNodes = function () {
+        if (!this.nodesConnected) {
+            var tracksOutput = this.audioContext.destination;
+            for (var k1 = 0; k1 < this.currentSong.effects.length; k1++) {
+                var sngeffect = this.currentSong.effects[this.currentSong.effects.length - k1 - 1].plugin;
+                sngeffect.getOutput().connect(tracksOutput);
+                tracksOutput = sngeffect.getOutput();
+            }
+            for (var k1 = 0; k1 < this.currentSong.tracks.length; k1++) {
+                var track = this.currentSong.tracks[this.currentSong.tracks.length - k1 - 1];
+                var singleTtrackOutput = tracksOutput;
+                for (var k2 = 0; k2 < track.effects.length; k2++) {
+                    var trackfx = track.effects[track.effects.length - k2 - 1].plugin;
+                    trackfx.getOutput().connect(singleTtrackOutput);
+                    singleTtrackOutput = trackfx.getInput();
+                }
+                for (var k2 = 0; k2 < track.voices.length; k2++) {
+                    var voice = track.voices[k2];
+                    var voiceOutput = singleTtrackOutput;
+                    for (var k3 = 0; k3 < voice.effects.length; k3++) {
+                        var voiceeffect = voice.effects[voice.effects.length - k3 - 1].plugin;
+                        voiceeffect.getOutput().connect(voiceOutput);
+                        voiceOutput = voiceeffect.getInput();
+                    }
+                    var sourceplugin = voice.source.plugin;
+                    sourceplugin.getOutput().connect(voiceOutput);
+                }
+            }
+            this.nodesConnected = true;
+        }
     };
     ZvoogApp.prototype.isTrackActive = function (track) {
         if (track + 1 == this.currentSong.selectedLayer.level1) {
@@ -4629,10 +4911,10 @@ var ZvoogApp = /** @class */ (function () {
                         action: this.createSelectLayerAction(kk1_3, kk2_3, kk3, 0)
                     });
                     if (this.isTrackFxActive(k1, k2)) {
-                        var pars_1 = plugin.getParams();
-                        if (pars_1) {
-                            for (var k3 = 0; k3 < pars_1.length; k3++) {
-                                var p = pars_1[k3];
+                        var pars_5 = plugin.getParams();
+                        if (pars_5) {
+                            for (var k3 = 0; k3 < pars_5.length; k3++) {
+                                var p = pars_5[k3];
                                 items.push({
                                     label: p.label(), css: this.isTrackFxParameterSelected(k1, k2, k3) ? 'fillColorContent' : 'fillColorSub',
                                     padding: 2, path128: ZvoogIcons.iconPathGraph128,
@@ -4660,10 +4942,10 @@ var ZvoogApp = /** @class */ (function () {
                 action: this.createSelectLayerAction(kk1, kk2, 0, 0)
             });
             if (this.isFxActive(k1)) {
-                var pars_2 = effect.plugin.getParams();
-                if (pars_2) {
-                    for (var k2 = 0; k2 < pars_2.length; k2++) {
-                        var p = pars_2[k2];
+                var pars_6 = effect.plugin.getParams();
+                if (pars_6) {
+                    for (var k2 = 0; k2 < pars_6.length; k2++) {
+                        var p = pars_6[k2];
                         items.push({
                             label: p.label(), css: this.isFxParameterSelected(k1, k2) ? 'fillColorContent' : 'fillColorSub',
                             padding: 1, path128: ZvoogIcons.iconPathGraph128,
@@ -4819,7 +5101,7 @@ var ZvoogApp = /** @class */ (function () {
             this.tileLevel.startSlideTo(-xyz.x * this.tileLevel.tapSize, -xyz.y * this.tileLevel.tapSize, xyz.z, null);
         }
     };
-    ZvoogApp.prototype.addParameters = function () {
+    ZvoogApp.prototype.addCurvesForParameters = function () {
         for (var k1 = 0; k1 < this.currentSong.effects.length; k1++) {
             var effect = this.currentSong.effects[k1];
             var pars = effect.plugin.getParams();
@@ -4829,14 +5111,14 @@ var ZvoogApp = /** @class */ (function () {
                         var curve = effect.parameters[k2];
                         if (this.isFxActive(k1)) {
                             if (this.isFxParameterSelected(k1, k2)) {
-                                this.addParameterCurve(curve, this.firstAnchor, 'firstSegment', 'firstJoint', true);
+                                this.addParameterCurve(curve, this.firstAnchor, 'firstSegment', true);
                             }
                             else {
-                                this.addParameterCurve(curve, this.secondAnchor, 'secondSegment', 'secondJoint', false);
+                                this.addParameterCurve(curve, this.secondAnchor, 'secondSegment', false);
                             }
                         }
                         else {
-                            this.addParameterCurve(curve, this.otherAnchor, 'otherSegment', 'otherJoint', false);
+                            this.addParameterCurve(curve, this.otherAnchor, 'otherSegment', false);
                         }
                     }
                 }
@@ -4854,14 +5136,14 @@ var ZvoogApp = /** @class */ (function () {
                             var curve = effect.parameters[k3];
                             if (this.isTrackFxActive(k1, k2)) {
                                 if (this.isTrackFxParameterSelected(k1, k2, k3)) {
-                                    this.addParameterCurve(curve, this.firstAnchor, 'firstSegment', 'firstJoint', true);
+                                    this.addParameterCurve(curve, this.firstAnchor, 'firstSegment', true);
                                 }
                                 else {
-                                    this.addParameterCurve(curve, this.secondAnchor, 'secondSegment', 'secondJoint', false);
+                                    this.addParameterCurve(curve, this.secondAnchor, 'secondSegment', false);
                                 }
                             }
                             else {
-                                this.addParameterCurve(curve, this.otherAnchor, 'otherSegment', 'otherJoint', false);
+                                this.addParameterCurve(curve, this.otherAnchor, 'otherSegment', false);
                             }
                         }
                     }
@@ -4877,35 +5159,35 @@ var ZvoogApp = /** @class */ (function () {
                             var curve = voice.source.parameters[k4];
                             if (this.isVoiceSourceActive(k1, k2)) {
                                 if (this.isVoiceSourceParameterSelected(k1, k2, k4)) {
-                                    this.addParameterCurve(curve, this.firstAnchor, 'firstSegment', 'firstJoint', true);
+                                    this.addParameterCurve(curve, this.firstAnchor, 'firstSegment', true);
                                 }
                                 else {
-                                    this.addParameterCurve(curve, this.secondAnchor, 'secondSegment', 'secondJoint', false);
+                                    this.addParameterCurve(curve, this.secondAnchor, 'secondSegment', false);
                                 }
                             }
                             else {
-                                this.addParameterCurve(curve, this.otherAnchor, 'otherSegment', 'otherJoint', false);
+                                this.addParameterCurve(curve, this.otherAnchor, 'otherSegment', false);
                             }
                         }
                     }
                 }
                 for (var k3 = 0; k3 < voice.effects.length; k3++) {
                     var effect = voice.effects[k3];
-                    var pars_3 = effect.plugin.getParams();
-                    if (pars_3) {
-                        for (var k4 = 0; k4 < pars_3.length; k4++) {
+                    var pars_7 = effect.plugin.getParams();
+                    if (pars_7) {
+                        for (var k4 = 0; k4 < pars_7.length; k4++) {
                             if (effect.parameters.length > k4) {
                                 var curve = effect.parameters[k4];
                                 if (this.isVoiceFxActive(k1, k2, k3)) {
                                     if (this.isVoiceFxParameterSelected(k1, k2, k3, k4)) {
-                                        this.addParameterCurve(curve, this.firstAnchor, 'firstSegment', 'firstJoint', true);
+                                        this.addParameterCurve(curve, this.firstAnchor, 'firstSegment', true);
                                     }
                                     else {
-                                        this.addParameterCurve(curve, this.secondAnchor, 'secondSegment', 'secondJoint', false);
+                                        this.addParameterCurve(curve, this.secondAnchor, 'secondSegment', false);
                                     }
                                 }
                                 else {
-                                    this.addParameterCurve(curve, this.otherAnchor, 'otherSegment', 'otherJoint', false);
+                                    this.addParameterCurve(curve, this.otherAnchor, 'otherSegment', false);
                                 }
                             }
                         }
@@ -4914,27 +5196,31 @@ var ZvoogApp = /** @class */ (function () {
             }
         }
     };
-    ZvoogApp.prototype.addParameterCurve = function (curve, tile, cssSegment, cssJoint, joint) {
+    ZvoogApp.prototype.addParameterCurve = function (curve, tile, cssSegment, joint) {
         var measureX = 0;
         var measureIndex = 0;
         var x384 = 0;
-        var prex = 0;
-        var prey = 0;
+        var prex = this.gridIndentLeft + measureX;
+        var prey = this.gridIndentUp + (120 - 0.5 - 0) * this.noteLineWidth - 2;
+        ;
         for (var i = 0; i < curve.points.length; i++) {
             var point = curve.points[i];
+            var curMeasure = this.currentSong.timeline[0];
             for (var m = 0; m < point.skipMeasures; m++) {
                 measureX = measureX + this.patternDuration(this.currentSong.timeline[measureIndex]) * this.lengthOfSecond;
+                curMeasure = this.currentSong.timeline[measureIndex];
                 measureIndex++;
                 x384 = 0;
             }
             x384 = x384 + point.skip384;
-            var x = this.gridIndentLeft + measureX;
+            //if(point.skip384)console.log(i,point.skip384,duration2time(curMeasure.tempo,x384));
+            var x = this.gridIndentLeft + measureX + duration2time(curMeasure.tempo, x384) * this.lengthOfSecond;
             var y = this.gridIndentUp + (120 - 0.5 - point.velocity) * this.noteLineWidth - 2;
+            //if (i) {
+            tile.content.push(this.tileLevel.line(prex + 0.5, prey + 2, x + 0.5, y + 2, cssSegment));
+            //}
             if (joint) {
                 tile.content.push(this.tileLevel.rectangle(x - 6 + 0.5, y - 4, 12, 12, 6, 6, 'fillFlatSpot'));
-            }
-            if (i) {
-                tile.content.push(this.tileLevel.line(prex + 0.5, prey + 2, x + 0.5, y + 2, cssSegment));
             }
             prex = x;
             prey = y;
@@ -4949,7 +5235,7 @@ var ZvoogApp = /** @class */ (function () {
             console.log('click', key);
         };
     };
-    ZvoogApp.prototype.resetNotes = function () {
+    ZvoogApp.prototype.resetNoteLines = function () {
         this.firstAnchor.content.length = 0;
         this.secondAnchor.content.length = 0;
         this.otherAnchor.content.length = 0;
@@ -4999,7 +5285,7 @@ var ZvoogApp = /** @class */ (function () {
                 }
             }
         }
-        this.addParameters();
+        this.addCurvesForParameters();
     };
     ZvoogApp.prototype.addChordNotes = function (chunkAnchor, nextMeasureX, measure, chunk, css) {
         for (var ch = 0; ch < chunk.chords.length; ch++) {
@@ -5390,7 +5676,7 @@ var ZvoogApp = /** @class */ (function () {
         this.resetFieldSize();
         this.resetButtons();
         this.resetGrid();
-        this.resetNotes();
+        this.resetNoteLines();
         this.resetTrackVoiceName();
         this.tileLevel.resetModel();
     };
