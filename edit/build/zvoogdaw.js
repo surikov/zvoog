@@ -4953,7 +4953,7 @@ var MIDIFileHeader = /** @class */ (function () {
         //this.ticksPerFrame = this.datas.getUint16(12);
     }
     MIDIFileHeader.prototype.getTickResolution = function (tempo) {
-        console.log('getTickResolution', tempo);
+        //console.log('getTickResolution', tempo);
         if (tempo) {
             this.lastNonZeroQuarter = tempo;
         }
@@ -5021,6 +5021,7 @@ var MIDIFileTrack = /** @class */ (function () {
         this.datas = new DataView(buffer, start, this.HDR_LENGTH + this.trackLength);
         this.trackContent = new DataView(this.datas.buffer, this.datas.byteOffset + this.HDR_LENGTH, this.datas.byteLength - this.HDR_LENGTH);
         this.events = [];
+        this.volumes = [];
     }
     return MIDIFileTrack;
 }());
@@ -5030,8 +5031,8 @@ var MidiParser = /** @class */ (function () {
         this.EVENT_SYSEX = 0xf0;
         this.EVENT_DIVSYSEX = 0xf7;
         this.EVENT_MIDI = 0x8;
-        // Meta event types
-        this.EVENT_META_SEQUENCE_NUMBER = 0x00;
+        // Meta event types https://www.recordingblogs.com/wiki/midi-meta-messages
+        this.EVENT_META_SEQUENCE_NUMBER = 0x00; //
         this.EVENT_META_TEXT = 0x01;
         this.EVENT_META_COPYRIGHT_NOTICE = 0x02;
         this.EVENT_META_TRACK_NAME = 0x03;
@@ -5039,12 +5040,12 @@ var MidiParser = /** @class */ (function () {
         this.EVENT_META_LYRICS = 0x05;
         this.EVENT_META_MARKER = 0x06;
         this.EVENT_META_CUE_POINT = 0x07;
-        this.EVENT_META_MIDI_CHANNEL_PREFIX = 0x20;
+        this.EVENT_META_MIDI_CHANNEL_PREFIX = 0x20; //https://www.recordingblogs.com/wiki/midi-channel-prefix-meta-message
         this.EVENT_META_END_OF_TRACK = 0x2f;
         this.EVENT_META_SET_TEMPO = 0x51;
         this.EVENT_META_SMTPE_OFFSET = 0x54;
-        this.EVENT_META_TIME_SIGNATURE = 0x58;
-        this.EVENT_META_KEY_SIGNATURE = 0x59;
+        this.EVENT_META_TIME_SIGNATURE = 0x58; //https://www.recordingblogs.com/wiki/midi-time-signature-meta-message
+        this.EVENT_META_KEY_SIGNATURE = 0x59; //https://www.recordingblogs.com/wiki/midi-key-signature-meta-message
         this.EVENT_META_SEQUENCER_SPECIFIC = 0x7f;
         // MIDI event types
         this.EVENT_MIDI_NOTE_OFF = 0x8;
@@ -5246,10 +5247,10 @@ var MidiParser = /** @class */ (function () {
             var track = this.tracks[t];
             var playTimeTicks = 0;
             var tickResolution = this.header.getTickResolution(0);
-            console.log(t, 'start parseNotes tickResolution', tickResolution);
-            for (var k_1 = 0; k_1 < this.header.tempos.length; k_1++) {
-                console.log(k_1, this.header.tempos[k_1]);
-            }
+            //console.log(t, 'start parseNotes tickResolution', tickResolution);
+            /*for (let k = 0; k < this.header.tempos.length; k++) {
+                console.log(k, this.header.tempos[k]);
+            }*/
             for (var e = 0; e < track.events.length; e++) {
                 var evnt = track.events[e];
                 var curDelta = 0;
@@ -5263,8 +5264,8 @@ var MidiParser = /** @class */ (function () {
                     if (evnt.subtype === this.EVENT_META_SET_TEMPO) {
                         if (evnt.tempo) {
                             tickResolution = this.header.getTickResolution(evnt.tempo);
-                            console.log('set for', 'EVENT_META_SET_TEMPO', evnt.tempoBPM, evnt);
-                            console.log('tickResolution', tickResolution, 'at', e, playTimeTicks);
+                            //console.log('set for', 'EVENT_META_SET_TEMPO', evnt.tempoBPM, evnt);
+                            //console.log('tickResolution', tickResolution, 'at', e, playTimeTicks);
                         }
                     }
                 }
@@ -5364,8 +5365,9 @@ var MidiParser = /** @class */ (function () {
                                 }
                                 else {
                                     if (evnt.subtype == this.EVENT_MIDI_CONTROLLER && evnt.param1 == 7) {
-                                        //console.log(evnt);
-                                        track.volume = evnt.param2 ? evnt.param2 / 127 : 0;
+                                        var v = evnt.param2 ? evnt.param2 / 127 : 0;
+                                        track.volumes.push({ ms: evnt.playTimeMs, value: v });
+                                        //console.log(t, 'track.volume', track.volumes[track.volumes.length - 1], track.title);
                                     }
                                     else {
                                         //
@@ -5404,7 +5406,7 @@ var MidiParser = /** @class */ (function () {
                         //console.log(t,this.toText(evnt.data?evnt.data:[]), evnt);
                     }
                     if (evnt.subtype == this.EVENT_META_KEY_SIGNATURE) {
-                        //console.log(t,'EVENT_META_KEY_SIGNATURE',evnt.key,evnt.scale);
+                        //console.log(t, 'noytes EVENT_META_KEY_SIGNATURE', evnt.key, evnt.scale);
                         var key = evnt.key ? evnt.key : 0;
                         if (key > 127)
                             key = key - 256;
@@ -5412,12 +5414,12 @@ var MidiParser = /** @class */ (function () {
                         this.header.keyMajMin = evnt.scale ? evnt.scale : 0; //0-maj, 1 min
                     }
                     if (evnt.subtype == this.EVENT_META_SET_TEMPO) {
-                        console.log('track', t, 'EVENT_META_SET_TEMPO', evnt.tempoBPM, evnt);
+                        //console.log('track', t, 'EVENT_META_SET_TEMPO', evnt.tempoBPM, evnt);
                         this.header.tempoBPM = evnt.tempoBPM ? evnt.tempoBPM : 120;
                         this.header.tempos.push({ ms: evnt.playTimeMs ? evnt.playTimeMs : 0, bmp: this.header.tempoBPM });
                     }
                     if (evnt.subtype == this.EVENT_META_TIME_SIGNATURE) {
-                        //console.log(t,'EVENT_META_TIME_SIGNATURE',evnt);
+                        //console.log(t, 'notes EVENT_META_TIME_SIGNATURE', evnt);
                         this.header.meterCount = evnt.param1 ? evnt.param1 : 4;
                         var dvsn = evnt.param2 ? evnt.param2 : 2;
                         if (dvsn == 1)
@@ -5467,7 +5469,7 @@ var MidiParser = /** @class */ (function () {
                         return event;
                     case this.EVENT_META_MIDI_CHANNEL_PREFIX:
                         event.prefix = stream.readUint8();
-                        //console.log('EVENT_META_MIDI_CHANNEL_PREFIX',event);
+                        console.log('EVENT_META_MIDI_CHANNEL_PREFIX', event);
                         return event;
                     case this.EVENT_META_END_OF_TRACK:
                         //console.log('EVENT_META_END_OF_TRACK',event);
@@ -5476,7 +5478,7 @@ var MidiParser = /** @class */ (function () {
                         event.tempo = (stream.readUint8() << 16) + (stream.readUint8() << 8) + stream.readUint8();
                         event.tempoBPM = 60000000 / event.tempo;
                         //console.log('EVENT_META_SET_TEMPO',event);
-                        console.log('note', 'EVENT_META_SET_TEMPO', event.tempoBPM, event);
+                        //console.log('note', 'EVENT_META_SET_TEMPO', event.tempoBPM, event);
                         return event;
                     case this.EVENT_META_SMTPE_OFFSET:
                         event.hour = stream.readUint8();
@@ -5489,7 +5491,7 @@ var MidiParser = /** @class */ (function () {
                     case this.EVENT_META_KEY_SIGNATURE:
                         event.key = stream.readUint8();
                         event.scale = stream.readUint8();
-                        //console.log('EVENT_META_KEY_SIGNATURE',event);
+                        //console.log('event EVENT_META_KEY_SIGNATURE', event);
                         return event;
                     case this.EVENT_META_TIME_SIGNATURE:
                         event.data = stream.readBytes(event.length);
@@ -5497,7 +5499,7 @@ var MidiParser = /** @class */ (function () {
                         event.param2 = event.data[1];
                         event.param3 = event.data[2];
                         event.param4 = event.data[3];
-                        //console.log('EVENT_META_TIME_SIGNATURE',event);
+                        //console.log('event EVENT_META_TIME_SIGNATURE', event);
                         return event;
                     case this.EVENT_META_SEQUENCER_SPECIFIC:
                         event.data = stream.readBytes(event.length);
@@ -5574,7 +5576,7 @@ var MidiParser = /** @class */ (function () {
                     event.param2 = stream.readUint8();
                     return event;
                 default:
-                    //console.log('unknown note',event);
+                    console.log('unknown note', event);
                     return event;
             }
         }
@@ -5697,6 +5699,20 @@ var MidiParser = /** @class */ (function () {
             { duration: 384 / 16, power: 0 }
         ];
     };
+    MidiParser.prototype.findMeasureNum = function (measures, ms) {
+        var k = { nn: 0, startMs: 0 };
+        //var t = 0;
+        for (var m = 0; m < measures.length; m++) {
+            var measure = measures[m];
+            if (ms >= k.startMs && ms < k.startMs + measure.duration) {
+                break;
+            }
+            //console.log(i,m,miditrack.measures[m]);
+            k.startMs = k.startMs + measure.duration;
+            k.nn++;
+        }
+        return k;
+    };
     MidiParser.prototype.convert = function () {
         var midisong = this.dump();
         var gridPat = this.meter44();
@@ -5751,11 +5767,73 @@ var MidiParser = /** @class */ (function () {
                 tempo: Math.round(midisong.bpm)
             });
         }
+        var cuti = 0;
+        var curBPM = midisong.bpm;
+        for (var i_3 = 0; i_3 < schedule.timeline.length; i_3++) {
+            var measure_1 = schedule.timeline[i_3];
+            for (var k = 0; k < midisong.tempos.length; k++) {
+                var pp = duration2time(160, duration384(measure_1.meter));
+                if (midisong.tempos[k].ms >= cuti * 1000 && midisong.tempos[k].ms < (cuti + pp) * 1000) {
+                    curBPM = Math.round(midisong.tempos[k].bmp);
+                    break;
+                }
+            }
+            measure_1.tempo = curBPM;
+            var tt = duration2time(measure_1.tempo, duration384(measure_1.meter));
+            cuti = cuti + tt;
+            //console.log(i, cuti, measure);
+        }
         for (var i = 0; i < midisong.tracks.length; i++) {
             var miditrack = midisong.tracks[i];
+            var volumePoints = [];
+            if (miditrack.volumes.length) {
+                /*volumePoints.push({
+                    skipMeasures: 0
+                    , skip384: 0
+                    , velocity: 119
+                });*/
+                var curMeasure = 0;
+                var curDelta = 0;
+                var curVol = 0;
+                for (var kk = 0; kk < miditrack.volumes.length; kk++) {
+                    var measureN = this.findMeasureNum(miditrack.measures, miditrack.volumes[kk].ms);
+                    var deltatime = miditrack.volumes[kk].ms - measureN.startMs;
+                    var delta384 = time2Duration(deltatime / 1000, schedule.timeline[measureN.nn].tempo);
+                    //console.log(i, kk, measureN, miditrack.volumes[kk], miditrack.title, deltatime, delta384);
+                    volumePoints.push({
+                        skipMeasures: measureN.nn - curMeasure,
+                        skip384: delta384,
+                        velocity: curVol
+                    });
+                    curVol = 119 * miditrack.volumes[kk].value;
+                    volumePoints.push({
+                        skipMeasures: 0,
+                        skip384: delta384,
+                        velocity: curVol
+                    });
+                    curMeasure = measureN.nn;
+                    curDelta = delta384;
+                }
+            }
+            else {
+                volumePoints.push({
+                    skipMeasures: 0,
+                    skip384: 0,
+                    velocity: 99
+                });
+            }
             var track = {
                 voices: [],
-                effects: [{ parameters: [{ points: [{ skipMeasures: 0, skip384: 0, velocity: 119 }] }], plugin: new ZvoogFxGain() }],
+                effects: [{
+                        parameters: [{
+                                points: volumePoints
+                                /*points: [{
+                                    skipMeasures: 0
+                                    , skip384: 0, velocity: 119
+                                }]*/
+                            }],
+                        plugin: new ZvoogFxGain()
+                    }],
                 title: 'track ' + i + ' ' + miditrack.title,
                 strings: []
             };
@@ -5765,7 +5843,8 @@ var MidiParser = /** @class */ (function () {
                     plugin: new ZvoogInstrumentSource(miditrack.program + 1),
                     parameters: []
                 },
-                effects: [{ parameters: [{ points: [{ skipMeasures: 0, skip384: 0, velocity: 119 }] }], plugin: new ZvoogFxGain() }],
+                effects: [] //{ parameters: [{ points: [{ skipMeasures: 0, skip384: 0, velocity: 119 }] }], plugin: new ZvoogFxGain() }]
+                ,
                 title: 'MIDI ' + miditrack.program
             };
             var time = 0;
@@ -5914,22 +5993,6 @@ var MidiParser = /** @class */ (function () {
                 return a.seconds - b.seconds;
             }));*/
         //console.log(midisong.tempos);
-        var cuti = 0;
-        var curBPM = midisong.bpm;
-        for (var i_3 = 0; i_3 < schedule.timeline.length; i_3++) {
-            var measure_1 = schedule.timeline[i_3];
-            for (var k = 0; k < midisong.tempos.length; k++) {
-                var pp = duration2time(160, duration384(measure_1.meter));
-                if (midisong.tempos[k].ms >= cuti * 1000 && midisong.tempos[k].ms < (cuti + pp) * 1000) {
-                    curBPM = Math.round(midisong.tempos[k].bmp);
-                    break;
-                }
-            }
-            measure_1.tempo = curBPM;
-            var tt = duration2time(measure_1.tempo, duration384(measure_1.meter));
-            cuti = cuti + tt;
-            //console.log(i, cuti, measure);
-        }
         return schedule;
     };
     MidiParser.prototype.dump = function () {
@@ -5947,7 +6010,15 @@ var MidiParser = /** @class */ (function () {
         };
         for (var i = 0; i < this.tracks.length; i++) {
             var miditrack = this.tracks[i];
-            var tr = { order: i, title: miditrack.title ? miditrack.title : '', volume: miditrack.volume ? miditrack.volume : 1, program: miditrack.program ? miditrack.program : 0, measures: [] };
+            var tr = {
+                order: i,
+                title: miditrack.title ? miditrack.title : ''
+                //, volume: miditrack.volume ? miditrack.volume : 1
+                ,
+                volumes: miditrack.volumes,
+                program: miditrack.program ? miditrack.program : 0,
+                measures: []
+            };
             for (var ch = 0; ch < miditrack.chords.length; ch++) {
                 var midichord = miditrack.chords[ch];
                 var newchord = { when: midichord.when, notes: [], channel: midichord.channel };
