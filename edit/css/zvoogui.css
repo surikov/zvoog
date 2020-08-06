@@ -166,6 +166,10 @@ a {
 	fill: var(--spot-color);
 	fill-opacity: 25%;
 }
+.fillUnSelectSpot22222{
+	fill: var(--spot-color);
+	fill-opacity: 75%;
+}
 .fillSelectionFirst {
 	fill: var(--spot-color);
 	fill-opacity: 75%;
@@ -185,6 +189,11 @@ a {
 .fillDisabledColorContent {
 	fill: var(--main-color);
 	text-decoration: line-through;
+}
+
+.tickerLine {
+	fill: var(--spot-color);
+	transform2:translateX(555px);
 }
 
 .fillColorAuxiliary2222222222222222222222222222 {
