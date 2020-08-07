@@ -192,8 +192,9 @@ a {
 }
 
 .tickerLine {
-	fill: var(--spot-color);
+	fill22: var(--spot-color);
 	transform2:translateX(555px);
+	fill:url(#tickerGradient)
 }
 
 .fillColorAuxiliary2222222222222222222222222222 {

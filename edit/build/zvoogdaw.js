@@ -4799,6 +4799,9 @@ var TileLevel = /** @class */ (function () {
         this.model = layers;
         this.resetModel();
     };
+    TileLevel.prototype.resetModelAndRun = function (afterDone) {
+        this.resetModel();
+    };
     TileLevel.prototype.resetModel = function () {
         for (var i = 0; i < this.model.length; i++) {
             this.autoID(this.model[i].anchors);
@@ -5027,6 +5030,8 @@ var MIDIFileTrack = /** @class */ (function () {
 }());
 var MidiParser = /** @class */ (function () {
     function MidiParser(arrayBuffer) {
+        this.instrumentNamesArray = [];
+        this.drumNamesArray = [];
         this.EVENT_META = 0xff;
         this.EVENT_SYSEX = 0xf0;
         this.EVENT_DIVSYSEX = 0xf7;
@@ -5469,7 +5474,7 @@ var MidiParser = /** @class */ (function () {
                         return event;
                     case this.EVENT_META_MIDI_CHANNEL_PREFIX:
                         event.prefix = stream.readUint8();
-                        console.log('EVENT_META_MIDI_CHANNEL_PREFIX', event);
+                        //console.log('EVENT_META_MIDI_CHANNEL_PREFIX', event);
                         return event;
                     case this.EVENT_META_END_OF_TRACK:
                         //console.log('EVENT_META_END_OF_TRACK',event);
@@ -5621,7 +5626,7 @@ var MidiParser = /** @class */ (function () {
                 parameters: []
             },
             effects: [],
-            title: 'Drum ' + drum
+            title: 'Drum ' + drum + ': ' + this.drumTitles()[drum]
         };
         var drvc = { voice: voice, drum: drum };
         drumVoices.push(drvc);
@@ -5845,7 +5850,7 @@ var MidiParser = /** @class */ (function () {
                 },
                 effects: [] //{ parameters: [{ points: [{ skipMeasures: 0, skip384: 0, velocity: 119 }] }], plugin: new ZvoogFxGain() }]
                 ,
-                title: 'MIDI ' + miditrack.program
+                title: 'MIDI ' + miditrack.program + ': ' + this.instrumentTitles()[miditrack.program]
             };
             var time = 0;
             var corrMs = 0;
@@ -6047,6 +6052,200 @@ var MidiParser = /** @class */ (function () {
         //console.log(a);
         return a;
     };
+    MidiParser.prototype.instrumentTitles = function () {
+        if (this.instrumentNamesArray.length > 0) {
+            //
+        }
+        else {
+            var insNames = [];
+            insNames[0] = "Acoustic Grand Piano: Piano";
+            insNames[1] = "Bright Acoustic Piano: Piano";
+            insNames[2] = "Electric Grand Piano: Piano";
+            insNames[3] = "Honky-tonk Piano: Piano";
+            insNames[4] = "Electric Piano 1: Piano";
+            insNames[5] = "Electric Piano 2: Piano";
+            insNames[6] = "Harpsichord: Piano";
+            insNames[7] = "Clavinet: Piano";
+            insNames[8] = "Celesta: Chromatic Percussion";
+            insNames[9] = "Glockenspiel: Chromatic Percussion";
+            insNames[10] = "Music Box: Chromatic Percussion";
+            insNames[11] = "Vibraphone: Chromatic Percussion";
+            insNames[12] = "Marimba: Chromatic Percussion";
+            insNames[13] = "Xylophone: Chromatic Percussion";
+            insNames[14] = "Tubular Bells: Chromatic Percussion";
+            insNames[15] = "Dulcimer: Chromatic Percussion";
+            insNames[16] = "Drawbar Organ: Organ";
+            insNames[17] = "Percussive Organ: Organ";
+            insNames[18] = "Rock Organ: Organ";
+            insNames[19] = "Church Organ: Organ";
+            insNames[20] = "Reed Organ: Organ";
+            insNames[21] = "Accordion: Organ";
+            insNames[22] = "Harmonica: Organ";
+            insNames[23] = "Tango Accordion: Organ";
+            insNames[24] = "Acoustic Guitar (nylon): Guitar";
+            insNames[25] = "Acoustic Guitar (steel): Guitar";
+            insNames[26] = "Electric Guitar (jazz): Guitar";
+            insNames[27] = "Electric Guitar (clean): Guitar";
+            insNames[28] = "Electric Guitar (muted): Guitar";
+            insNames[29] = "Overdriven Guitar: Guitar";
+            insNames[30] = "Distortion Guitar: Guitar";
+            insNames[31] = "Guitar Harmonics: Guitar";
+            insNames[32] = "Acoustic Bass: Bass";
+            insNames[33] = "Electric Bass (finger): Bass";
+            insNames[34] = "Electric Bass (pick): Bass";
+            insNames[35] = "Fretless Bass: Bass";
+            insNames[36] = "Slap Bass 1: Bass";
+            insNames[37] = "Slap Bass 2: Bass";
+            insNames[38] = "Synth Bass 1: Bass";
+            insNames[39] = "Synth Bass 2: Bass";
+            insNames[40] = "Violin: Strings";
+            insNames[41] = "Viola: Strings";
+            insNames[42] = "Cello: Strings";
+            insNames[43] = "Contrabass: Strings";
+            insNames[44] = "Tremolo Strings: Strings";
+            insNames[45] = "Pizzicato Strings: Strings";
+            insNames[46] = "Orchestral Harp: Strings";
+            insNames[47] = "Timpani: Strings";
+            insNames[48] = "String Ensemble 1: Ensemble";
+            insNames[49] = "String Ensemble 2: Ensemble";
+            insNames[50] = "Synth Strings 1: Ensemble";
+            insNames[51] = "Synth Strings 2: Ensemble";
+            insNames[52] = "Choir Aahs: Ensemble";
+            insNames[53] = "Voice Oohs: Ensemble";
+            insNames[54] = "Synth Choir: Ensemble";
+            insNames[55] = "Orchestra Hit: Ensemble";
+            insNames[56] = "Trumpet: Brass";
+            insNames[57] = "Trombone: Brass";
+            insNames[58] = "Tuba: Brass";
+            insNames[59] = "Muted Trumpet: Brass";
+            insNames[60] = "French Horn: Brass";
+            insNames[61] = "Brass Section: Brass";
+            insNames[62] = "Synth Brass 1: Brass";
+            insNames[63] = "Synth Brass 2: Brass";
+            insNames[64] = "Soprano Sax: Reed";
+            insNames[65] = "Alto Sax: Reed";
+            insNames[66] = "Tenor Sax: Reed";
+            insNames[67] = "Baritone Sax: Reed";
+            insNames[68] = "Oboe: Reed";
+            insNames[69] = "English Horn: Reed";
+            insNames[70] = "Bassoon: Reed";
+            insNames[71] = "Clarinet: Reed";
+            insNames[72] = "Piccolo: Pipe";
+            insNames[73] = "Flute: Pipe";
+            insNames[74] = "Recorder: Pipe";
+            insNames[75] = "Pan Flute: Pipe";
+            insNames[76] = "Blown bottle: Pipe";
+            insNames[77] = "Shakuhachi: Pipe";
+            insNames[78] = "Whistle: Pipe";
+            insNames[79] = "Ocarina: Pipe";
+            insNames[80] = "Lead 1 (square): Synth Lead";
+            insNames[81] = "Lead 2 (sawtooth): Synth Lead";
+            insNames[82] = "Lead 3 (calliope): Synth Lead";
+            insNames[83] = "Lead 4 (chiff): Synth Lead";
+            insNames[84] = "Lead 5 (charang): Synth Lead";
+            insNames[85] = "Lead 6 (voice): Synth Lead";
+            insNames[86] = "Lead 7 (fifths): Synth Lead";
+            insNames[87] = "Lead 8 (bass + lead): Synth Lead";
+            insNames[88] = "Pad 1 (new age): Synth Pad";
+            insNames[89] = "Pad 2 (warm): Synth Pad";
+            insNames[90] = "Pad 3 (polysynth): Synth Pad";
+            insNames[91] = "Pad 4 (choir): Synth Pad";
+            insNames[92] = "Pad 5 (bowed): Synth Pad";
+            insNames[93] = "Pad 6 (metallic): Synth Pad";
+            insNames[94] = "Pad 7 (halo): Synth Pad";
+            insNames[95] = "Pad 8 (sweep): Synth Pad";
+            insNames[96] = "FX 1 (rain): Synth Effects";
+            insNames[97] = "FX 2 (soundtrack): Synth Effects";
+            insNames[98] = "FX 3 (crystal): Synth Effects";
+            insNames[99] = "FX 4 (atmosphere): Synth Effects";
+            insNames[100] = "FX 5 (brightness): Synth Effects";
+            insNames[101] = "FX 6 (goblins): Synth Effects";
+            insNames[102] = "FX 7 (echoes): Synth Effects";
+            insNames[103] = "FX 8 (sci-fi): Synth Effects";
+            insNames[104] = "Sitar: Ethnic";
+            insNames[105] = "Banjo: Ethnic";
+            insNames[106] = "Shamisen: Ethnic";
+            insNames[107] = "Koto: Ethnic";
+            insNames[108] = "Kalimba: Ethnic";
+            insNames[109] = "Bagpipe: Ethnic";
+            insNames[110] = "Fiddle: Ethnic";
+            insNames[111] = "Shanai: Ethnic";
+            insNames[112] = "Tinkle Bell: Percussive";
+            insNames[113] = "Agogo: Percussive";
+            insNames[114] = "Steel Drums: Percussive";
+            insNames[115] = "Woodblock: Percussive";
+            insNames[116] = "Taiko Drum: Percussive";
+            insNames[117] = "Melodic Tom: Percussive";
+            insNames[118] = "Synth Drum: Percussive";
+            insNames[119] = "Reverse Cymbal: Percussive";
+            insNames[120] = "Guitar Fret Noise: Sound effects";
+            insNames[121] = "Breath Noise: Sound effects";
+            insNames[122] = "Seashore: Sound effects";
+            insNames[123] = "Bird Tweet: Sound effects";
+            insNames[124] = "Telephone Ring: Sound effects";
+            insNames[125] = "Helicopter: Sound effects";
+            insNames[126] = "Applause: Sound effects";
+            insNames[127] = "Gunshot: Sound effects";
+            this.instrumentNamesArray = insNames;
+        }
+        return this.instrumentNamesArray;
+    };
+    ;
+    MidiParser.prototype.drumTitles = function () {
+        if (this.drumNamesArray.length < 1) {
+            var drumNames = [];
+            drumNames[35] = "Bass Drum 2";
+            drumNames[36] = "Bass Drum 1";
+            drumNames[37] = "Side Stick/Rimshot";
+            drumNames[38] = "Snare Drum 1";
+            drumNames[39] = "Hand Clap";
+            drumNames[40] = "Snare Drum 2";
+            drumNames[41] = "Low Tom 2";
+            drumNames[42] = "Closed Hi-hat";
+            drumNames[43] = "Low Tom 1";
+            drumNames[44] = "Pedal Hi-hat";
+            drumNames[45] = "Mid Tom 2";
+            drumNames[46] = "Open Hi-hat";
+            drumNames[47] = "Mid Tom 1";
+            drumNames[48] = "High Tom 2";
+            drumNames[49] = "Crash Cymbal 1";
+            drumNames[50] = "High Tom 1";
+            drumNames[51] = "Ride Cymbal 1";
+            drumNames[52] = "Chinese Cymbal";
+            drumNames[53] = "Ride Bell";
+            drumNames[54] = "Tambourine";
+            drumNames[55] = "Splash Cymbal";
+            drumNames[56] = "Cowbell";
+            drumNames[57] = "Crash Cymbal 2";
+            drumNames[58] = "Vibra Slap";
+            drumNames[59] = "Ride Cymbal 2";
+            drumNames[60] = "High Bongo";
+            drumNames[61] = "Low Bongo";
+            drumNames[62] = "Mute High Conga";
+            drumNames[63] = "Open High Conga";
+            drumNames[64] = "Low Conga";
+            drumNames[65] = "High Timbale";
+            drumNames[66] = "Low Timbale";
+            drumNames[67] = "High Agogo";
+            drumNames[68] = "Low Agogo";
+            drumNames[69] = "Cabasa";
+            drumNames[70] = "Maracas";
+            drumNames[71] = "Short Whistle";
+            drumNames[72] = "Long Whistle";
+            drumNames[73] = "Short Guiro";
+            drumNames[74] = "Long Guiro";
+            drumNames[75] = "Claves";
+            drumNames[76] = "High Wood Block";
+            drumNames[77] = "Low Wood Block";
+            drumNames[78] = "Mute Cuica";
+            drumNames[79] = "Open Cuica";
+            drumNames[80] = "Mute Triangle";
+            drumNames[81] = "Open Triangle";
+            this.drumNamesArray = drumNames;
+        }
+        return this.drumNamesArray;
+    };
+    ;
     return MidiParser;
 }());
 console.log('ZvoogApp v1.01');
@@ -6067,7 +6266,10 @@ var ZvoogApp = /** @class */ (function () {
         //onAir: boolean = false;
         this.tickDurationMs = 222;
         this.lastSongPositionMs = 0;
+        //createdTickerPostionTaps = 0;
         this.audioTimeMs = 0;
+        this.lastAudioTimeMs = 0;
+        this.tickerDiffMs = 1000;
         this.nodesConnected = false;
         this.popup = new ZvoogPopup(this);
         console.log('ZvoogApp init');
@@ -6255,6 +6457,9 @@ var ZvoogApp = /** @class */ (function () {
         this.currentSong.effects[0].parameters[0].points.push({ skipMeasures: 2, skip384: 222, velocity: 111 });
         this.currentSong.effects[0].parameters[0].points.push({ skipMeasures: 1, skip384: 333, velocity: 55 });
         console.log(this.currentSong.effects[0].parameters[0].points);*/
+        this.popup.closePopupMenu3();
+        this.popup.closePopupMenu2();
+        this.popup.closePopupMenu1();
         this.prepareSchedule();
         this.resetWholeProject();
     };
@@ -6284,8 +6489,8 @@ var ZvoogApp = /** @class */ (function () {
         this.resetWholeProject();
     };
     ZvoogApp.prototype.afterZoomCallback = function () {
-        console.log('xyz', this.tileLevel.translateX, this.tileLevel.translateY, this.tileLevel.translateZ);
-        //this.moveTicker(12345);
+        //console.log('xyz', this.tileLevel.translateX, this.tileLevel.translateY, this.tileLevel.translateZ);
+        this.moveTicker();
     };
     ZvoogApp.prototype.addMainIconButton = function (iconX, iconY, iconScale, iconPath, x, y, size, text, sizecss, content, action) {
         content.push(this.tileLevel.actionRectangle(action.bind(this), x, y, size, size, 0.5 * size, 0.5 * size, 'fillButtonSpot'));
@@ -6344,7 +6549,7 @@ var ZvoogApp = /** @class */ (function () {
         this.addButtonIcon128(playIcon, 0.1 + 1 + 0.1 + 1 + 0.1 + 1 + 0.1, 0.1, 1, this.overButtonsAnchor.content, this.togglePlay, 'fillColorContent');
     };
     ZvoogApp.prototype.togglePlay = function () {
-        console.log('play', this.audioTimeMs);
+        //console.log('play', this.audioTimeMs);
         if (this.audioTimeMs) {
             this.audioTimeMs = 0;
             ZvoogTicker.cancelAllSources(this);
@@ -6362,12 +6567,12 @@ var ZvoogApp = /** @class */ (function () {
                     this.audioContext.resume();
                 }
                 this.connectNodes();
-                this.lastSongPositionMs = 0;
+                //this.lastSongPositionMs = 0;
                 this.audioTimeMs = this.audioContext.currentTime * 1000 + 3 * this.tickDurationMs;
                 this.resetWholeProject();
             }
         }
-        console.log('now', this.audioTimeMs, this.audioContext);
+        //console.log('now', this.audioTimeMs, this.audioContext);
     };
     ZvoogApp.prototype.connectNodes = function () {
         if (!this.nodesConnected) {
@@ -6685,13 +6890,24 @@ var ZvoogApp = /** @class */ (function () {
                     else {
                         _this.currentSong.selectedMeasures.duration = n + 1 - _this.currentSong.selectedMeasures.from + 1;
                     }
+                    _this.lastSongPositionMs = 0;
+                    for (var i = 0; i < _this.currentSong.timeline.length; i++) {
+                        var m = _this.currentSong.timeline[i];
+                        var measureDurationMS = Math.floor(1000 * duration2time(m.tempo, duration384(m.meter)));
+                        if (i + 1 < _this.currentSong.selectedMeasures.from) {
+                            _this.lastSongPositionMs = _this.lastSongPositionMs + measureDurationMS;
+                        }
+                        else {
+                            break;
+                        }
+                    }
                 }
             }
             else {
                 _this.currentSong.selectedMeasures.from = n + 1;
             }
             _this.resetWholeProject();
-            console.log('toggle', n, _this.currentSong.selectedMeasures);
+            console.log('toggle', n, _this.currentSong.selectedMeasures, _this.lastSongPositionMs);
         };
     };
     ZvoogApp.prototype.addFarBackground = function (w) {
@@ -6811,9 +7027,12 @@ var ZvoogApp = /** @class */ (function () {
         ZvoogDraw.resetNoteLines(this);
         ZvoogGrid.resetTrackVoiceName(this);
         this.tileLevel.resetModel();
-        this.tickLineRectangle = document.getElementById('tickLineRectangle');
+        this.tileLevel.resetModelAndRun(this.moveTicker.bind(this));
+        this.tickLineRectangle = null;
+        //this.tickLineRectangle = (document.getElementById('tickLineRectangle') as any) as SVGElement;
+        //this.moveTicker();
     };
-    ZvoogApp.prototype.moveTicker = function (ms) {
+    ZvoogApp.prototype.moveTicker = function () {
         if (this.tickLineRectangle) {
         }
         else {
@@ -6821,12 +7040,16 @@ var ZvoogApp = /** @class */ (function () {
             this.tickLineRectangle = document.getElementById('tickLineRectangle');
         }
         if (this.tickLineRectangle) {
-            //console.log(this.tickLineRectangle);
-            var xx = Math.round(this.tileLevel.tapSize * this.lengthOfSecond * ms / 1000);
+            console.log('move ticker to', this.lastSongPositionMs, this.tickLineRectangle.style.transform);
+            var xx = Math.round(this.tileLevel.tapSize * this.lengthOfSecond * this.lastSongPositionMs / 1000);
+            //let xx=Math.round(this.tileLevel.tapSize*(this.lengthOfSecond*this.lastSongPositionMs/1000-this.createdTickerPostionTaps));
             this.tickLineRectangle.style.transform = 'translate(' + xx + 'px,0px)';
             //this.tickLineRectangle.style.fill = '#00ff00';
             //this.tickLineRectangle.style.opacity='10%';
             //console.log(this.tickLineRectangle);
+        }
+        else {
+            console.log('no tickLineRectangle');
         }
     };
     /*patternDuration(pattern: ZvoogPattern): number {
@@ -7267,8 +7490,12 @@ var ZvoogGrid;
         app.addFarBackground(nextMeasureX);
         app.keyWholeAnchor.ww = nextMeasureX;
         app.addBlackWhiteKeys(nextMeasureX);
+        //let xx=Math.round(this.tileLevel.tapSize*this.lengthOfSecond*this.lastSongPositionMs/1000-this.createdTickerPostionTaps);
+        //app.createdTickerPostionTaps=Math.round(app.lengthOfSecond*app.lastSongPositionMs/1000);
+        //console.log('create',app.createdTickerPostionTaps);
         var tickLine = {
-            x: app.gridIndentLeft + 0,
+            x: app.gridIndentLeft + 0 //app.createdTickerPostionTaps
+            ,
             y: app.gridIndentUp,
             w: 16,
             h: 120 * 3,
@@ -7497,7 +7724,11 @@ var ZvoogTicker;
             measureMS = measureMS + measureDurationMs;
         }
         ZvoogTicker.sendParametersData(app, audioTime, fromMs, toMs, startSongSelectionMs, endSongSelectionMs);
-        app.moveTicker(fromMs);
+        if (app.lastAudioTimeMs < audioTime - app.tickerDiffMs) {
+            //app.moveTicker(fromMs);
+            app.moveTicker();
+            app.lastAudioTimeMs = audioTime;
+        }
     }
     ZvoogTicker.sendSongData = sendSongData;
     function sendParametersData(app, audioTime, fromMs, toMs, startSongSelectionMs, endSongSelectionMs) {
