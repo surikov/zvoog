@@ -108,7 +108,7 @@ class TestSong {
 		for (var i = 0; i < parCount; i++) {
 			parameters.push(this.createRandomLine(measures));
 		}
-		let fx: ZvoogTrackEffect = { plugin: plugin, parameters: parameters };
+		let fx: ZvoogTrackEffect = { plugin: plugin,disabled:false, parameters: parameters };
 		return fx;
 	}
 	createRandomPitch(pre: number): ZvoogPitch {
@@ -214,6 +214,7 @@ class TestSong {
 	createRandomVoice(measures: ZvoogMeasure[], voiceOrder: number): ZvoogVoice {
 		let v: ZvoogVoice = {
 			chunks: []
+			,disabled:false
 			, source: {
 				plugin: new ZvoogFilterSourceEmpty()
 				, parameters: []
@@ -246,6 +247,7 @@ class TestSong {
 	createRandomTrack(measures: ZvoogMeasure[], trackOrder: number): ZvoogTrack {
 		let t: ZvoogTrack = {
 			voices: []
+			,disabled:false
 			, effects: []
 			, title: this.createRandomName() + 'track '
 			, strings: []

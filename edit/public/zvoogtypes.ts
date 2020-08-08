@@ -31,7 +31,7 @@ type UndoRedoAction = {
 	redo: (app: ZvoogApp) => void;
 };
 type UndoRedoCommand = {
-	properties: any
+	properties: UndoRedoProperties
 	, key: string
 	, point: XYZ
 };
@@ -39,10 +39,16 @@ enum UndoRedoKeys {
 	undoRedoChangeProjectTitle = 'changeProjectTitle'
 	, undoRedoChangeProjectDescription = 'changeProjectDescription'
 	, undoRedoSelectLayer = 'selectLayer'
+	, undoRedoDisableTrack = 'disableTrack'
+	, undoRedoDisableSongFx = 'disableSongFx'
+	, undoRedoDisableTrackFx = 'disableTrackFx'
+	, undoRedoDisableVoice = 'disableSongVoice'
+	, undoRedoDisableVoiceFx = 'disableVoiceFx'
 	, undoRedoBunch = 'bunch'
 };
+type UndoRedoProperties = {  };
 //var undoRedoChangeProjectTitle: string = 'changeProjectTitle';
-type UndoRedoChangeProjectTitleProperties = { newTitle: string, oldTitle: string };
+type UndoRedoChangeProjectTitleProperties = UndoRedoProperties & { newTitle: string, oldTitle: string };
 //var undoRedoChangeProjectDescription: string = 'changeProjectDescription';
 type UndoRedoProjectDescriptionProperties = { newDescription: string, oldDescription: string };
 //var undoRedoMoveTrack: string = 'moveTrack';
@@ -52,6 +58,11 @@ type UndoRedoProjectDescriptionProperties = { newDescription: string, oldDescrip
 
 //var undoRedoSelectLayer: string = 'moveVoice';
 type UndoRedoSelectLayerProperties = { oldSelection: ZvoogLayerSelection, newSelection: ZvoogLayerSelection };
+type UndoRedoDisableTrackProperties = { track: number, oldState: boolean, newState:boolean };
+type UndoRedoDisableSongFxProperties = { effect: number,oldState: boolean, newState:boolean };
+type UndoRedoDisableTrackFxProperties = { track: number, effect: number,oldState: boolean, newState:boolean };
+type UndoRedoDisableVoiceProperties = { track: number, voice: number,oldState: boolean, newState:boolean };
+type UndoRedoDisableVoiceFxProperties = { track: number, voice: number,effect: number,oldState: boolean, newState:boolean };
 
 //var undoRedoBunch: string = 'bunch';
 type UndoRedoBunchProperties = { commands: UndoRedoCommand[] };
@@ -66,6 +77,7 @@ type ZvoogTrackSource = {
 };
 type ZvoogVoice = {
 	chunks: ZvoogPattern[]
+	,disabled:boolean
 	, source: ZvoogTrackSource
 	, effects: ZvoogTrackEffect[]
 	, title: string
@@ -76,6 +88,7 @@ type ZvoogString = {
 }
 type ZvoogTrack = {
 	voices: ZvoogVoice[]
+	,disabled:boolean
 	, effects: ZvoogTrackEffect[]
 	, title: string
 	, strings: ZvoogString[]
@@ -126,6 +139,7 @@ type ZvoogParameterLine = {
 };*/
 type ZvoogTrackEffect = {
 	plugin: ZvoogEffect
+	,disabled:boolean
 	, parameters: ZvoogCurve[]
 };
 type ZvoogGridStep = {

@@ -183,9 +183,7 @@ a {
 	fill:url(#buttonGradient)
 }
 
-.fillColorContent {
-	fill: var(--main-color);
-}
+
 .fillDisabledColorContent {
 	fill: var(--main-color);
 	text-decoration: line-through;
@@ -201,6 +199,31 @@ a {
 	fill: var(--aux-color);
 }
 
+.popItemBaseOn {
+	fill: var(--grid-color);
+}
+.popItemBaseOff {
+	fill: var(--grid-color);
+	text-decoration: line-through;
+}
+.popItemSelectedOn {
+	fill: var(--main-color);
+}
+.popItemSelectedOff {
+	fill: var(--main-color);
+	text-decoration: line-through;
+}
+.popItemSubSelectedOn {
+	fill: var(--aux-color);
+}
+.popItemSubSelectedOff {
+	fill: var(--aux-color);
+	text-decoration: line-through;
+}
+
+.fillColorContent {
+	fill: var(--main-color);
+}
 .fillColorOther {
 	fill: var(--grid-color);
 }
