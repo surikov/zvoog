@@ -6210,9 +6210,9 @@ var MidiParser = /** @class */ (function () {
                 title: 'MIDI ' + miditrack.program + ': ' + this.instrumentTitles()[miditrack.program]
             };
             var time = 0;
-            var corrMs = 0;
+            var correctionMs = 0;
             for (var m = 0; m < miditrack.measures.length; m++) {
-                corrMs = 0;
+                correctionMs = 0;
                 var songmeasure = miditrack.measures[m];
                 var chunk = {
                     /*meter: {
@@ -6229,13 +6229,18 @@ var MidiParser = /** @class */ (function () {
                     var midichord = songmeasure.songchords[c];
                     var chordtime = midichord.when - time;
                     var when384 = time2Duration(chordtime / 1000, midisong.bpm);
-                    var over6 = when384 % 6;
-                    if (over6)
-                        corrMs = 64 * duration2time(midisong.bpm, over6);
+                    var over6 = when384 % 12;
+                    if (over6) {
+                        var ttt = 33 * duration2time(midisong.bpm, over6);
+                        if (ttt > correctionMs) {
+                            correctionMs = ttt; //33 * duration2time(midisong.bpm, over6);
+                            console.log(correctionMs);
+                        }
+                    }
                     //console.log((when384 - over6), chordtime, when384, over6, corrMs);
                     var zvoogchord = {
                         //when: chordtime
-                        when: when384 - over6,
+                        when: 12 * (Math.round((when384 - over6) / 12)),
                         values: [],
                         title: '',
                         fretHint: [],
@@ -6268,7 +6273,8 @@ var MidiParser = /** @class */ (function () {
                     chunk.chords.push(zvoogchord);
                 }
                 voice.chunks.push(chunk);
-                time = time + songmeasure.duration + corrMs;
+                time = time + songmeasure.duration + correctionMs;
+                //time = time + songmeasure.duration + 0.33;
                 //console.log('measure', m, time);
             }
             track.voices.push(voice);
