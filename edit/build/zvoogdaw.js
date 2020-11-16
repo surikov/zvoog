@@ -252,7 +252,7 @@ var ZvoogPopup = /** @class */ (function () {
                         label: voice.title
                         /*, css: this.app.isVoiceSelected(k1, k2)
                             ? 'fillColorContent'
-                            //: this.currentSong.selectedLayer.level3 > 0 || this.currentSong.selectedLayer.level2 >= track.voices.length
+                            //: this.currentSong.selectedLayer.source_voiceFx_trackParam > 0 || this.currentSong.selectedLayer.voice_trackFx_songFxParam >= track.voices.length
                             : this.app.isVoiceSubSelected(k1, k2)
                                 ? 'fillColorSub'
                                 : 'fillColorOther'
@@ -360,7 +360,8 @@ var ZvoogPopup = /** @class */ (function () {
                                     for (var k4 = 0; k4 < pars.length; k4++) {
                                         var zp = pars[k4];
                                         items.push({
-                                            label: zp.label(), css: this_1.app.isVoiceFxParameterSelected(k1, k2, k3, k4) ? 'fillColorContent' : 'fillColorSub',
+                                            label: zp.label(),
+                                            css: this_1.app.isVoiceFxParameterSelected(k1, k2, k3, k4) ? 'fillColorContent' : 'fillColorSub',
                                             padding: 3, path128: ZvoogIcons.iconPathGraph128, subMenu: [],
                                             action: this_1.app.createSelectLayerAction(k1 + 1, k2 + 1, k3 + 1 + 1, k4 + 1)
                                         });
@@ -517,7 +518,8 @@ var ZvoogPopup = /** @class */ (function () {
             _loop_2(k1);
         }
         items.push({
-            label: 'theme', css: 'fillColorOther', path128: ZvoogIcons.iconPathGear128, padding: 0, subMenu: [
+            label: 'theme', css: 'fillColorOther', path128: ZvoogIcons.iconPathGear128, padding: 0,
+            subMenu: [
                 { label: '80th', css: 'fillColorOther', path128: ZvoogIcons.iconPathGear128, subMenu: [], padding: 0, action: function () { _this.app.setCSS('./css/zvoogcolors_80th.css'); } },
                 { label: 'argon', css: 'fillColorOther', path128: ZvoogIcons.iconPathGear128, subMenu: [], padding: 0, action: function () { _this.app.setCSS('./css/zvoogcolors_argon.css'); } },
                 { label: 'bumaga', css: 'fillColorOther', path128: ZvoogIcons.iconPathGear128, subMenu: [], padding: 0, action: function () { _this.app.setCSS('./css/zvoogcolors_bumaga.css'); } },
@@ -606,17 +608,17 @@ var UndoRedoSelectLayer = /** @class */ (function () {
         this.props = o;
     }
     UndoRedoSelectLayer.prototype.undo = function (app) {
-        app.currentSong.selectedLayer.level1 = this.props.oldSelection.level1;
-        app.currentSong.selectedLayer.level2 = this.props.oldSelection.level2;
-        app.currentSong.selectedLayer.level3 = this.props.oldSelection.level3;
-        app.currentSong.selectedLayer.level4 = this.props.oldSelection.level4;
+        app.currentSong.selectedLayer.track_songFx = this.props.oldSelection.track_songFx;
+        app.currentSong.selectedLayer.voice_trackFx_songFxParam = this.props.oldSelection.voice_trackFx_songFxParam;
+        app.currentSong.selectedLayer.source_voiceFx_trackParam = this.props.oldSelection.source_voiceFx_trackParam;
+        app.currentSong.selectedLayer.sourceParam_voiceFxParam = this.props.oldSelection.sourceParam_voiceFxParam;
     };
     ;
     UndoRedoSelectLayer.prototype.redo = function (app) {
-        app.currentSong.selectedLayer.level1 = this.props.newSelection.level1;
-        app.currentSong.selectedLayer.level2 = this.props.newSelection.level2;
-        app.currentSong.selectedLayer.level3 = this.props.newSelection.level3;
-        app.currentSong.selectedLayer.level4 = this.props.newSelection.level4;
+        app.currentSong.selectedLayer.track_songFx = this.props.newSelection.track_songFx;
+        app.currentSong.selectedLayer.voice_trackFx_songFxParam = this.props.newSelection.voice_trackFx_songFxParam;
+        app.currentSong.selectedLayer.source_voiceFx_trackParam = this.props.newSelection.source_voiceFx_trackParam;
+        app.currentSong.selectedLayer.sourceParam_voiceFxParam = this.props.newSelection.sourceParam_voiceFxParam;
     };
     ;
     return UndoRedoSelectLayer;
@@ -730,14 +732,14 @@ class UndoRedoMoveTrack implements UndoRedoAction {
     undo(app: ZvoogApp): void {
         //var tracks: ZvoogTrack[] = app.currentSong.tracks.splice(this.props.newTrackPosition, 1);
         //app.currentSong.tracks.splice(this.props.oldTrackPosition, 0, tracks[0]);
-        app.currentSong.selectedLayer.level1=this.props.oldTrackPosition;
-        app.currentSong.selectedLayer.level2=this.props.oldVoicePosition;
+        app.currentSong.selectedLayer.track_songFx=this.props.oldTrackPosition;
+        app.currentSong.selectedLayer.voice_trackFx_songFxParam=this.props.oldVoicePosition;
     };
     redo(app: ZvoogApp): void {
         //var tracks: ZvoogTrack[] = app.currentSong.tracks.splice(this.props.oldTrackPosition, 1);
         //app.currentSong.tracks.splice(this.props.newTrackPosition, 0, tracks[0]);
-        app.currentSong.selectedLayer.level1=this.props.newTrackPosition;
-        app.currentSong.selectedLayer.level2=this.props.newVoicePosition;
+        app.currentSong.selectedLayer.track_songFx=this.props.newTrackPosition;
+        app.currentSong.selectedLayer.voice_trackFx_songFxParam=this.props.newVoicePosition;
     };
 }
 class UndoRedoMoveVoice implements UndoRedoAction {
@@ -750,16 +752,16 @@ class UndoRedoMoveVoice implements UndoRedoAction {
         //app.currentSong.tracks.splice(this.props.oldTrackPosition, 0, tracks[0]);
         //var voices: ZvoogVoice[] = tracks[0].voices.splice(this.props.newVoicePosition, 1);
         //tracks[0].voices.splice(this.props.oldTrackPosition, 0, voices[0]);
-        app.currentSong.selectedLayer.level1=this.props.oldTrackPosition;
-        app.currentSong.selectedLayer.level2=this.props.oldVoicePosition;
+        app.currentSong.selectedLayer.track_songFx=this.props.oldTrackPosition;
+        app.currentSong.selectedLayer.voice_trackFx_songFxParam=this.props.oldVoicePosition;
     };
     redo(app: ZvoogApp): void {
         //var tracks: ZvoogTrack[] = app.currentSong.tracks.splice(this.props.oldTrackPosition, 1);
         //app.currentSong.tracks.splice(this.props.newTrackPosition, 0, tracks[0]);
         //var voices: ZvoogVoice[] = tracks[0].voices.splice(this.props.oldVoicePosition, 1);
         //tracks[0].voices.splice(this.props.newTrackPosition, 0, voices[0]);
-        app.currentSong.selectedLayer.level1=this.props.newTrackPosition;
-        app.currentSong.selectedLayer.level2=this.props.newVoicePosition;
+        app.currentSong.selectedLayer.track_songFx=this.props.newTrackPosition;
+        app.currentSong.selectedLayer.voice_trackFx_songFxParam=this.props.newVoicePosition;
     };
 }*/
 var UndoRedoBunch = /** @class */ (function () {
@@ -1221,7 +1223,7 @@ var TestSong = /** @class */ (function () {
             keyPattern: this.createKeyPattern(),
             horizontal: true,
             locked: false,
-            selectedLayer: { level1: 0, level2: 0, level3: 0, level4: 0 },
+            selectedLayer: { track_songFx: 0, voice_trackFx_songFxParam: 0, source_voiceFx_trackParam: 0, sourceParam_voiceFxParam: 0 },
             selectedMeasures: { from: 0, duration: 0 }
         };
         var curPoint = 0;
@@ -1246,8 +1248,8 @@ var TestSong = /** @class */ (function () {
             tc = 1;
         if (s.tracks[tc].voices.length > 1)
             vc = 1;
-        s.selectedLayer.level1 = tc;
-        s.selectedLayer.level2 = vc;
+        s.selectedLayer.track_songFx = tc;
+        s.selectedLayer.voice_trackFx_songFxParam = vc;
         return s;
     };
     return TestSong;
@@ -4148,7 +4150,7 @@ var TileLevel = /** @class */ (function () {
                 this._translateZ = z;
             }
         },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     Object.defineProperty(TileLevel.prototype, "translateX", {
@@ -4161,7 +4163,7 @@ var TileLevel = /** @class */ (function () {
                 this._translateX = x;
             }
         },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     Object.defineProperty(TileLevel.prototype, "translateY", {
@@ -4174,7 +4176,7 @@ var TileLevel = /** @class */ (function () {
                 this._translateY = y;
             }
         },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     TileLevel.prototype.dump = function () {
@@ -5593,27 +5595,36 @@ var MidiParser = /** @class */ (function () {
         }
     };
     MidiParser.prototype.parseNotes = function () {
+        var tickResolutionPre = 0;
         for (var t = 0; t < this.tracks.length; t++) {
             var track = this.tracks[t];
             var playTimeTicks = 0;
             var tickResolution = this.header.getTickResolution(0);
+            if (tickResolutionPre != tickResolution) {
+                console.log('start tickResolutionPre', tickResolutionPre, tickResolution);
+                tickResolutionPre = tickResolution;
+            }
             //console.log(t, 'start parseNotes tickResolution', tickResolution);
             /*for (let k = 0; k < this.header.tempos.length; k++) {
                 console.log(k, this.header.tempos[k]);
             }*/
             for (var e = 0; e < track.events.length; e++) {
                 var evnt = track.events[e];
-                var curDelta = 0;
+                var curDelta = 0.0;
                 if (evnt.delta)
                     curDelta = evnt.delta;
                 //playTimeTicks = playTimeTicks + curDelta;
                 playTimeTicks = playTimeTicks + curDelta * tickResolution / 1000.0;
-                //console.log(playTimeTicks,curDelta,curDelta * tickResolution / 1000);
+                //console.log(playTimeTicks,curDelta,tickResolution);
                 if (evnt.basetype === this.EVENT_META) {
                     // tempo change events
                     if (evnt.subtype === this.EVENT_META_SET_TEMPO) {
                         if (evnt.tempo) {
                             tickResolution = this.header.getTickResolution(evnt.tempo);
+                            if (tickResolutionPre != tickResolution) {
+                                console.log('set tickResolutionPre', tickResolutionPre, tickResolution);
+                                tickResolutionPre = tickResolution;
+                            }
                             //console.log('set for', 'EVENT_META_SET_TEMPO', evnt.tempoBPM, evnt);
                             //console.log('tickResolution', tickResolution, 'at', e, playTimeTicks);
                         }
@@ -5944,7 +5955,7 @@ var MidiParser = /** @class */ (function () {
     };
     MidiParser.prototype.takeMeasure = function (track, when, bpm, meter) {
         var q = 60 / bpm;
-        var duration = Math.floor(1000 * q * meter * 4);
+        var duration = 1000 * q * meter * 4;
         var idx = Math.floor(when / duration);
         for (var i = 0; i <= idx; i++) {
             if (track.measures.length < 1 + idx) {
@@ -6091,7 +6102,7 @@ var MidiParser = /** @class */ (function () {
             keyPattern: [],
             horizontal: true,
             locked: false,
-            selectedLayer: { level1: 0, level2: 0, level3: 0, level4: 0 },
+            selectedLayer: { track_songFx: 0, voice_trackFx_songFxParam: 0, source_voiceFx_trackParam: 0, sourceParam_voiceFxParam: 0 },
             selectedMeasures: { from: 0, duration: 0 }
         };
         schedule.effects.push({
@@ -6152,7 +6163,7 @@ var MidiParser = /** @class */ (function () {
                     , velocity: 119
                 });*/
                 var curMeasure = 0;
-                var curDelta = 0;
+                //var curDelta = 0;
                 var curVol = 0;
                 for (var kk = 0; kk < miditrack.volumes.length; kk++) {
                     var measureN = this.findMeasureNum(miditrack.measures, miditrack.volumes[kk].ms);
@@ -6171,7 +6182,7 @@ var MidiParser = /** @class */ (function () {
                         velocity: curVol
                     });
                     curMeasure = measureN.nn;
-                    curDelta = delta384;
+                    //curDelta = delta384;
                 }
             }
             else {
@@ -6180,6 +6191,10 @@ var MidiParser = /** @class */ (function () {
                     skip384: 0,
                     velocity: 99
                 });
+            }
+            var trackTitle = miditrack.title;
+            if (!(trackTitle)) {
+                trackTitle = 'track ' + i;
             }
             var track = {
                 voices: [],
@@ -6194,8 +6209,10 @@ var MidiParser = /** @class */ (function () {
                             }],
                         plugin: new ZvoogFxGain(),
                         disabled: false
-                    }],
-                title: 'track ' + i + ' ' + miditrack.title,
+                    }]
+                //, title: 'track ' + i + ' ' + miditrack.title
+                ,
+                title: trackTitle,
                 strings: []
             };
             var voice = {
@@ -6210,10 +6227,11 @@ var MidiParser = /** @class */ (function () {
                 title: 'MIDI ' + miditrack.program + ': ' + this.instrumentTitles()[miditrack.program]
             };
             var time = 0;
-            var correctionMs = 0;
+            //var correctionMs = 0;
             for (var m = 0; m < miditrack.measures.length; m++) {
-                correctionMs = 0;
+                //correctionMs = 0;
                 var songmeasure = miditrack.measures[m];
+                //console.log(m,);
                 var chunk = {
                     /*meter: {
                         count: midisong.meter.count
@@ -6229,18 +6247,19 @@ var MidiParser = /** @class */ (function () {
                     var midichord = songmeasure.songchords[c];
                     var chordtime = midichord.when - time;
                     var when384 = time2Duration(chordtime / 1000, midisong.bpm);
-                    var over6 = when384 % 12;
-                    if (over6) {
-                        var ttt = 33 * duration2time(midisong.bpm, over6);
-                        if (ttt > correctionMs) {
-                            correctionMs = ttt; //33 * duration2time(midisong.bpm, over6);
-                            console.log(correctionMs);
-                        }
-                    }
+                    //var over6 = when384 % 12;
+                    //if (over6) {
+                    //var ttt = 33 * duration2time(midisong.bpm, over6);
+                    //if (ttt > correctionMs) {
+                    //	correctionMs = ttt;//33 * duration2time(midisong.bpm, over6);
+                    //console.log(correctionMs);
+                    //}
+                    //}
                     //console.log((when384 - over6), chordtime, when384, over6, corrMs);
                     var zvoogchord = {
                         //when: chordtime
-                        when: 12 * (Math.round((when384 - over6) / 12)),
+                        //when: 12 * (Math.round((when384 - over6) / 12))
+                        when: 12 * (Math.round((when384 - 0) / 12)),
                         values: [],
                         title: '',
                         fretHint: [],
@@ -6273,7 +6292,8 @@ var MidiParser = /** @class */ (function () {
                     chunk.chords.push(zvoogchord);
                 }
                 voice.chunks.push(chunk);
-                time = time + songmeasure.duration + correctionMs;
+                //time = time + songmeasure.duration + correctionMs;
+                time = time + songmeasure.duration;
                 //time = time + songmeasure.duration + 0.33;
                 //console.log('measure', m, time);
             }
@@ -6296,6 +6316,10 @@ var MidiParser = /** @class */ (function () {
                         }
                     }
                 }
+            }
+            //console.log(fordrum);
+            if (fordrum.length > 0) {
+                track.voices = [];
             }
             for (var d = 0; d < fordrum.length; d++) {
                 var zvoice = fordrum[d].voice;
@@ -6390,8 +6414,9 @@ var MidiParser = /** @class */ (function () {
             for (var ch = 0; ch < miditrack.chords.length; ch++) {
                 var midichord = miditrack.chords[ch];
                 var newchord = { when: midichord.when, notes: [], channel: midichord.channel };
-                var measure = this.takeMeasure(tr, Math.floor(midichord.when), this.header.tempoBPM, this.header.meterCount / this.header.meterDivision);
+                var measure = this.takeMeasure(tr, midichord.when, this.header.tempoBPM, this.header.meterCount / this.header.meterDivision);
                 //tr.chords.push(newchord);
+                //console.log(ch,midichord,measure);
                 measure.songchords.push(newchord);
                 for (var n = 0; n < midichord.notes.length; n++) {
                     var midinote = midichord.notes[n];
@@ -6615,13 +6640,17 @@ console.log('ZvoogApp v1.01');
 var ZvoogApp = /** @class */ (function () {
     function ZvoogApp() {
         this.minZoom = 1;
+        this.maxNotesSpotZoom = 16;
+        this.maxBlackWhiteZoom = 25;
+        this.maxOtherZoom = 100;
+        this.maxMainZoom = 300;
         this.maxZoom = 1024;
         this.menuStyleWidth = '7cm';
         //tickPositionMs=0;
         this.gridIndentUp = 256;
-        this.gridIndentDown = 10;
-        this.gridIndentLeft = 10;
-        this.gridIndentRight = 10;
+        this.gridIndentDown = 50;
+        this.gridIndentLeft = 30;
+        this.gridIndentRight = 90;
         this.lengthOfSecond = 50;
         this.noteLineWidth = 3;
         this.undoRedo = new ZvoogUndoRedo(this);
@@ -6634,6 +6663,10 @@ var ZvoogApp = /** @class */ (function () {
         this.lastAudioTimeMs = 0;
         this.tickerDiffMs = 1000;
         this.nodesConnected = false;
+        this.markMeasureIndex = -1;
+        this.markStep384 = -1;
+        this.markWidth384 = -1;
+        this.markKey = -1;
         this.popup = new ZvoogPopup(this);
         console.log('ZvoogApp init');
     }
@@ -6662,7 +6695,7 @@ var ZvoogApp = /** @class */ (function () {
         for (var e = 0; e < this.currentSong.effects.length; e++) {
             var fx = this.currentSong.effects[e];
             if (fx.plugin.busy()) {
-                this.currentSong.selectedLayer = { level1: e + 1 + this.currentSong.tracks.length, level2: 0, level3: 0, level4: 0 };
+                this.currentSong.selectedLayer = { track_songFx: e + 1 + this.currentSong.tracks.length, voice_trackFx_songFxParam: 0, source_voiceFx_trackParam: 0, sourceParam_voiceFxParam: 0 };
                 return true;
             }
         }
@@ -6671,20 +6704,20 @@ var ZvoogApp = /** @class */ (function () {
             for (var n = 0; n < track.effects.length; n++) {
                 var fx = track.effects[n];
                 if (fx.plugin.busy()) {
-                    this.currentSong.selectedLayer = { level1: e + 1, level2: n + 1, level3: 0, level4: 0 };
+                    this.currentSong.selectedLayer = { track_songFx: e + 1, voice_trackFx_songFxParam: n + 1, source_voiceFx_trackParam: 0, sourceParam_voiceFxParam: 0 };
                     return true;
                 }
             }
             for (var k = 0; k < track.voices.length; k++) {
                 var voice = track.voices[k];
                 if (voice.source.plugin.busy()) {
-                    this.currentSong.selectedLayer = { level1: e + 1, level2: k + 1, level3: 1, level4: 0 };
+                    this.currentSong.selectedLayer = { track_songFx: e + 1, voice_trackFx_songFxParam: k + 1, source_voiceFx_trackParam: 1, sourceParam_voiceFxParam: 0 };
                     return true;
                 }
                 for (var n = 0; n < voice.effects.length; n++) {
                     var fx = voice.effects[n];
                     if (fx.plugin.busy()) {
-                        this.currentSong.selectedLayer = { level1: e + 1, level2: k + 1, level3: 1 + n + 1, level4: 0 };
+                        this.currentSong.selectedLayer = { track_songFx: e + 1, voice_trackFx_songFxParam: k + 1, source_voiceFx_trackParam: 1 + n + 1, sourceParam_voiceFxParam: 0 };
                         return true;
                     }
                 }
@@ -6922,7 +6955,7 @@ var ZvoogApp = /** @class */ (function () {
         else {
             if (this.selectLockedPluginLayer()) {
                 //this.resetWholeProject();
-                console.log(this.currentSong.selectedLayer);
+                //console.log(this.currentSong.selectedLayer);
                 this.openLayersPopup();
             }
             else {
@@ -7010,28 +7043,28 @@ var ZvoogApp = /** @class */ (function () {
         }
     };
     ZvoogApp.prototype.isTrackActive = function (track) {
-        if (track + 1 == this.currentSong.selectedLayer.level1) {
+        if (track + 1 == this.currentSong.selectedLayer.track_songFx) {
             return true;
         }
         return false;
     };
     ZvoogApp.prototype.isTrackSelected = function (track) {
         if (this.isTrackActive(track)) {
-            if (this.currentSong.selectedLayer.level2 == 0) {
+            if (this.currentSong.selectedLayer.voice_trackFx_songFxParam == 0) {
                 return true;
             }
         }
         return false;
     };
     ZvoogApp.prototype.isFxActive = function (fx) {
-        if (this.currentSong.tracks.length + fx + 1 == this.currentSong.selectedLayer.level1) {
+        if (this.currentSong.tracks.length + fx + 1 == this.currentSong.selectedLayer.track_songFx) {
             return true;
         }
         return false;
     };
     ZvoogApp.prototype.isFxSelected = function (fx) {
         if (this.isFxActive(fx)) {
-            if (this.currentSong.selectedLayer.level2 == 0) {
+            if (this.currentSong.selectedLayer.voice_trackFx_songFxParam == 0) {
                 return true;
             }
         }
@@ -7039,7 +7072,7 @@ var ZvoogApp = /** @class */ (function () {
     };
     ZvoogApp.prototype.isFxParameterSelected = function (fx, par) {
         if (this.isFxActive(fx)) {
-            if (par + 1 == this.currentSong.selectedLayer.level2) {
+            if (par + 1 == this.currentSong.selectedLayer.voice_trackFx_songFxParam) {
                 return true;
             }
         }
@@ -7047,7 +7080,7 @@ var ZvoogApp = /** @class */ (function () {
     };
     ZvoogApp.prototype.isTrackFxActive = function (track, fx) {
         if (this.isTrackActive(track)) {
-            if (this.currentSong.tracks[track].voices.length + fx + 1 == this.currentSong.selectedLayer.level2) {
+            if (this.currentSong.tracks[track].voices.length + fx + 1 == this.currentSong.selectedLayer.voice_trackFx_songFxParam) {
                 return true;
             }
         }
@@ -7055,7 +7088,7 @@ var ZvoogApp = /** @class */ (function () {
     };
     ZvoogApp.prototype.isTrackFxSelected = function (track, fx) {
         if (this.isTrackFxActive(track, fx)) {
-            if (this.currentSong.selectedLayer.level3 == 0) {
+            if (this.currentSong.selectedLayer.source_voiceFx_trackParam == 0) {
                 return true;
             }
         }
@@ -7063,7 +7096,7 @@ var ZvoogApp = /** @class */ (function () {
     };
     ZvoogApp.prototype.isTrackFxParameterSelected = function (track, fx, par) {
         if (this.isTrackFxActive(track, fx)) {
-            if (par + 1 == this.currentSong.selectedLayer.level3) {
+            if (par + 1 == this.currentSong.selectedLayer.source_voiceFx_trackParam) {
                 return true;
             }
         }
@@ -7071,19 +7104,19 @@ var ZvoogApp = /** @class */ (function () {
     };
     ZvoogApp.prototype.isVoiceActive = function (track, voice) {
         if (this.isTrackActive(track)) {
-            if (voice + 1 == this.currentSong.selectedLayer.level2) {
+            if (voice + 1 == this.currentSong.selectedLayer.voice_trackFx_songFxParam) {
                 return true;
             }
         }
         return false;
     };
     ZvoogApp.prototype.isVoiceSubSelected = function (track, voice) {
-        //this.currentSong.selectedLayer.level3 > 0 || this.currentSong.selectedLayer.level2 >= track.voices.length
+        //this.currentSong.selectedLayer.source_voiceFx_trackParam > 0 || this.currentSong.selectedLayer.voice_trackFx_songFxParam >= track.voices.length
         if (this.isTrackActive(track)) {
             if (!this.isVoiceSelected(track, voice)) {
                 if (this.currentSong.tracks.length > track) {
-                    if (this.currentSong.selectedLayer.level2 <= this.currentSong.tracks[track].voices.length) {
-                        if (this.currentSong.selectedLayer.level3 == 0) {
+                    if (this.currentSong.selectedLayer.voice_trackFx_songFxParam <= this.currentSong.tracks[track].voices.length) {
+                        if (this.currentSong.selectedLayer.source_voiceFx_trackParam == 0) {
                             return true;
                         }
                     }
@@ -7094,7 +7127,7 @@ var ZvoogApp = /** @class */ (function () {
     };
     ZvoogApp.prototype.isVoiceSelected = function (track, voice) {
         if (this.isVoiceActive(track, voice)) {
-            if (this.currentSong.selectedLayer.level3 == 0) {
+            if (this.currentSong.selectedLayer.source_voiceFx_trackParam == 0) {
                 return true;
             }
         }
@@ -7102,7 +7135,7 @@ var ZvoogApp = /** @class */ (function () {
     };
     ZvoogApp.prototype.isVoiceSourceActive = function (track, voice) {
         if (this.isVoiceActive(track, voice)) {
-            if (this.currentSong.selectedLayer.level3 == 1) {
+            if (this.currentSong.selectedLayer.source_voiceFx_trackParam == 1) {
                 return true;
             }
         }
@@ -7110,7 +7143,7 @@ var ZvoogApp = /** @class */ (function () {
     };
     ZvoogApp.prototype.isVoiceSourceSelected = function (track, voice) {
         if (this.isVoiceSourceActive(track, voice)) {
-            if (this.currentSong.selectedLayer.level4 == 0) {
+            if (this.currentSong.selectedLayer.sourceParam_voiceFxParam == 0) {
                 return true;
             }
         }
@@ -7118,7 +7151,7 @@ var ZvoogApp = /** @class */ (function () {
     };
     ZvoogApp.prototype.isVoiceSourceParameterSelected = function (track, voice, par) {
         if (this.isVoiceSourceActive(track, voice)) {
-            if (par + 1 == this.currentSong.selectedLayer.level4) {
+            if (par + 1 == this.currentSong.selectedLayer.sourceParam_voiceFxParam) {
                 return true;
             }
         }
@@ -7126,7 +7159,7 @@ var ZvoogApp = /** @class */ (function () {
     };
     ZvoogApp.prototype.isVoiceFxActive = function (track, voice, fx) {
         if (this.isVoiceActive(track, voice)) {
-            if (fx + 1 + 1 == this.currentSong.selectedLayer.level3) {
+            if (fx + 1 + 1 == this.currentSong.selectedLayer.source_voiceFx_trackParam) {
                 return true;
             }
         }
@@ -7134,7 +7167,7 @@ var ZvoogApp = /** @class */ (function () {
     };
     ZvoogApp.prototype.isVoiceFxSelected = function (track, voice, fx) {
         if (this.isVoiceFxActive(track, voice, fx)) {
-            if (this.currentSong.selectedLayer.level4 == 0) {
+            if (this.currentSong.selectedLayer.sourceParam_voiceFxParam == 0) {
                 return true;
             }
         }
@@ -7142,7 +7175,7 @@ var ZvoogApp = /** @class */ (function () {
     };
     ZvoogApp.prototype.isVoiceFxParameterSelected = function (track, voice, fx, par) {
         if (this.isVoiceActive(track, voice)) {
-            if (par + 1 == this.currentSong.selectedLayer.level4) {
+            if (par + 1 == this.currentSong.selectedLayer.sourceParam_voiceFxParam) {
                 return true;
             }
         }
@@ -7196,16 +7229,16 @@ var ZvoogApp = /** @class */ (function () {
                 point: me.uiTapPosition(),
                 properties: {
                     oldSelection: {
-                        level1: me.currentSong.selectedLayer.level1,
-                        level2: me.currentSong.selectedLayer.level2,
-                        level3: me.currentSong.selectedLayer.level3,
-                        level4: me.currentSong.selectedLayer.level4
+                        track_songFx: me.currentSong.selectedLayer.track_songFx,
+                        voice_trackFx_songFxParam: me.currentSong.selectedLayer.voice_trackFx_songFxParam,
+                        source_voiceFx_trackParam: me.currentSong.selectedLayer.source_voiceFx_trackParam,
+                        sourceParam_voiceFxParam: me.currentSong.selectedLayer.sourceParam_voiceFxParam
                     },
                     newSelection: {
-                        level1: c1,
-                        level2: c2,
-                        level3: c3,
-                        level4: c4
+                        track_songFx: c1,
+                        voice_trackFx_songFxParam: c2,
+                        source_voiceFx_trackParam: c3,
+                        sourceParam_voiceFxParam: c4
                     }
                 }
             });
@@ -7220,9 +7253,9 @@ var ZvoogApp = /** @class */ (function () {
             //me.undoRedo.addRedo({ key: undoRedoMoveVoice, point: me.uiTapPosition(), properties: { oldTrackPosition: t, newTrackPosition: 0, oldVoicePosition: v, newVoicePosition: 0 } });
             me.undoRedo.addRedo({
                 key: undoRedoMoveVoice, point: me.uiTapPosition(), properties: {
-                    oldTrackPosition: me.currentSong.selectedLayer.level1
+                    oldTrackPosition: me.currentSong.selectedLayer.track_songFx
                     , newTrackPosition: t
-                    , oldVoicePosition: me.currentSong.selectedLayer.level2
+                    , oldVoicePosition: me.currentSong.selectedLayer.voice_trackFx_songFxParam
                     , newVoicePosition: v
                 }
             });
@@ -7236,9 +7269,9 @@ var ZvoogApp = /** @class */ (function () {
             //console.log('popupMoveUpTrack', t);
             me.undoRedo.addRedo({
                 key: undoRedoMoveTrack, point: me.uiTapPosition(), properties: {
-                    oldTrackPosition: me.currentSong.selectedLayer.level1
+                    oldTrackPosition: me.currentSong.selectedLayer.track_songFx
                     , newTrackPosition: t
-                    , oldVoicePosition: me.currentSong.selectedLayer.level2
+                    , oldVoicePosition: me.currentSong.selectedLayer.voice_trackFx_songFxParam
                     , newVoicePosition: 0
                 }
             });
@@ -7354,7 +7387,7 @@ var ZvoogApp = /** @class */ (function () {
     ZvoogApp.prototype.createLayers = function () {
         var layers = [];
         this.overButtonsAnchor = { xx: 0, yy: 0, ww: 1, hh: 1, showZoom: this.minZoom, hideZoom: this.maxZoom, content: [] };
-        this.labelsStaticAnchor = { xx: 0, yy: 0, ww: 1, hh: 1, showZoom: this.minZoom, hideZoom: 300, content: [] };
+        this.labelsStaticAnchor = { xx: 0, yy: 0, ww: 1, hh: 1, showZoom: this.minZoom, hideZoom: this.maxMainZoom, content: [] };
         this.labelsOctaveAnchor16 = { xx: 0, yy: 0, ww: 1, hh: 1, showZoom: 8, hideZoom: 16, content: [] };
         this.labelsOctaveAnchor8 = { xx: 0, yy: 0, ww: 1, hh: 1, showZoom: 4, hideZoom: 8, content: [] };
         this.labelsOctaveAnchor4 = { xx: 0, yy: 0, ww: 1, hh: 1, showZoom: 2, hideZoom: 4, content: [] };
@@ -7367,12 +7400,17 @@ var ZvoogApp = /** @class */ (function () {
         this.bottomTogglesAnchor16 = { xx: 0, yy: 0, ww: 1, hh: 1, showZoom: 4, hideZoom: 16, content: [] };
         this.bottomTogglesAnchor64 = { xx: 0, yy: 0, ww: 1, hh: 1, showZoom: 16, hideZoom: 64, content: [] };
         this.bottomTogglesAnchor256 = { xx: 0, yy: 0, ww: 1, hh: 1, showZoom: 64, hideZoom: 256, content: [] };
-        this.keyZoomAnchor = { xx: 0, yy: this.gridIndentUp, ww: 1, hh: 120 * this.noteLineWidth, showZoom: this.minZoom, hideZoom: 25, content: [] };
-        this.keyWholeAnchor = { xx: 0, yy: this.gridIndentUp, ww: 1, hh: 120 * this.noteLineWidth, showZoom: 25, hideZoom: this.maxZoom, content: [] };
+        this.keyZoomAnchor = { xx: 0, yy: this.gridIndentUp, ww: 1, hh: 120 * this.noteLineWidth, showZoom: this.minZoom, hideZoom: this.maxBlackWhiteZoom,
+            content: [] };
+        this.keyWholeAnchor = { xx: 0, yy: this.gridIndentUp, ww: 1, hh: 120 * this.noteLineWidth, showZoom: this.maxBlackWhiteZoom, hideZoom: this.maxZoom,
+            content: [] };
         this.meterPatternAnchor = { xx: 0, yy: 0, ww: 1, hh: 1, showZoom: this.minZoom, hideZoom: this.maxZoom, content: [] };
-        this.firstAnchor = { xx: 0, yy: 0, ww: 1, hh: 1, showZoom: this.minZoom, hideZoom: 300, content: [] };
-        this.secondAnchor = { xx: 0, yy: 0, ww: 1, hh: 1, showZoom: this.minZoom, hideZoom: 100, content: [] };
-        this.otherAnchor = { xx: 0, yy: 0, ww: 1, hh: 1, showZoom: this.minZoom, hideZoom: 100, content: [] };
+        this.mainTapWatchRectangle = { x: 0, y: 0, w: 1, h: 1, rx: 0, ry: 0, css: 'fillButtonActionPoint', action: ZvoogDraw.notesPaneClick };
+        this.mainTapWatchAnchor = { xx: 0, yy: 0, ww: 1, hh: 1, showZoom: this.minZoom, hideZoom: this.maxNotesSpotZoom,
+            content: [this.mainTapWatchRectangle] };
+        this.firstAnchor = { xx: 0, yy: 0, ww: 1, hh: 1, showZoom: this.minZoom, hideZoom: this.maxMainZoom, content: [] };
+        this.secondAnchor = { xx: 0, yy: 0, ww: 1, hh: 1, showZoom: this.minZoom, hideZoom: this.maxOtherZoom, content: [] };
+        this.otherAnchor = { xx: 0, yy: 0, ww: 1, hh: 1, showZoom: this.minZoom, hideZoom: this.maxOtherZoom, content: [] };
         this.workButtonsGroup = { xx: 0, yy: 0, ww: 1, hh: 1, showZoom: this.minZoom, hideZoom: this.maxZoom, content: [] };
         this.tickerLineAnchor = { xx: 0, yy: 0, ww: 1, hh: 1, showZoom: this.minZoom, hideZoom: this.maxZoom, content: [] };
         this.popupMenuGroup1 = { xx: 0, yy: 0, ww: 1, hh: 1, showZoom: this.minZoom, hideZoom: this.maxZoom, content: [] };
@@ -7382,7 +7420,8 @@ var ZvoogApp = /** @class */ (function () {
         layers.push({ g: document.getElementById('overButtonsGroup'), anchors: [this.overButtonsAnchor], overlay: 1 });
         layers.push({ g: document.getElementById('labelsStaticGroup'), anchors: [this.labelsStaticAnchor], overlay: 1 });
         layers.push({
-            g: document.getElementById('labelsBottomGroup'), anchors: [
+            g: document.getElementById('labelsBottomGroup'),
+            anchors: [
                 this.labelsBottomAnchor4,
                 this.labelsBottomAnchor16,
                 this.labelsBottomAnchor64,
@@ -7390,7 +7429,8 @@ var ZvoogApp = /** @class */ (function () {
             ], stickBottom: 1
         });
         layers.push({
-            g: document.getElementById('bottomTogglesGroup'), anchors: [
+            g: document.getElementById('bottomTogglesGroup'),
+            anchors: [
                 this.bottomTogglesAnchor4,
                 this.bottomTogglesAnchor16,
                 this.bottomTogglesAnchor64,
@@ -7398,7 +7438,8 @@ var ZvoogApp = /** @class */ (function () {
             ], stickBottom: 1
         });
         layers.push({
-            g: document.getElementById('labelsLeftGroup'), anchors: [
+            g: document.getElementById('labelsLeftGroup'),
+            anchors: [
                 this.labelsOctaveAnchor16,
                 this.labelsOctaveAnchor8,
                 this.labelsOctaveAnchor4,
@@ -7410,10 +7451,12 @@ var ZvoogApp = /** @class */ (function () {
         layers.push({ g: document.getElementById('otherVoicesGroup'), anchors: [this.otherAnchor] });
         layers.push({ g: document.getElementById('secondaryVoicesGroup'), anchors: [this.secondAnchor] });
         layers.push({ g: document.getElementById('mainVoiceGroup'), anchors: [this.firstAnchor] });
+        layers.push({ g: document.getElementById('mainTapWatchGroup'), anchors: [this.mainTapWatchAnchor] });
         layers.push({ g: document.getElementById('tickerLineGroup'), anchors: [this.tickerLineAnchor] });
         layers.push({ g: document.getElementById('workButtonsGroup'), anchors: [this.workButtonsGroup] });
         this.popupLayer = {
-            g: document.getElementById('popupGroup'), anchors: [this.popupMenuGroup1,
+            g: document.getElementById('popupGroup'),
+            anchors: [this.popupMenuGroup1,
                 this.popupMenuGroup2, this.popupMenuGroup3 //, this.popupMenuGroup4
             ]
         };
@@ -7489,6 +7532,12 @@ var ZvoogApp = /** @class */ (function () {
         //this.tileLevel.innerWidth = this.tileLevel.tapSize * (this.gridIndentLeft + this.wholeDuration(this.currentSong) * this.lengthOfSecond + this.gridIndentRight);
         this.tileLevel.innerWidth = this.tileLevel.tapSize * (this.gridIndentLeft + durations2time(this.currentSong.timeline) * this.lengthOfSecond + this.gridIndentRight);
         this.tileLevel.innerHeight = this.tileLevel.tapSize * (this.gridIndentUp + 120 * this.noteLineWidth + this.gridIndentDown);
+        this.mainTapWatchAnchor.ww = this.tileLevel.innerWidth / this.tileLevel.tapSize;
+        this.mainTapWatchAnchor.hh = this.tileLevel.innerHeight / this.tileLevel.tapSize;
+        this.mainTapWatchRectangle.x = this.gridIndentLeft;
+        this.mainTapWatchRectangle.y = this.gridIndentUp;
+        this.mainTapWatchRectangle.w = ZvoogGrid.calculateGridWidth(this);
+        this.mainTapWatchRectangle.h = 120 * this.noteLineWidth;
         this.firstAnchor.ww = this.tileLevel.innerWidth / this.tileLevel.tapSize;
         this.firstAnchor.hh = this.tileLevel.innerHeight / this.tileLevel.tapSize;
         this.secondAnchor.ww = this.tileLevel.innerWidth / this.tileLevel.tapSize;
@@ -7538,10 +7587,213 @@ var ZvoogDraw;
 (function (ZvoogDraw) {
     function createNoteHeadClick(key) {
         return function (x, y) {
-            console.log('click', key);
+            console.log('click key', key);
         };
     }
     ZvoogDraw.createNoteHeadClick = createNoteHeadClick;
+    function notesPaneClick(x, y) {
+        console.log('click pane', x, y);
+        var app = window.zvoogApp;
+        resetMark(x, y, app);
+    }
+    ZvoogDraw.notesPaneClick = notesPaneClick;
+    function resetMark(x, y, app) {
+        console.log('resetMark', app.currentSong.selectedLayer);
+        var curveOrVoice = findEditableLayer(app);
+        if (curveOrVoice) {
+            if (curveOrVoice.source) {
+                var voice = curveOrVoice;
+                console.log('voice', voice);
+            }
+            else {
+                var curve = curveOrVoice;
+                console.log('curve', curve);
+            }
+        }
+        var mx = 0;
+        var measure = app.currentSong.timeline[0];
+        var measureIdx = 0;
+        for (var i = 0; i < app.currentSong.timeline.length; i++) {
+            measure = app.currentSong.timeline[i];
+            var nextMeasureX = mx + app.patternDuration(measure) * app.lengthOfSecond;
+            if (x >= mx && x < nextMeasureX) {
+                measureIdx = i;
+                break;
+            }
+            else {
+                mx = nextMeasureX;
+            }
+        }
+        var patx = 0;
+        //let patIdx = 0;
+        var x384 = Math.round(time2Duration(x - mx, measure.tempo) / app.lengthOfSecond);
+        var wi384 = -1;
+        for (var i = 0; i < app.currentSong.gridPattern.length; i++) {
+            if (x384 < patx + app.currentSong.gridPattern[i].duration) {
+                x384 = patx;
+                wi384 = app.currentSong.gridPattern[i].duration;
+                //patIdx = i;
+                break;
+            }
+            else {
+                patx = patx + app.currentSong.gridPattern[i].duration;
+            }
+        }
+        var mkey = Math.ceil(120 - y / app.noteLineWidth);
+        if (app.markMeasureIndex < 0) {
+            app.markMeasureIndex = measureIdx;
+            app.markStep384 = x384;
+            app.markKey = mkey;
+            app.markWidth384 = wi384;
+        }
+        else {
+            putNewNoteToCurrentLayer(app.markKey, app.markMeasureIndex, app.markStep384, mkey, measureIdx, wi384 + x384, app);
+            app.markMeasureIndex = -1;
+            app.markStep384 = -1;
+            app.markKey = -1;
+            app.markWidth384 = -1;
+        }
+        app.resetWholeProject();
+        //console.log('findNotePosition', app.markMeasureIndex,app.markStep384,app.markWidth384,app.markKey);
+    }
+    ZvoogDraw.resetMark = resetMark;
+    function findEditableLayer(app) {
+        //console.log('selectEditableLayer', app.currentSong.selectedLayer);
+        for (var t = 0; t < app.currentSong.tracks.length; t++) {
+            var track = app.currentSong.tracks[t];
+            for (var v = 0; v < track.voices.length; v++) {
+                if (app.isVoiceSelected(t, v)) {
+                    return track.voices[v];
+                }
+                var voice = track.voices[v];
+                for (var p_1 = 0; p_1 < voice.source.parameters.length; p_1++) {
+                    if (app.isVoiceSourceParameterSelected(t, v, p_1)) {
+                        return voice.source.parameters[p_1];
+                    }
+                }
+                for (var f = 0; f < voice.effects.length; f++) {
+                    var effect = voice.effects[f];
+                    for (var p = 0; p < effect.parameters.length; p++) {
+                        if (app.isVoiceFxParameterSelected(t, v, f, p)) {
+                            return effect.parameters[p];
+                        }
+                    }
+                }
+            }
+            for (var f = 0; f < track.effects.length; f++) {
+                var effect = track.effects[f];
+                for (var p = 0; p < effect.parameters.length; p++) {
+                    if (app.isTrackFxParameterSelected(t, f, p)) {
+                        return effect.parameters[p];
+                    }
+                }
+            }
+        }
+        for (var f = 0; f < app.currentSong.effects.length; f++) {
+            var effect = app.currentSong.effects[f];
+            for (var p = 0; p < effect.parameters.length; p++) {
+                if (app.isFxParameterSelected(f, p)) {
+                    return effect.parameters[p];
+                }
+            }
+        }
+        return null;
+    }
+    function putNewNoteToCurrentLayer(fromKey, fromMeasureIdx, fromPosition384, toKey, toMeasureIdx, toPosition384, app) {
+        console.log('putNewNoteToCurrentLayer', fromKey, fromMeasureIdx, fromPosition384, toKey, toMeasureIdx, toPosition384);
+        for (var t = 0; t < app.currentSong.tracks.length; t++) {
+            var track = app.currentSong.tracks[t];
+            if (!track.disabled) {
+                for (var v = 0; v < track.voices.length; v++) {
+                    var voice = track.voices[v];
+                    if (!voice.disabled) {
+                        if (app.isVoiceSelected(t, v)) {
+                            console.log('found voice', voice.title);
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+        for (var k1 = 0; k1 < app.currentSong.effects.length; k1++) {
+            var effect = app.currentSong.effects[k1];
+            if (!effect.disabled) {
+                var pars = effect.plugin.getParams();
+                if (pars) {
+                    for (var k2 = 0; k2 < pars.length; k2++) {
+                        if (effect.parameters.length > k2) {
+                            var curve = effect.parameters[k2];
+                            if (app.isFxActive(k1)) {
+                                if (app.isFxParameterSelected(k1, k2)) {
+                                    console.log('found sound fx', effect.plugin.label(), 'curve', curve);
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        for (var k1 = 0; k1 < app.currentSong.tracks.length; k1++) {
+            var track = app.currentSong.tracks[k1];
+            if (!track.disabled) {
+                for (var k2 = 0; k2 < track.effects.length; k2++) {
+                    var effect = track.effects[k2];
+                    if (!effect.disabled) {
+                        var pars = effect.plugin.getParams();
+                        if (pars) {
+                            for (var k3 = 0; k3 < pars.length; k3++) {
+                                if (effect.parameters.length > k3) {
+                                    if (app.isTrackFxActive(k1, k2)) {
+                                        if (app.isTrackFxParameterSelected(k1, k2, k3)) {
+                                            console.log('found track' + track.title + 'fx', effect.plugin.label(), 'par', k3);
+                                            break;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                for (var k2 = 0; k2 < track.voices.length; k2++) {
+                    var voice = track.voices[k2];
+                    if (!voice.disabled) {
+                        var pars = voice.source.plugin.getParams();
+                        if (pars) {
+                            for (var k4 = 0; k4 < pars.length; k4++) {
+                                if (voice.source.parameters.length > k4) {
+                                    if (app.isVoiceSourceActive(k1, k2)) {
+                                        if (app.isVoiceSourceParameterSelected(k1, k2, k4)) {
+                                            console.log('found track' + track.title + 'source', voice.source.plugin.label(), 'par', k4);
+                                            break;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        for (var k3 = 0; k3 < voice.effects.length; k3++) {
+                            var effect = voice.effects[k3];
+                            if (!effect.disabled) {
+                                var pars_3 = effect.plugin.getParams();
+                                if (pars_3) {
+                                    for (var k4 = 0; k4 < pars_3.length; k4++) {
+                                        if (effect.parameters.length > k4) {
+                                            if (app.isVoiceFxActive(k1, k2, k3)) {
+                                                if (app.isVoiceFxParameterSelected(k1, k2, k3, k4)) {
+                                                    console.log('found track' + track.title + 'fx', effect.plugin.label(), 'par', k4);
+                                                    break;
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
     function addParameterCurve(app, curve, tile, cssSegment, joint) {
         var measureX = 0;
         var measureIndex = 0;
@@ -7652,9 +7904,9 @@ var ZvoogDraw;
                         for (var k3 = 0; k3 < voice.effects.length; k3++) {
                             var effect = voice.effects[k3];
                             if (!effect.disabled) {
-                                var pars_3 = effect.plugin.getParams();
-                                if (pars_3) {
-                                    for (var k4 = 0; k4 < pars_3.length; k4++) {
+                                var pars_4 = effect.plugin.getParams();
+                                if (pars_4) {
+                                    for (var k4 = 0; k4 < pars_4.length; k4++) {
                                         if (effect.parameters.length > k4) {
                                             var curve = effect.parameters[k4];
                                             if (app.isVoiceFxActive(k1, k2, k3)) {
@@ -7709,6 +7961,19 @@ var ZvoogDraw;
         }
     }
     ZvoogDraw.addChordNotes = addChordNotes;
+    function addMark(app, chunkAnchor, nextMeasureX, measure, chunk, css) {
+        if (app.markMeasureIndex >= 0 && app.markStep384 >= 0 && app.markKey >= 0) {
+            chunkAnchor.content.push(app.tileLevel.actionRectangle(function (x, y) {
+                putNewNoteToCurrentLayer(app.markKey, app.markMeasureIndex, app.markStep384, app.markKey, app.markMeasureIndex, app.markStep384 + app.markWidth384, app);
+                app.markMeasureIndex = -1;
+                app.markStep384 = -1;
+                app.markKey = -1;
+                app.markWidth384 = -1;
+                app.resetWholeProject();
+            }, nextMeasureX + app.gridIndentLeft + duration2time(measure.tempo, app.markStep384) * app.lengthOfSecond, (120 - app.markKey) * app.noteLineWidth + app.gridIndentUp, duration2time(measure.tempo, app.markWidth384) * app.lengthOfSecond, app.noteLineWidth, 0, 0, 'fillColorContent'));
+        }
+    }
+    ZvoogDraw.addMark = addMark;
     function resetNoteLines(app) {
         app.firstAnchor.content.length = 0;
         app.secondAnchor.content.length = 0;
@@ -7726,11 +7991,13 @@ var ZvoogDraw;
                             var measure = app.currentSong.timeline[i];
                             if (measure) {
                                 var chunkAnchor = app.tileLevel.anchor(app.gridIndentLeft + nextMeasureX, app.gridIndentUp, app.patternDuration(measure) * app.lengthOfSecond * 4, 120 * app.noteLineWidth, app.minZoom, app.maxZoom);
-                                //if (t == app.currentSong.selectedLayer.level1 && v == app.currentSong.selectedLayer.level2) {
+                                //if (t == app.currentSong.selectedLayer.track_songFx && v == app.currentSong.selectedLayer.voice_trackFx_songFxParam) {
                                 if (app.isVoiceSelected(t, v)) {
                                     app.firstAnchor.content.push(chunkAnchor);
                                     ZvoogDraw.addChordNotes(app, chunkAnchor, nextMeasureX, measure, chunk, 'firstLine');
-                                    var spotAnchor = app.tileLevel.anchor(app.gridIndentLeft + nextMeasureX, app.gridIndentUp, app.patternDuration(measure) * app.lengthOfSecond * 4, 120 * app.noteLineWidth, app.minZoom, 16);
+                                    if (i == app.markMeasureIndex)
+                                        ZvoogDraw.addMark(app, chunkAnchor, nextMeasureX, measure, chunk, 'firstLine');
+                                    var spotAnchor = app.tileLevel.anchor(app.gridIndentLeft + nextMeasureX, app.gridIndentUp, app.patternDuration(measure) * app.lengthOfSecond * 4, 120 * app.noteLineWidth, app.minZoom, app.maxNotesSpotZoom);
                                     app.firstAnchor.content.push(spotAnchor);
                                     for (var ch = 0; ch < chunk.chords.length; ch++) {
                                         var chord = chunk.chords[ch];
@@ -7738,12 +8005,13 @@ var ZvoogDraw;
                                             var key = chord.values[n];
                                             var chordX = app.gridIndentLeft + nextMeasureX + duration2time(measure.tempo, chord.when) * app.lengthOfSecond;
                                             var noteY = app.gridIndentUp + (120 - 0.5 - key.envelope[0].pitch) * app.noteLineWidth;
-                                            spotAnchor.content.push(app.tileLevel.actionRectangle(ZvoogDraw.createNoteHeadClick(key), chordX + 0.5, noteY - 1, 2, 2, 1, 1, 'fillFlatSpot'));
+                                            spotAnchor.content.push(app.tileLevel
+                                                .actionRectangle(ZvoogDraw.createNoteHeadClick(key), chordX + 0.5, noteY - 1, 2, 2, 1, 1, 'fillFlatSpot'));
                                         }
                                     }
                                 }
                                 else {
-                                    //if (t == app.currentSong.selectedLayer.level1 && v != app.currentSong.selectedLayer.level2) {
+                                    //if (t == app.currentSong.selectedLayer.track_songFx && v != app.currentSong.selectedLayer.voice_trackFx_songFxParam) {
                                     if (app.isVoiceSubSelected(t, v)) {
                                         app.secondAnchor.content.push(chunkAnchor);
                                         ZvoogDraw.addChordNotes(app, chunkAnchor, nextMeasureX, measure, chunk, 'secondLine');
@@ -7787,10 +8055,10 @@ var ZvoogGrid;
         app.bottomTogglesAnchor4.content.length = 0;
         app.tickerLineAnchor.content.length = 0;
         var nextMeasureX = 0;
-        /*if (app.currentSong.tracks.length > app.currentSong.selectedLayer.level1) {
-            let track: ZvoogTrack = app.currentSong.tracks[app.currentSong.selectedLayer.level1];
-            if (track.voices.length > app.currentSong.selectedLayer.level2) {
-                let voice: ZvoogVoice = track.voices[app.currentSong.selectedLayer.level2];
+        /*if (app.currentSong.tracks.length > app.currentSong.selectedLayer.track_songFx) {
+            let track: ZvoogTrack = app.currentSong.tracks[app.currentSong.selectedLayer.track_songFx];
+            if (track.voices.length > app.currentSong.selectedLayer.voice_trackFx_songFxParam) {
+                let voice: ZvoogVoice = track.voices[app.currentSong.selectedLayer.voice_trackFx_songFxParam];
 */
         var songSelectionCss = 'fillSelectionSpot';
         if (app.currentSong.selectedMeasures.duration) {
@@ -7813,7 +8081,7 @@ var ZvoogGrid;
                 ww: app.patternDuration(measure) * app.lengthOfSecond,
                 hh: 120 * app.noteLineWidth,
                 showZoom: app.minZoom,
-                hideZoom: 16,
+                hideZoom: app.maxNotesSpotZoom,
                 content: []
             };
             app.meterPatternAnchor.content.push(measureAnchor);
@@ -7822,8 +8090,8 @@ var ZvoogGrid;
                 yy: app.gridIndentUp,
                 ww: app.patternDuration(measure) * app.lengthOfSecond,
                 hh: 120 * app.noteLineWidth,
-                showZoom: 16,
-                hideZoom: 256,
+                showZoom: app.maxNotesSpotZoom,
+                hideZoom: app.maxMainZoom,
                 content: []
             };
             app.meterPatternAnchor.content.push(farMeasureAnchor);
@@ -7925,6 +8193,15 @@ var ZvoogGrid;
         //div.style.transform = "translate-x(1000)";
     }
     ZvoogGrid.resetGrid = resetGrid;
+    function calculateGridWidth(app) {
+        var nextMeasureX = 0;
+        for (var i = 0; i < app.currentSong.timeline.length; i++) {
+            var measure = app.currentSong.timeline[i];
+            nextMeasureX = nextMeasureX + app.patternDuration(measure) * app.lengthOfSecond;
+        }
+        return nextMeasureX;
+    }
+    ZvoogGrid.calculateGridWidth = calculateGridWidth;
     function resetTrackVoiceName(app) {
         var label1 = '';
         var label2 = '';
@@ -8017,11 +8294,11 @@ var ZvoogGrid;
         app.labelsStaticAnchor.content.length = 0;
         let trackName = '';
         let voiceName = '';
-        if (app.currentSong.selectedLayer.level1 < app.currentSong.tracks.length) {
-            let track = app.currentSong.tracks[app.currentSong.selectedLayer.level1];
+        if (app.currentSong.selectedLayer.track_songFx < app.currentSong.tracks.length) {
+            let track = app.currentSong.tracks[app.currentSong.selectedLayer.track_songFx];
             trackName = track.title;
-            if (app.currentSong.selectedLayer.level2 < track.voices.length) {
-                let voice = track.voices[app.currentSong.selectedLayer.level2];
+            if (app.currentSong.selectedLayer.voice_trackFx_songFxParam < track.voices.length) {
+                let voice = track.voices[app.currentSong.selectedLayer.voice_trackFx_songFxParam];
                 let voiceName = voice.title;
 
             }
@@ -8078,10 +8355,10 @@ var ZvoogTicker;
             }
             for (var k2 = 0; k2 < track.effects.length; k2++) {
                 var plugin = track.effects[k2].plugin;
-                var pars_4 = plugin.getParams();
-                if (pars_4) {
-                    for (var k3 = 0; k3 < pars_4.length; k3++) {
-                        var p = pars_4[k3];
+                var pars_5 = plugin.getParams();
+                if (pars_5) {
+                    for (var k3 = 0; k3 < pars_5.length; k3++) {
+                        var p = pars_5[k3];
                         p.cancelScheduledValues(0);
                         //console.log('cancelAllParameters track fx',k1,k2,k3);
                     }
@@ -8090,10 +8367,10 @@ var ZvoogTicker;
         }
         for (var k1 = 0; k1 < app.currentSong.effects.length; k1++) {
             var effect = app.currentSong.effects[k1];
-            var pars_5 = effect.plugin.getParams();
-            if (pars_5) {
-                for (var k2 = 0; k2 < pars_5.length; k2++) {
-                    var p = pars_5[k2];
+            var pars_6 = effect.plugin.getParams();
+            if (pars_6) {
+                for (var k2 = 0; k2 < pars_6.length; k2++) {
+                    var p = pars_6[k2];
                     p.cancelScheduledValues(0);
                     //console.log('cancelAllParameters song fx',k1,k2);
                 }
@@ -8169,23 +8446,23 @@ var ZvoogTicker;
             }
             for (var k2 = 0; k2 < track.effects.length; k2++) {
                 var plugin = track.effects[k2].plugin;
-                var pars_6 = plugin.getParams();
-                if (pars_6) {
-                    for (var k3 = 0; k3 < pars_6.length; k3++) {
-                        var p = pars_6[k3];
+                var pars_7 = plugin.getParams();
+                if (pars_7) {
+                    for (var k3 = 0; k3 < pars_7.length; k3++) {
+                        var p = pars_7[k3];
                     }
                 }
             }
         }
         for (var k1 = 0; k1 < app.currentSong.effects.length; k1++) {
             var effect = app.currentSong.effects[k1];
-            var pars_7 = effect.plugin.getParams();
-            if (pars_7) {
-                for (var k2 = 0; k2 < pars_7.length; k2++) {
+            var pars_8 = effect.plugin.getParams();
+            if (pars_8) {
+                for (var k2 = 0; k2 < pars_8.length; k2++) {
                     //console.log(audioTime, fromMs, toMs,k1,k2,effect.parameters.length);
                     if (effect.parameters.length > k2) {
                         var points = effect.parameters[k2].points;
-                        var p = pars_7[k2];
+                        var p = pars_8[k2];
                         if (k1 == 0 && k2 == 0) {
                             ZvoogTicker.sendParameterPoints(app, audioTime, fromMs, toMs, p, points, startSongSelectionMs, endSongSelectionMs);
                         }

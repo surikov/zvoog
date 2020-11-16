@@ -328,7 +328,7 @@ class TestSong {
 			, keyPattern: this.createKeyPattern()
 			, horizontal: true
 			, locked: false
-			, selectedLayer: { level1: 0, level2: 0, level3: 0, level4: 0 }
+			, selectedLayer: { track_songFx: 0, voice_trackFx_songFxParam: 0, source_voiceFx_trackParam: 0, sourceParam_voiceFxParam: 0 }
 			,selectedMeasures:{from:0,duration:0}
 		};
 		var curPoint: number = 0;
@@ -351,8 +351,8 @@ class TestSong {
 		var vc: number = 0;
 		if (s.tracks.length > 1) tc = 1;
 		if (s.tracks[tc].voices.length > 1) vc = 1;
-		s.selectedLayer.level1 = tc;
-		s.selectedLayer.level2 = vc;
+		s.selectedLayer.track_songFx = tc;
+		s.selectedLayer.voice_trackFx_songFxParam = vc;
 		return s;
 	}
 }

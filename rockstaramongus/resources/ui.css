@@ -1,0 +1,473 @@
+/* cyrillic-ext */
+@font-face {
+    font-family: 'Oswald';
+    font-style: normal;
+    font-weight: 400;
+    font-display: swap;
+    src: url(TK3_WkUHHAIjg75cFRf3bXL8LICs1_FvsUtiYySUhiCXABTV.woff) format('woff');
+    unicode-range: U+0460-052F, U+1C80-1C88, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+  }
+  /* cyrillic */
+  @font-face {
+    font-family: 'Oswald';
+    font-style: normal;
+    font-weight: 400;
+    font-display: swap;
+    src: url(TK3_WkUHHAIjg75cFRf3bXL8LICs1_FvsUJiYySUhiCXABTV.woff) format('woff');
+    unicode-range: U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+  }
+  /* vietnamese */
+  @font-face {
+    font-family: 'Oswald';
+    font-style: normal;
+    font-weight: 400;
+    font-display: swap;
+    src: url(TK3_WkUHHAIjg75cFRf3bXL8LICs1_FvsUliYySUhiCXABTV.woff) format('woff');
+    unicode-range: U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+1EA0-1EF9, U+20AB;
+  }
+  /* latin-ext */
+  @font-face {
+    font-family: 'Oswald';
+    font-style: normal;
+    font-weight: 400;
+    font-display: swap;
+    src: url(TK3_WkUHHAIjg75cFRf3bXL8LICs1_FvsUhiYySUhiCXABTV.woff) format('woff');
+    unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+2020, U+20A0-20AB, U+20AD-20CF, U+2113, U+2C60-2C7F, U+A720-A7FF;
+  }
+  /* latin */
+  @font-face {
+    font-family: 'Oswald';
+    font-style: normal;
+    font-weight: 400;
+    font-display: swap;
+    src: url(TK3_WkUHHAIjg75cFRf3bXL8LICs1_FvsUZiYySUhiCXAA.woff) format('woff');
+    unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+  }
+body {
+    padding: 0cm;
+    margin: 0cm;
+    background-color: #b7b7c8;
+    background-repeat2: no-repeat;
+    background-attachmen2t: fixed;
+    background-size2: cover;
+    background-position2: center;
+    font-size: 0.5cm;
+    font-family: 'Oswald', sans-serif;
+    color: #000;
+    user-select: none;
+    
+    
+    overflow: hidden;
+}
+#pageGrid{
+  background-image: url('./floorgrid.png');
+  background-size: 1cm;
+  width:100%;
+  height:100%;
+}
+input{
+  outline: none;
+}
+.menuDiv {
+    overflow: hidden;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    z-index: 5;
+    padding: 0.1cm;
+    justify-content: center;
+    display: flex;
+}
+.menuButton {
+    padding: 0.1cm;
+    margin: 0cm;
+    width: 1.0cm;
+    height: 1.0cm;
+    border: none;
+    outline: none;
+}
+
+#iconleftup1{
+   position:absolute;
+   left:-0.2cm;
+   top:2cm;
+   width:1cm;
+   height:1cm;
+}
+#iconleftdown1{
+   position:absolute;
+   left:-0.2cm;
+   top:3cm;
+   width:1cm;
+   height:1cm;
+}
+#iconleftup2{
+   position:absolute;
+   left:-0.2cm;
+   top:5cm;
+   width:1cm;
+   height:1cm;
+}
+#iconleftdown2{
+   position:absolute;
+   left:-0.2cm;
+   top:6cm;
+   width:1cm;
+   height:1cm;
+}
+#iconrightup1{
+   position:absolute;
+   right:-0.2cm;
+   top:2cm;
+   width:1cm;
+   height:1cm;
+}
+#iconrightdown1{
+   position:absolute;
+   right:-0.2cm;
+   top:3cm;
+   width:1cm;
+   height:1cm;
+}
+#iconrightup2{
+   position:absolute;
+   right:-0.2cm;
+   top:5cm;
+   width:1cm;
+   height:1cm;
+}
+#iconrightdown2{
+   position:absolute;
+   right:-0.2cm;
+   top:6cm;
+   width:1cm;
+   height:1cm;
+}
+
+
+
+
+
+.leftSideDiv{
+   position:absolute;
+   background-color2: rgba(255,0,0,0.5);
+   left:0cm;
+   top:3cm;
+   width:50%;
+   height:5cm;
+pointer-events: auto;
+}
+.firstLeftRound{
+  position:absolute;
+   width:2cm;
+   height:2cm;
+   right:0.25cm;
+   top:0cm;
+   pointer-events: auto; 
+}
+.secondLeftRound{
+  position:absolute;
+   width:2cm;
+   height:2cm;
+   right:0.25cm;
+   top:2cm;
+   pointer-events: auto; 
+}
+
+.rightSideDiv{
+   position:absolute;
+   background-color2: rgba(255,0,0,0.5);
+   left:50%;
+   top:3cm;
+   width:50%;
+   height:5cm;
+pointer-events: auto;
+}
+.firstRightRound{
+  position:absolute;
+   width:2cm;
+   height:2cm;
+   left:0.25cm;
+   top:0cm;
+   pointer-events: auto; 
+}
+.secondRightRound{
+  position:absolute;
+   width:2cm;
+   height:2cm;
+   left:0.25cm;
+   top:2cm;
+   pointer-events: auto; 
+}
+
+
+
+
+
+
+
+
+
+
+.rightButtonDiv{
+  position:absolute;
+   background-color2: rgba(255,0,0,0.5);
+margin-left: auto;
+    margin-right: auto;
+   bottom:3cm;
+width:100%;
+}
+.redButton{
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width:4cm;
+    height:2cm;
+}
+
+
+
+
+.progSlider {
+    -webkit-appearance: none;
+    width: 100%;
+    height: 0.25cm;
+    border-radius: 5px;
+    background: #ffffff;
+    outline: none;
+    padding: 0px;
+    margin: 0px;
+    border: 1px solid #000000;
+}
+
+.progSlider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 0.5cm;
+    height: 0.5cm;
+    border-radius: 50%;
+    background: #fff;
+    cursor: pointer;
+    border: 1px solid #000000;
+}
+
+.progSlider::-moz-range-thumb {
+    width: 0.5cm;
+    height: 0.5cm;
+    border-radius: 50%;
+    background: #fff;
+    cursor: pointer;
+    border: 1px solid #000000;
+}
+
+#progSliderRow {
+    width: 100%;
+    padding: 0cm;
+    bottom: 2.0cm;
+position:absolute;
+}
+
+
+#titleApp{
+      width: 100%;
+    padding: 0cm;
+    top: 0.1cm;
+position:absolute;
+text-align: center;
+}
+#titleChord{
+      width: 100%;
+    padding: 0cm;
+    bottom: 1.5cm;
+position:absolute;
+text-align: center;
+font-size: 0.25cm;
+}
+#leftTopNum{
+  position:absolute;
+  left:0.2cm;
+  top:2.8cm;
+  font-size: 0.25cm;
+}
+#leftDownNum{
+  position:absolute;
+  left:0.2cm;
+  top:5.8cm;
+  font-size: 0.25cm;
+}
+#rightTopNum{
+  position:absolute;
+  right:0.2cm;
+  top:2.8cm;
+  font-size: 0.25cm;
+}
+#rightDownNum{
+  position:absolute;
+  right:0.2cm;
+  top:5.8cm;
+  font-size: 0.25cm;
+}
+
+
+
+
+
+
+.leftCharsDiv{
+   position:absolute;
+   background-color2: rgba(255,0,0,0.5);
+   left:0cm;
+   top:3cm;
+   width:50%;
+   height:5cm;
+   background-color2: rgba(255,0,0,0.5);
+pointer-events: none; 
+}
+.firstLeftChar{
+  position:absolute;
+   width:3.5cm;
+   height:4.5cm;
+   right:-0.5cm;
+   top:-2.65cm;
+   pointer-events: none; 
+}
+.secondLeftChar{
+  position:absolute;
+   width:3.5cm;
+   height:4.5cm;
+   right:-0.5cm;
+   top:-0.65cm;
+   pointer-events: none; 
+}
+
+
+
+
+.rightCharsDiv{
+   position:absolute;
+   background-color2: rgba(255,0,0,0.5);
+   left:50%;
+   top:3cm;
+   width:50%;
+   height:5cm;
+   background-color2: rgba(255,0,0,0.5);
+pointer-events: none; 
+}
+.firstRightChar{
+  position:absolute;
+   width:3.5cm;
+   height:4.5cm;
+   left:-0.5cm;
+   top:-2.65cm;
+   pointer-events: none; 
+}
+.secondRightChar{
+  position:absolute;
+   width:3.5cm;
+   height:4.5cm;
+   left:-0.5cm;
+   top:-0.65cm;
+   pointer-events: none; 
+}
+
+
+.auxText{
+   color: #fff;
+}
+
+#settingDiv {
+   background-color: rgba(0, 0, 0, 0.97);
+   z-index: 17;
+   position: fixed;
+   overflow: auto;
+   height: 100%;
+   width: 100%;
+   display: none;
+}
+
+#settingDiv p {
+   text-align: center;
+}
+
+#progListDiv {
+   padding: 0cm;
+}
+
+.proEditgForm {
+   width: 100%;
+   display: flex;
+   flex-direction: row;
+}
+
+.saveProgButton{
+   width: 1cm;
+   height: 1cm;
+   flex-grow: 0;
+   flex-shrink: 0;
+   margin-left: 0.25cm;
+   margin-right: 0.5cm;
+   margin-top: 0.0cm;
+   margin-bottom: 0.0cm;
+   padding:0cm;
+}
+
+.closeSettingDiv {
+   overflow: hidden;
+   position: fixed;
+   top: 0;
+   right: 0;
+   z-index: 8;
+   padding-left: 0cm;
+   padding-right: 0.5cm;
+   padding-top: 0.1cm;
+   padding-bottom: 0.5cm;
+   display: flex;
+}
+
+.newProgLabel{
+   text-align: center;
+   width: 100%;
+   padding: 0cm;
+   margin: 0cm;
+}
+.progEditField {
+   flex-grow: 4;
+   height: 1.0cm;
+   border-radius: 0.5cm;
+   background: #002233;
+   border: 0px;
+   color: #fff;
+   font-family: 'Oswald', sans-serif;
+   margin-left: 0.5cm;
+   padding-left: 0.5cm;
+   padding-right: 0.5cm;
+   font-size: 0.35cm;
+}
+
+textarea:focus,
+input:focus {
+   outline: none;
+}
+
+::-webkit-input-placeholder {
+   /* Edge */
+   color: #225566;
+}
+
+:-ms-input-placeholder {
+   /* Internet Explorer 10-11 */
+   color: #225566;
+}
+
+::placeholder {
+   color: #225566;
+}
+
+.smallFont{
+   font-size: 0.2cm;
+   color: #ffc;
+}
+p{
+   font-size: 0.3cm;
+   color: #ffe;
+}

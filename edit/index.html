@@ -16,13 +16,22 @@
 	<svg id="contentSVG" class='contentSVG' viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"
 		xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1">
 		<defs>
-			<linearGradient x1='-100%' y1='-100%' x2='100%' y2='100%' id="buttonGradient">
+			<linearGradient x1='-100%' y1='-100%' x2='100%' y2='100%' id="buttonGradient2">
 				<stop offset="0%" stop-color="var(--aux-color)" />
 				<stop offset="100%" stop-color="var(--spot-color)" />
 			</linearGradient>
-			<linearGradient x1='0%' y1='0%' x2='100%' y2='100%' id="tickerGradient">
+			<radialGradient x1='-100%' y1='-100%' x2='100%' y2='100%' id="buttonGradient">
+				<stop offset="0%" stop-color="var(--spot-color)" />
+				<stop offset="93%" stop-color="var(--spot-color)" />
+				<stop offset="100%" stop-color="var(--aux-color)" />
+			</radialGradient>
+			<linearGradient x1='0%' y1='0%' x2='100%' y2='100%' id="tickerGradient2">
 				<stop offset="0%" stop-color="var(--aux-color)" />
 				<stop offset="100%" stop-color="var(--spot-color)" />
+			</linearGradient>
+			<linearGradient x1='0%' y1='0%' x2='100%' y2='0%' id="tickerGradient">
+				<stop offset="0%" stop-color="var(--spot-color)" />
+				<stop offset="100%" stop-color="rgba(0,0,0,0)" />
 			</linearGradient>
 		</defs>
 		<!--<g id='backgroundGroup'></g>-->
@@ -35,7 +44,7 @@
 		<g id='tickerLineGroup'></g>
 		<g id='otherVoicesGroup'></g>
 		<g id='secondaryVoicesGroup'></g>
-		
+		<g id='mainTapWatchGroup'></g>
 		<g id='mainVoiceGroup'></g>
 		<g id='bottomTogglesGroup'></g>
 		<g id='workButtonsGroup'></g>

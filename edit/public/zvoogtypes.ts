@@ -147,10 +147,10 @@ type ZvoogGridStep = {
 	power: number;
 };
 type ZvoogLayerSelection = {
-	level1: number
-	, level2: number
-	, level3: number
-	, level4: number
+	track_songFx: number
+	, voice_trackFx_songFxParam: number
+	, source_voiceFx_trackParam: number
+	, sourceParam_voiceFxParam: number
 };
 type ZvoogMeasureSelection = {
 	from: number

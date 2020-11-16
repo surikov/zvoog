@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   inkscape:export-ydpi="96.620003"
+   inkscape:export-xdpi="96.620003"
+   inkscape:export-filename="/Users/sss/Documents/gitHubPrj/SurikovStuff/rockDice/rockstaramongus/resources/iconleftslider.png"
+   sodipodi:docname="iconrightslider.svg"
+   inkscape:version="1.0 (4035a4f, 2020-05-01)"
+   id="svg3811"
+   version="1.1"
+   viewBox="0 0 15 30"
+   height="30mm"
+   width="15mm">
+  <defs
+     id="defs3805" />
+  <sodipodi:namedview
+     inkscape:window-maximized="1"
+     inkscape:window-y="23"
+     inkscape:window-x="0"
+     inkscape:window-height="930"
+     inkscape:window-width="1280"
+     inkscape:snap-global="false"
+     showgrid="false"
+     inkscape:document-rotation="0"
+     inkscape:current-layer="layer1"
+     inkscape:document-units="mm"
+     inkscape:cy="86.356801"
+     inkscape:cx="58.05599"
+     inkscape:zoom="3.959798"
+     inkscape:pageshadow="2"
+     inkscape:pageopacity="0.0"
+     borderopacity="1.0"
+     bordercolor="#666666"
+     pagecolor="#ffffff"
+     id="base" />
+  <metadata
+     id="metadata3808">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     id="layer1"
+     inkscape:groupmode="layer"
+     inkscape:label="Layer 1">
+    <g
+       transform="matrix(-1,0,0,1,25.000118,-10)"
+       id="g5073">
+      <path
+         id="rect4456"
+         style="fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.237375;stroke-miterlimit:4;stroke-dasharray:none"
+         d="m 10,10 v 30.000236 h 8.653219 c 3.516014,0 6.346899,-2.830886 6.346899,-6.3469 V 16.346383 C 25.000118,12.830368 22.169233,10 18.653219,10 Z" />
+      <path
+         d="m 10,10.2 v 29.6 h 8.537775 C 22.006882,39.8 24.8,37.006882 24.8,33.537775 V 16.461715 C 24.8,12.992608 22.006882,10.2 18.537775,10.2 Z"
+         style="fill:#eeeeee;fill-opacity:1;stroke:none;stroke-width:0.234209;stroke-miterlimit:4;stroke-dasharray:none"
+         id="rect4456-4" />
+      <path
+         id="rect4456-4-5"
+         style="fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.20691;stroke-miterlimit:4;stroke-dasharray:none"
+         d="M 10,11.9 V 38 h 7.557087 C 20.627714,38 23.1,35.537149 23.1,32.478238 V 17.421306 C 23.1,14.362404 20.627714,11.9 17.557087,11.9 Z" />
+      <path
+         d="m 10,12.1 v 25.7 h 7.441712 C 20.465459,37.8 22.9,35.374894 22.9,32.362863 V 17.536689 C 22.9,14.524666 20.465459,12.1 17.441712,12.1 Z"
+         style="fill:#eeeeee;fill-opacity:1;stroke:none;stroke-width:0.203745;stroke-miterlimit:4;stroke-dasharray:none"
+         id="rect4456-4-5-2" />
+    </g>
+    <g
+       id="g2566-33-1-3"
+       transform="rotate(135,114.47409,99.728816)">
+      <rect
+         y="237.86987"
+         x="121.1941"
+         height="4.4099469"
+         width="0.66817379"
+         id="rect2547-85-9-0"
+         style="fill:#000000;stroke:none;stroke-width:0.2;stroke-miterlimit:4;stroke-dasharray:none" />
+      <rect
+         transform="rotate(90)"
+         style="display:inline;fill:#000000;stroke:none;stroke-width:0.2;stroke-miterlimit:4;stroke-dasharray:none"
+         id="rect2547-2-8-8-1"
+         width="0.66817379"
+         height="4.4099469"
+         x="241.61165"
+         y="-125.60405" />
+    </g>
+    <g
+       transform="matrix(-0.70710678,-0.70710678,-0.70710678,0.70710678,265.93842,-59.748763)"
+       id="g2566-33-1-5-9"
+       style="display:inline">
+      <rect
+         style="fill:#000000;stroke:none;stroke-width:0.2;stroke-miterlimit:4;stroke-dasharray:none"
+         id="rect2547-85-9-2-4"
+         width="0.66817379"
+         height="4.4099469"
+         x="121.1941"
+         y="237.86987" />
+      <rect
+         y="-125.60405"
+         x="241.61165"
+         height="4.4099469"
+         width="0.66817379"
+         id="rect2547-2-8-8-3-5"
+         style="display:inline;fill:#000000;stroke:none;stroke-width:0.2;stroke-miterlimit:4;stroke-dasharray:none"
+         transform="rotate(90)" />
+    </g>
+  </g>
+</svg>
