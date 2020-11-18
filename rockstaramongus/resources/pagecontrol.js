@@ -674,6 +674,7 @@ var PageControl = /** @class */ (function () {
         }
     };
     PageControl.prototype.setEditNewProg = function () {
+        console.log('setEditNewProg', this);
         this.unSetEditNewProg();
         if (this.currentEditFieldNum > -1) {
             this.unSetEditSelectedProg(this.currentEditFieldNum);
@@ -695,7 +696,7 @@ var PageControl = /** @class */ (function () {
         imgbtn.src = 'resources/buttonOK.svg';
         var me = this;
         imgbtn.onclick = function () {
-            //console.log('save', me);
+            console.log('add', me);
             //me.unSetEditNewProg();
             me.approveNewProg();
         };
@@ -704,6 +705,7 @@ var PageControl = /** @class */ (function () {
         div.appendChild(imgbtn);
         //console.log('txtfld',txtfld);
         document.getElementById('settingDiv').scrollTo(0, 0);
+        console.log('imgbtn', imgbtn);
     };
     PageControl.prototype.unSetEditNewProg = function () {
         var div = document.getElementById('otherSettingDiv');
@@ -717,7 +719,7 @@ var PageControl = /** @class */ (function () {
         var me = this;
         //
         a.onclick = function () {
-            //console.log('new clicked');
+            console.log('new clicked');
             me.setEditNewProg();
         };
         div.appendChild(p);
@@ -778,6 +780,7 @@ var PageControl = /** @class */ (function () {
         return strings;
     };
     PageControl.prototype.approveNewProg = function () {
+        console.log('approveNewProg');
         var fld = document.getElementById(this.currentEditFieldID);
         if (fld) {
             var txt = fld.value.trim();

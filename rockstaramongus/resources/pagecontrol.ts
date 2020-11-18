@@ -707,6 +707,7 @@ class PageControl {
 		}
 	}
 	setEditNewProg() {
+		console.log('setEditNewProg', this);
 		this.unSetEditNewProg();
 		if (this.currentEditFieldNum > -1) {
 			this.unSetEditSelectedProg(this.currentEditFieldNum);
@@ -727,9 +728,10 @@ class PageControl {
 		imgbtn.type = 'image';
 		imgbtn.src = 'resources/buttonOK.svg';
 		var me = this;
+		
 		imgbtn.onclick = function () {
 
-			//console.log('save', me);
+			console.log('add', me);
 			//me.unSetEditNewProg();
 			me.approveNewProg();
 		};
@@ -738,6 +740,7 @@ class PageControl {
 		div.appendChild(imgbtn);
 		//console.log('txtfld',txtfld);
 		document.getElementById('settingDiv').scrollTo(0, 0);
+		console.log('imgbtn', imgbtn);
 	}
 	unSetEditNewProg() {
 		var div: HTMLElement = document.getElementById('otherSettingDiv');
@@ -751,7 +754,7 @@ class PageControl {
 		var me = this;
 		//
 		a.onclick = function () {
-			//console.log('new clicked');
+			console.log('new clicked');
 			me.setEditNewProg();
 		}
 		div.appendChild(p);
@@ -810,6 +813,7 @@ class PageControl {
 		return strings;
 	}
 	approveNewProg() {
+		console.log('approveNewProg');
 		var fld: HTMLElement = document.getElementById(this.currentEditFieldID);
 		if (fld) {
 			var txt = (fld as any).value.trim();

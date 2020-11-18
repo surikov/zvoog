@@ -375,6 +375,11 @@ pointer-events: none;
    color: #fff;
 }
 
+.titleText{
+   color: #fff;
+   font-size: 1cm;
+}
+
 #settingDiv {
    background-color: rgba(0, 0, 0, 0.97);
    z-index: 17;
