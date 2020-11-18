@@ -167,12 +167,12 @@ var PageControl = /** @class */ (function () {
         });*/
         this.readChanged();
         //this.fillProgList();
-        //window.addEventListener("pagehide", this.saveState.bind(this));
-        //window.addEventListener("blur", this.saveState.bind(this));
-        //window.addEventListener("unload", this.saveState.bind(this));
-        //document.addEventListener("pagehide", this.pausePlay.bind(this));
-        //document.addEventListener("blur", this.pausePlay.bind(this));
-        //document.addEventListener("unload", this.pausePlay.bind(this));
+        window.addEventListener("pagehide", this.saveCurrentState.bind(this));
+        window.addEventListener("blur", this.saveCurrentState.bind(this));
+        window.addEventListener("unload", this.saveCurrentState.bind(this));
+        window.addEventListener("pagehide", this.pausePlay.bind(this));
+        window.addEventListener("blur", this.pausePlay.bind(this));
+        window.addEventListener("unload", this.pausePlay.bind(this));
         //document.onunload=function(){this.pausePlay.bind(this);}
         this.loadState();
     }

@@ -1,0 +1,453 @@
+<html>
+
+<head>
+	<title>Share</title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="initial-scale=1.0, width=device-width, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0, shrink-to-fit=no" />
+	<script src="resources/midiwrite_index.js"></script>
+	<script src="resources/labels.js"></script>
+
+	<style>
+		body {
+			background-color: #000;
+		}
+
+		a {
+			color: #FF00FF;
+			text-decoration: none;
+		}
+
+		.buttonExportImg {
+			width: 1.5cm;
+			height: 1.5cm;
+			padding: 0.1cm;
+			margin: 0cm;
+			border: none;
+			outline: none;
+		}
+
+		#buttonExport {
+			width: 1.5cm;
+			height: 1.5cm;
+		}
+
+		#buttonCopy {
+			width: 1.5cm;
+			height: 1.5cm;
+		}
+
+		.buttonCenter {
+			text-align: center;
+		}
+
+		.closeSettingDiv {
+			overflow: hidden;
+			position: fixed;
+			top: 0;
+			right: 0;
+			z-index: 7;
+			padding-left: 0cm;
+			padding-right: 0.5cm;
+			padding-top: 0.1cm;
+			padding-bottom: 0.5cm;
+			display: flex;
+		}
+
+		.menuButton {
+			padding: 0.1cm;
+			margin: 0cm;
+			width: 1.0cm;
+			height: 1.0cm;
+			border: none;
+			outline: none;
+		}
+
+		#infoLine {
+			color: #fff;
+			font-size: small;
+			font-style: italic;
+			text-align: center;
+		}
+	</style>
+</head>
+
+<body>
+	<p>&nbsp</p>
+	<p>&nbsp</p>
+	<p>&nbsp</p>
+	<!-- ShareThis BEGIN -->
+	<div id='sharethis' class="sharethis-inline-share-buttons" data-url="https://surikov.github.io/shareprogression/"></div>
+	<!-- ShareThis END -->
+	<p>&nbsp</p>
+	<div class='buttonCenter'>
+		<!-- <input type="image" src='resources/midilogo.svg' id='buttonExport' class='menuButton' onclick='promptExport();' /> -->
+		<a href='console.log("empty");' id='buttonExport'>
+			<img src='resources/midilogo.svg' class='buttonExportImg' />
+		</a>
+		<input type="image" src='resources/copylink.svg' id='buttonCopy' class='menuButton' onclick='copyLink();' />
+	</div>
+	<div class="closeSettingDiv">
+		<input type="image" src='resources/buttonClose.svg' class='menuButton' onclick='window.location.href="ui.html";' />
+	</div>
+	<p id='infoLine'>&nbsp;</p>
+
+	<script>
+		var div = document.getElementById('sharethis');
+		//console.dir(div);
+		var rockDice = '' + localStorage.getItem('rockDice');
+		//var urlToShare = 'https://surikov.github.io/shareprogression/main.html?load=' + rockDice;
+		var urlToShare = 'https://surikov.github.io/zvoog/rockstaramongus/ui.html?load=' + rockDice;
+		//console.log('urlToShare', urlToShare);
+		div.dataset.url = urlToShare;
+
+		promptExport();
+
+		function drumByNum(drum) {
+			if (drum == 0) return 35;
+			if (drum == 1) return 41;
+			if (drum == 2) return 38;
+			if (drum == 3) return 45;
+			if (drum == 4) return 42;
+			if (drum == 5) return 46;
+			if (drum == 6) return 51;
+			if (drum == 7) return 49;
+			return 35;
+		}
+
+		function trackByNum(track) {
+			if (track == 0) return 30;
+			if (track == 1) return 25;
+			if (track == 2) return 17;
+			if (track == 3) return 29;
+			if (track == 4) return 1;
+			if (track == 5) return 34;
+			if (track == 6) return 51;
+			if (track == 7) return 52;
+			return 2;
+		}
+
+		function n16(nn) {
+			if (nn) {
+				var r = [];
+				for (var i = 0; i < nn; i++) {
+					r.push('16');
+				}
+				return r;
+			} else {
+				return 0;
+			}
+		}
+
+		function promptExport() {
+			console.dir('promptExport', midiwrite);
+
+			//var track0 = new Track();
+			//track0.setTempo(130);
+
+			var o = localStorage.getItem('playInfo');
+			var playInfo = JSON.parse(o);
+			console.log('playInfo', playInfo);
+
+			var drumTrack = new Track();
+			drumTrack.setTempo(130);
+			var onOff = [];
+			for (var ii = 0; ii < 128; ii++) {
+				//var drums = [];
+				for (var kk = 0; kk < playInfo.drumData.length; kk++) {
+					var step = playInfo.drumData[kk];
+					if (step.beat == ii) {
+						onOff.push({
+							nn: ii,
+							drum: drumByNum(step.drum),
+							on: true
+						});
+						onOff.push({
+							nn: ii + 2,
+							drum: drumByNum(step.drum),
+							on: false
+						});
+					}
+				}
+			}
+			onOff.sort(function (a, b) {
+				return a.nn - b.nn;
+			});
+			//console.log(onOff);
+			var preNN = 0;
+			for (var ii = 0; ii < onOff.length; ii++) {
+				//if (onOff[ii].nn == ii) {
+				var wait = onOff[ii].nn - preNN;
+				if (onOff[ii].on) {
+					var nn = new NoteOnEvent({
+						pitch: onOff[ii].drum,
+						velocity: 99,
+						channel: 10,
+						wait: n16(wait)
+					});
+					drumTrack.addEvent(nn);
+					//console.log(onOff[ii].nn, wait, onOff[ii], nn);
+				} else {
+					var nn = new NoteOffEvent({
+						pitch: onOff[ii].drum,
+						velocity: 99,
+						channel: 10,
+						duration: n16(wait)
+					})
+					drumTrack.addEvent(nn);
+					//console.log(onOff[ii].nn, wait, onOff[ii], nn);
+				}
+				preNN = onOff[ii].nn;
+				//}
+			}
+			/*for (var ii = 0; ii < 128; ii++) {
+				var drums = [];
+				for (var kk = 0; kk < playInfo.drumData.length; kk++) {
+					var step = playInfo.drumData[kk];
+					if (step.beat == ii) {
+						drums.push(drumByNum(step.drum));
+					}
+				}
+				if (drums.length) {
+					drumTrack.addEvent(new NoteEvent({
+						pitch: drums,
+						velocity: 99,
+						duration: '16',
+						channel: 10,
+						wait: waits
+					}));
+					waits = [];
+				} else {
+					waits.push('16');
+				}
+			}*/
+			console.log(drumTrack);
+			var alltracks = [];
+			for (var tt = 0; tt < 8; tt++) {
+				var iTrack = new Track();
+				alltracks.push(iTrack);
+				//var wait16 = 0;
+				var insMIDI = trackByNum(tt);
+
+				iTrack.addEvent(new ProgramChangeEvent({
+					instrument: insMIDI,
+					channel: tt
+				}));
+
+				var onOff = [];
+				var volume = 99;
+				if (tt == 2 || tt == 6 || tt == 7) {
+					volume = 77;
+				}
+				for (var ii = 0; ii < 128; ii++) {
+					var drums = [];
+					for (var kk = 0; kk < playInfo.tracksData.length; kk++) {
+						var step = playInfo.tracksData[kk];
+						if (step.track == tt && step.beat == ii) {
+							var pitch = step.pitch + 36;
+							if (tt == 5) {
+								pitch = step.pitch + 24;
+							}
+							onOff.push({
+								nn: ii,
+								pitch: pitch,
+								//drum: drumByNum(step.drum),
+								on: true
+								, volume: volume
+							});
+							onOff.push({
+								nn: ii + step.length,
+								pitch: pitch,
+								//drum: drumByNum(step.drum),
+								on: false
+								, volume: volume
+							});
+						}
+					}
+				}
+				onOff.sort(function (a, b) {
+					return a.nn - b.nn;
+				});
+				var preNN = 0;
+				for (var ii = 0; ii < onOff.length; ii++) {
+					//if (onOff[ii].nn == ii) {
+					var wait = onOff[ii].nn - preNN;
+					if (onOff[ii].on) {
+						var nn = new NoteOnEvent({
+							pitch: onOff[ii].pitch,
+							velocity: onOff[ii].volume,
+							channel: tt + 1,
+							wait: n16(wait)
+						});
+						iTrack.addEvent(nn);
+						//console.log(onOff[ii].nn, wait, onOff[ii], nn);
+					} else {
+						var nn = new NoteOffEvent({
+							pitch: onOff[ii].pitch,
+							velocity: onOff[ii].volume,
+							channel: tt + 1,
+							duration: n16(wait)
+						})
+						iTrack.addEvent(nn);
+						//console.log(onOff[ii].nn, wait, onOff[ii], nn);
+					}
+					preNN = onOff[ii].nn;
+					//}
+				}
+
+
+
+
+
+				/*
+								for (var ii = 0; ii < 128; ii++) {
+									pitches = [];
+									var dur = 0;
+									var volume = 99;
+									if (tt == 2 || tt == 6 || tt == 7) {
+										volume = 77;
+									}
+									for (var kk = 0; kk < playInfo.tracksData.length; kk++) {
+										var step = playInfo.tracksData[kk];
+										if (step.track == tt && step.beat == ii) {
+											var pitch = step.pitch + 36;
+											if (tt == 5) {
+												pitch = step.pitch + 24;
+											}
+											dur = step.length;
+											pitches.push(pitch);
+										}
+									}
+									if (pitches.length) {
+										//console.log(ii,dur,wait,);
+										iTrack.addEvent(new NoteEvent({
+											pitch: pitches,
+											velocity: volume,
+											duration: n16(dur),
+											channel: tt + 1,
+											wait: n16(wait16)
+										}));
+										wait16 = 1 - dur;
+									} else {
+										wait16++;
+									}
+								}*/
+				//console.log(tt, insMIDI, iTrack);
+			}
+			/*
+			drumTrack.addEvent(new NoteEvent({pitch: [41,43], velocity: 99, duration: '4',channel:10}));
+			drumTrack.addEvent(new NoteEvent({pitch: 35, velocity: 99, duration: '2',channel:10}));
+			drumTrack.addEvent(new NoteEvent({pitch: 36, velocity: 99, duration: '2',channel:10}));
+			drumTrack.addEvent(new NoteEvent({pitch: 37, velocity: 99, duration: '2',channel:10}));
+			drumTrack.addEvent(new NoteEvent({pitch: 38, velocity: 99, duration: '2',channel:10}));
+			drumTrack.addEvent(new NoteEvent({pitch: 39, velocity: 99, duration: '2',channel:10}));
+			*/
+			//drumTrack.addEvent(new ProgramChangeEvent({instrument: 33}));
+			//drumTrack.addEvent(new NoteEvent({pitch: ['E4','D4'], velocity: 99, duration: '4',channel:10}));
+			//drumTrack.addEvent(new NoteEvent({pitch: "C4", velocity: 99, duration: '2',channel:10}));
+			//drumTrack.addEvent(new NoteEvent({pitch:['C4', 'C4', 'C4', 'C4', 'D4', 'D4', 'D4', 'D4'], velocity: 99, duration: '8', sequential:true,channel:10}));
+
+			//console.log('drumTrack', drumTrack);
+
+			var writer = new Writer([
+				alltracks[0], alltracks[1], alltracks[2], alltracks[3], alltracks[4], alltracks[5], alltracks[6], alltracks[7], drumTrack
+				//alltracks[5]
+			]);
+			//console.log(writer);
+			console.log(writer.dataUri());
+			//console.log(writer.buildFile());
+			//exportFile(writer.buildFile());
+			setExportLink(writer.buildFile());
+		}
+
+		function nameyyyymmddhhmmss() {
+			var tt = new Date();
+			var yyyy = tt.getFullYear();
+			var mm = tt.getMonth() < 9 ? "0" + (tt.getMonth() + 1) : (tt.getMonth() + 1); // getMonth() is zero-based
+			var dd = tt.getDate() < 10 ? "0" + tt.getDate() : tt.getDate();
+			var hh = tt.getHours() < 10 ? "0" + tt.getHours() : tt.getHours();
+			var min = tt.getMinutes() < 10 ? "0" + tt.getMinutes() : tt.getMinutes();
+			var ss = tt.getSeconds() < 10 ? "0" + tt.getSeconds() : tt.getSeconds();
+			return 'RockDice_' + yyyy + '_' + mm + '_' + dd + '_' + hh + '_' + min + '_' + ss + '.mid';
+		};
+		function setExportLink(uInt8Array) {
+			var a = document.getElementById('buttonExport');
+			var dataObj = new Blob([uInt8Array.buffer], {
+				type: 'application/octet-stream'
+			});
+			a.href = URL.createObjectURL(dataObj);
+			a.download = 'rockstaramongus.mid';
+		}
+		function exportFile(uInt8Array) {
+			//console.log('uInt8Array', JSON.stringify(uInt8Array));
+			window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, function (fs) {
+				console.log('fileSystem', JSON.stringify(fs)); //"externalDataDirectory":"file:///storage/emulated/0/Android/data/rockdice.chord.progression/files/"
+				//var fileName=''+cordova.file.externalDataDirectory+nameyyyymmddhhmmss();
+				/*
+				Android/data/rockdice.chord.progression/files/RockDice_2020_09_30_17_05_07.mid
+"externalRootDirectory":"file:///storage/emulated/0/"
+"externalDataDirectory":"file:///storage/emulated/0/Android/data/rockdice.chord.progression/files/"
+				*/
+				var fileDir = cordova.file.externalDataDirectory.replace(cordova.file.externalRootDirectory, '');
+				var fileName = nameyyyymmddhhmmss();
+				var filePath = fileDir + fileName;
+				console.log('filePath', filePath);
+				fs.root.getFile(filePath, {
+					create: true,
+					exclusive: false
+				}, function (fileEntry) {
+					console.log("fileEntry is file?" + fileEntry.isFile.toString());
+					// fileEntry.name == 'someFile.txt'
+					// fileEntry.fullPath == '/someFile.txt'
+					//writeFile(fileEntry, null);
+					fileEntry.createWriter(function (fileWriter) {
+						fileWriter.onwriteend = function () {
+							console.log("Successful file write...");
+							//readFile(fileEntry);
+						};
+						fileWriter.onerror = function (e) {
+							console.log("Failed file write: " + e.toString());
+						};
+						// If data object is not passed in,
+						// create a new Blob instead.
+						var dataObj = new Blob([uInt8Array.buffer], {
+							type: 'application/octet-stream'
+						});
+						fileWriter.write(dataObj);
+						document.getElementById("infoLine").innerHTML = '' + filePath;
+					});
+				}, function (err) {
+					console.log('getFile error', JSON.stringify(err));
+				});
+			}, function (err) {
+				console.log('requestFileSystem error', JSON.stringify(err));
+			});
+		}
+
+
+		function copyLink() {
+			console.log('copyLink', urlToShare);
+			var copyText = document.createElement('textarea');
+
+			copyText.value = urlToShare;
+			document.body.appendChild(copyText);
+			copyText.select();
+			copyText.setSelectionRange(0, 99999); /*For mobile devices*/
+			document.execCommand("copy");
+			copyText.style.display = 'none';
+			//alert('Chord progression URL copied to clipboard');
+			//document.getElementById("infoLine").innerHTML = 'Chord progression URL copied to clipboard';
+			document.getElementById("infoLine").innerHTML = loLabel('urlCopied');
+		}
+
+
+		/*
+				function onDeviceReady() {
+					console.log('Running cordova-' + cordova.platformId + '@' + cordova.version);
+					console.log('cordova.file', JSON.stringify(cordova.file));
+				}
+				document.addEventListener("deviceready", onDeviceReady, false);*/
+	</script>
+	<script type='text/javascript' src='https://platform-api.sharethis.com/js/sharethis.js#property=5b8e6991f365de0011fdf755&product=inline-share-buttons' async='async'></script>
+</body>
+
+</html>

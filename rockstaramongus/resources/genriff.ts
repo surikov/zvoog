@@ -2,7 +2,7 @@ type ToneStep = { track: number, beat: number, length: number, shift: number, pi
 type DrumPatternDefinition = { category: string, name: string, start: { len16: number, encoded: string }, end: { len16: number, encoded: string } };
 type DrumStep = { drum: number, beat: number };
 type Progression816 = { //category: string, 
-	name: string, chords: string[]
+    name: string, chords: string[]
 };
 type ProgDescr = { category: string, name: string, chords: string };
 
@@ -18,7 +18,7 @@ declare function WebAudioFontPlayer(): void;
 declare function WebAudioFontChannel(audioContext: AudioContext): void;
 declare function WebAudioFontReverberator(audioContext: AudioContext): void;
 
-declare function loLabel(key: string) : string;
+declare function loLabel(key: string): string;
 
 class GenRiff {
     audioContext: AudioContext;
@@ -115,9 +115,9 @@ class GenRiff {
         { category: '', name: 'octave1', chord: 'Am', len16: 8 * 4, encoded: '0050209400250215400450209400650215400850209400a50215400c50209400e50215401050209401250215401450209401650215401850209401a50215401c50109401d50115401e50109401f5011540' }
         , { category: '', name: 'octave2', chord: 'Am', len16: 8 * 2, encoded: '0050109400150209400250115400350215400450109400550209400650115400750215400850109400950209400a50115400b50215400c50109400d50209400e50115400f5021540' }
         , { category: '', name: 'edmtri', chord: 'Am', len16: 8 * 2, encoded: '005010940015010940025010c40035010940045010940055011040065010940075010940085010c400950109400a50109400b50110400c50109400d50109400e5010c400f5010940105010940115011040125010940135010940145010c401550109401650109401750110401850109401950109401a5010c401b50109401c50109401d50110401e50109401f5010940' }
-             , { category: '', name: 'strange', chord: 'Am', len16: 8 * 2, encoded: '0050209400250115400350115400450209400650115400750115400850209400a50115400b50115400c50209400e50115400f5011040' }
+        , { category: '', name: 'strange', chord: 'Am', len16: 8 * 2, encoded: '0050209400250115400350115400450209400650115400750115400850209400a50115400b50115400c50209400e50115400f5011040' }
         , { category: '', name: 'octave32 off', chord: 'Am', len16: 8 * 2, encoded: '0050109400250209400450109400650209400850109400a50209400c50109400e5010c400f5010940' }
-        
+
         , { category: '', name: 'octave3 off', chord: 'Am', len16: 8 * 8, encoded: '0250209400650209400a50109400b50109400e50209401250209401650209401a50109401b5010c401e50209402250209402650209402a50109402b50109402e5020940325010940335010c403650209403a50109403b5010c403e5020940' }
         , { category: '', name: 'octave4 terc', chord: 'Bm', len16: 8 * 2, encoded: '005020b40025021740045020b40065020e40085020b400a50217400c5020b400e5021240' }
         , { category: '', name: 'tonic1', chord: 'Am', len16: 8 * 4, encoded: '0050209400250209400450209400650209400850209400a50209400c50209400e5020940105020940125020940145020940165020940185020c401a50209401c5020c401e5020940' }
@@ -2154,7 +2154,8 @@ class GenRiff {
     }
     stopPlay() {
         this.onAir = false;
-        this.player.cancelQueue(this.audioContext);
+        if (this.player)
+            this.player.cancelQueue(this.audioContext);
     }
     beginPlay() {
         this.onAir = true;

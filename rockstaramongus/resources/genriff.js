@@ -2165,7 +2165,8 @@ var GenRiff = /** @class */ (function () {
     };
     GenRiff.prototype.stopPlay = function () {
         this.onAir = false;
-        this.player.cancelQueue(this.audioContext);
+        if (this.player)
+            this.player.cancelQueue(this.audioContext);
     };
     GenRiff.prototype.beginPlay = function () {
         this.onAir = true;

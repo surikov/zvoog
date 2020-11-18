@@ -226,7 +226,7 @@
 		var licolors = [];
 
 		licolors.push('#888888');
-		
+
 		licolors.push('#ff0000');
 		licolors.push('#00ff00');
 		licolors.push('#0000ff');
@@ -289,7 +289,7 @@
 				}
 			}
 		}*/
-		
+
 		function rgbStageFill(selNum, arrLen) {
 			var nn = selNum / arrLen;
 			var bgr = 147 - Math.round((147 - 111) * nn);
@@ -504,28 +504,59 @@
 		}
 		function tapShare() {
 			console.log('tapShare');
-			updateStyles();
+			//updateStyles();
+			control.promptShare();
 		}
 		function tapRandomize() {
 			console.log('tapRandomize');
 			control.playRandom();
 			updateStyles();
 		}
+		function handleOpenURL(url) {
+			console.log("received url: " + url);
+			//https://surikov.github.io/shareprogression/main.html?load=Am%2C%20G%2C%20F%2C%20E7%2F764%2F420%2F0%2F479", source: file:///android_asset/www/main.html (122)
+			if (url) {
+				var parts = url.split('=');
+				if (parts[1]) {
+					console.log("parts[1]: " + parts[1]);
+					//var toload = decodeURI(parts[1]);
+					var toload = parts[1];
+					//console.log("toload: " + toload);
+
+					//console.log('redirect ' + toload);
+					localStorage.setItem('rockDice', toload);
+					localStorage.setItem(startedDice, toload);
+					//skipOpen = toload;
+					//console.log('set skipOpen ' + toload);
+					control.loadState();
+					updateProgressionSlider
+					updateStyles();
+
+
+
+				}
+			}
+		}
 		//setBackColor('#f0f000');
 		//startDance();
 		var startedDice = 'startedDice3';
-		var skipOpen = localStorage.getItem(startedDice);
-		console.log('skipOpen ' + skipOpen);
-		localStorage.setItem(startedDice, '');
+		//var skipOpen = localStorage.getItem(startedDice);
+		//console.log('skipOpen ' + skipOpen);
+		//localStorage.setItem(startedDice, '');
 		var genRiff = new GenRiff();
 		var control = new PageControl(genRiff);
 		genRiff.onUpdateChordPosition = function (nn) {
 			control.updateChordPosition(nn);
 		}
-		updateStyles();
+		handleOpenURL(window.location.href);
 		updateProgressionSlider(control.progressionSeedValue);
+		updateStyles();
+		
 		control.updateChordPosition(0);
 		stopDance();
+
+		//console.log(window.location);
+		
 	</script>
 </body>
 
