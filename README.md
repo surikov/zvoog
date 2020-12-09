@@ -8,5 +8,5 @@ Plugin system for Web Audio API
 * [Test implementation](implementation.md)
 * [Roadmap](roadmap.md)
 
-testlogin.html
+[testlogin.html](testlogin.html)
 
