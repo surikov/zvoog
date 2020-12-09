@@ -1,0 +1,29 @@
+
+<!DOCTYPE html>
+<html>
+  <head>
+
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
+    <meta name="google-signin-client_id" content="462732075780-lagu9g2nin6812m4p775edso67sjvukr.apps.googleusercontent.com">
+<script>
+window.testGoogleConnect=function(){
+      console.log('testGoogleConnect');
+    }
+window.onSignIn=function(googleUser) {
+      console.log('onSignIn',googleUser);
+      var profile = googleUser.getBasicProfile();
+      console.log('ID: ' + profile.getId()); // Do not send to your backend! Use an ID token instead.
+      console.log('Name: ' + profile.getName());
+      console.log('Image URL: ' + profile.getImageUrl());
+      console.log('Email: ' + profile.getEmail()); // This is null if the 'email' scope is not present.
+    }
+</script>
+  </head>
+
+  <body class="PagesWelcome">
+    <div>test</div>
+    <div><a onclick="onSignIn">Test Google connect</a></div>
+            <div class="g-signin2" data-onsuccess="onSignIn">test</div>
+            <hr/>
+  </body>
+</html>
