@@ -7,6 +7,5 @@ Plugin system for Web Audio API
 * [Requirement for implementation](requirement.md)
 * [Test implementation](implementation.md)
 * [Roadmap](roadmap.md)
-
-- [testlogin.html](testlogin.html)
+* [testlogin.html](testlogin.html)
 
