@@ -5,26 +5,35 @@
 
     <script src="https://apis.google.com/js/platform.js" async defer></script>
     <meta name="google-signin-client_id" content="462732075780-lagu9g2nin6812m4p775edso67sjvukr.apps.googleusercontent.com">
-<script>
-window.testGoogleConnect=function(){
-      console.log('testGoogleConnect');
-    }
-window.onSignIn=function(googleUser) {
-      console.log('onSignIn',googleUser);
-      var profile = googleUser.getBasicProfile();
-      console.log('ID: ' + profile.getId()); // Do not send to your backend! Use an ID token instead.
-      console.log('Name: ' + profile.getName());
-      console.log('Image URL: ' + profile.getImageUrl());
-      console.log('Email: ' + profile.getEmail()); // This is null if the 'email' scope is not present.
-    }
-</script>
+    <script>
+      window.onSignIn=function(googleUser) {
+          console.log('googleUser',googleUser);
+          var profile = googleUser.getBasicProfile();
+          console.log('profile',profile);
+          document.getElementById('gooid').innerHTML=''+profile.getId();
+          document.getElementById('gooname').innerHTML=''+profile.getName();
+          document.getElementById('gooemail').innerHTML=''+profile.getEmail();
+        }
+      window.signOut=function() {
+          var auth2 = gapi.auth2.getAuthInstance();
+          auth2.signOut().then(function () {
+            document.getElementById('gooid').innerHTML='none';
+            document.getElementById('gooname').innerHTML='none';
+            document.getElementById('gooemail').innerHTML='none';
+          });
+        }
+    </script>
   </head>
 
-  <body class="PagesWelcome">
-    <p>test 1.001</p>
-    <p><a onclick="onSignIn">Test Google connect</a></p>
+  <body>
+    <h1>test 1.004</h1>
+    <p>Google ID: <span id='gooid'>?</span></p>
+    <p>Google name: <span id='gooname'>?</span></p>
+    <p>Google e-mail: <span id='gooemail'>?</span></p>
+    <p><a href="#" onclick="signOut();">Sign out</a></p>
     <hr/>
     <div class="g-signin2" data-onsuccess="onSignIn">test</p>
     <hr/>
+
   </body>
 </html>
