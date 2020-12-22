@@ -969,7 +969,7 @@ var GenRiff = /** @class */ (function () {
                     pitch: 36,
                     title: 'Кик',
                     id: 0,
-                    volumeRatio: 0.5,
+                    volumeRatio: 0.4,
                     length: 0.3,
                     audioNode: null
                 }
@@ -991,7 +991,8 @@ var GenRiff = /** @class */ (function () {
                 length: 0.3,
                 audioNode: null,
                 sub: {
-                    sound: window._drum_38_0_Chaos_sf2_file,
+                    //sound: (window as any)._drum_38_3_SBLive_sf2,
+                    sound: window._drum_38_20_FluidR3_GM_sf2_file,
                     pitch: 38,
                     title: 'Рабочий',
                     id: 2,
@@ -1000,11 +1001,11 @@ var GenRiff = /** @class */ (function () {
                     audioNode: null
                 },
                 subSub: {
-                    sound: window._drum_38_3_SBLive_sf2,
+                    sound: window._drum_38_0_Chaos_sf2_file,
                     pitch: 38,
                     title: 'Рабочий',
                     id: 2,
-                    volumeRatio: 0.85,
+                    volumeRatio: 0.4,
                     length: 0.3,
                     audioNode: null
                 }
