@@ -947,12 +947,29 @@ var GenRiff = /** @class */ (function () {
         //analyser: AnalyserNode;
         this.drumInfo = [{
                 sound: window._drum_35_0_Chaos_sf2_file,
-                pitch: 36,
+                pitch: 35,
                 title: 'Кик',
                 id: 0,
                 volumeRatio: 0.95,
                 length: 0.3,
-                audioNode: null
+                audioNode: null,
+                sub: {
+                    sound: window._drum_36_13_JCLive_sf2_file,
+                    pitch: 36,
+                    title: 'Кик',
+                    id: 0,
+                    volumeRatio: 0.3,
+                    length: 0.3,
+                    audioNode: null
+                }, subSub: {
+                    sound: window._drum_36_11_JCLive_sf2_file,
+                    pitch: 36,
+                    title: 'Кик',
+                    id: 0,
+                    volumeRatio: 0.4,
+                    length: 0.3,
+                    audioNode: null
+                }
             }, {
                 sound: window._drum_41_26_JCLive_sf2_file,
                 pitch: 41,
@@ -962,13 +979,32 @@ var GenRiff = /** @class */ (function () {
                 length: 0.3,
                 audioNode: null
             }, {
+                variation: 0,
                 sound: window._drum_38_22_FluidR3_GM_sf2_file,
                 pitch: 38,
                 title: 'Рабочий',
                 id: 2,
                 volumeRatio: 1.0,
                 length: 0.3,
-                audioNode: null
+                audioNode: null,
+                sub: {
+                    sound: window._drum_38_0_Chaos_sf2_file,
+                    pitch: 38,
+                    title: 'Рабочий',
+                    id: 2,
+                    volumeRatio: 0.4,
+                    length: 0.3,
+                    audioNode: null
+                },
+                subSub: {
+                    sound: window._drum_38_3_SBLive_sf2,
+                    pitch: 38,
+                    title: 'Рабочий',
+                    id: 2,
+                    volumeRatio: 0.75,
+                    length: 0.3,
+                    audioNode: null
+                }
             }, {
                 sound: window._drum_45_26_JCLive_sf2_file,
                 pitch: 45,
@@ -1041,6 +1077,7 @@ var GenRiff = /** @class */ (function () {
                 volumeRatio: 0.3,
                 audioNode: null
             }, {
+                variation: 0,
                 color: 'rgb(140,0,64)',
                 shadow: 'rgba(140,0,64,0.4)',
                 //color: 'rgba(204,0,204,1)',
@@ -1053,7 +1090,37 @@ var GenRiff = /** @class */ (function () {
                 octave: 2,
                 inChordDelay: 0.01,
                 volumeRatio: 0.75,
-                audioNode: null
+                audioNode: null,
+                sub: {
+                    color: 'rgb(140,0,64)',
+                    shadow: 'rgba(140,0,64,0.4)',
+                    //color: 'rgba(204,0,204,1)',
+                    //shadow: 'rgba(204,0,204,0.4)',
+                    title: 'Бас-гитара',
+                    order: 5,
+                    sound: window._tone_0390_Chaos_sf2_file,
+                    volume: 70,
+                    nn: 5,
+                    octave: 2,
+                    inChordDelay: 0.01,
+                    volumeRatio: 0.4,
+                    audioNode: null
+                },
+                subSub: {
+                    color: 'rgb(140,0,64)',
+                    shadow: 'rgba(140,0,64,0.4)',
+                    //color: 'rgba(204,0,204,1)',
+                    //shadow: 'rgba(204,0,204,0.4)',
+                    title: 'Бас-гитара',
+                    order: 5,
+                    sound: window._tone_0350_Chaos_sf2_file,
+                    volume: 70,
+                    nn: 5,
+                    octave: 2,
+                    inChordDelay: 0.01,
+                    volumeRatio: 0.5,
+                    audioNode: null
+                }
             }, {
                 color: 'rgb(0,127,255)',
                 shadow: 'rgba(0,127,255,0.4)',
@@ -1908,6 +1975,16 @@ var GenRiff = /** @class */ (function () {
             var hit = this.playInfo.drumData[i];
             if (hit.beat >= startBeat && hit.beat <= endBeat) {
                 var drumchannel = this.drumInfo[hit.drum];
+                if (drumchannel.variation) {
+                    if (drumchannel.variation == 1) {
+                        drumchannel = drumchannel.sub;
+                    }
+                    else {
+                        if (drumchannel.variation == 2) {
+                            drumchannel = drumchannel.subSub;
+                        }
+                    }
+                }
                 var zones = drumchannel.sound;
                 //if (channel.info && window[channel.info.variable]) {
                 //zones = window[channel.info.variable];
@@ -1943,6 +2020,17 @@ var GenRiff = /** @class */ (function () {
                 inChordCount = 0;
             }
             var tonechannel = this.trackInfo[7 - note.track];
+            if (tonechannel.variation) {
+                //console.log(tonechannel);
+                if (tonechannel.variation == 1) {
+                    tonechannel = tonechannel.sub;
+                }
+                else {
+                    if (tonechannel.variation == 2) {
+                        tonechannel = tonechannel.subSub;
+                    }
+                }
+            }
             var zones = tonechannel.sound;
             //if (tonechannel.info && window[channel.info.variable]) {
             //zones = window[channel.info.variable];
@@ -2051,13 +2139,41 @@ var GenRiff = /** @class */ (function () {
                 this.trackInfo[i].audioNode.connect(this.master.input);
                 this.drumInfo[i].audioNode = this.audioContext.createGain();
                 this.drumInfo[i].audioNode.connect(this.master.input);
+                if (this.trackInfo[i].sub) {
+                    this.trackInfo[i].sub.audioNode = this.audioContext.createGain();
+                    this.trackInfo[i].sub.audioNode.connect(this.master.input);
+                }
+                if (this.trackInfo[i].subSub) {
+                    this.trackInfo[i].subSub.audioNode = this.audioContext.createGain();
+                    this.trackInfo[i].subSub.audioNode.connect(this.master.input);
+                }
+                if (this.drumInfo[i].sub) {
+                    this.drumInfo[i].sub.audioNode = this.audioContext.createGain();
+                    this.drumInfo[i].sub.audioNode.connect(this.master.input);
+                }
+                if (this.drumInfo[i].subSub) {
+                    this.drumInfo[i].subSub.audioNode = this.audioContext.createGain();
+                    this.drumInfo[i].subSub.audioNode.connect(this.master.input);
+                }
             }
             for (var i = 0; i < this.drumInfo.length; i++) {
                 this.player.adjustPreset(this.audioContext, this.drumInfo[i].sound);
+                if (this.drumInfo[i].sub) {
+                    this.player.adjustPreset(this.audioContext, this.drumInfo[i].sub.sound);
+                }
+                if (this.drumInfo[i].subSub) {
+                    this.player.adjustPreset(this.audioContext, this.drumInfo[i].subSub.sound);
+                }
             }
             for (var i = 0; i < this.trackInfo.length; i++) {
                 //console.log(i,this.trackInfo[i]);
                 this.player.adjustPreset(this.audioContext, this.trackInfo[i].sound);
+                if (this.trackInfo[i].sub) {
+                    this.player.adjustPreset(this.audioContext, this.trackInfo[i].sub.sound);
+                }
+                if (this.trackInfo[i].subSub) {
+                    this.player.adjustPreset(this.audioContext, this.trackInfo[i].subSub.sound);
+                }
             }
             //this.startTicks();
             /*

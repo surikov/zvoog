@@ -21,6 +21,18 @@
 	<script src="resources/12846_26_JCLive_sf2_file.js"></script>
 	<script src="resources/12849_26_JCLive_sf2_file.js"></script>
 	<script src="resources/12851_26_JCLive_sf2_file.js"></script>
+	<!-- -->
+	<script src="resources/0390_Chaos_sf2_file.js"></script>
+	<script src="resources/0350_Chaos_sf2_file.js"></script>
+	
+	<script src="resources/12838_0_Chaos_sf2_file.js"></script>
+	<script src="resources/12838_3_SBLive_sf2.js"></script>
+	<script src="resources/12836_11_JCLive_sf2_file.js"></script>
+	<script src="resources/12836_13_JCLive_sf2_file.js"></script>
+	
+	
+	
+	
 	<script src="resources/riffplay_module.js"></script>
 	<script src="resources/labels.js"></script>
 
@@ -212,7 +224,9 @@
 			<input type="image" src='resources/iconplay.svg' id='menuPlayButton' class='menuButton' onclick='tapPlay();' />
 			<input type="image" src='resources/iconmusic.svg' id='menuEditButton' class='menuButton' onclick='tapEdit();' />
 			<input type="image" src='resources/iconshare.svg' id='menuShareButton' class='menuButton' onclick='tapShare();' />
-
+			<!--
+			<input type="image" src='resources/buttonClose.svg' id='menuShareButton' class='menuButton' onclick='rollBassOption();' />
+-->
 		</div>
 	</div>
 
@@ -435,6 +449,7 @@
 		function tapBassStage() {
 			console.log('tapBassStage');
 			control.bassSeedValue = Math.floor(Math.random() * 1000);
+			genRiff.trackInfo[2].variation=Math.floor(Math.random() * 3);
 			control.readChanged();
 			control.startPlay();
 			updateStyles();
@@ -442,6 +457,8 @@
 		function tapDrumStage() {
 			console.log('tapDrumStage');
 			control.drumSeedValue = Math.floor(Math.random() * 1000);
+			genRiff.drumInfo[2].variation=Math.floor(Math.random() * 3);
+			genRiff.drumInfo[0].variation=genRiff.drumInfo[2].variation;
 			control.readChanged();
 			control.startPlay();
 			updateStyles();
@@ -465,6 +482,7 @@
 			console.log('tapBassUp');
 			control.bassSeedValue = control.bassSeedValue + Math.round(1000 / genRiff.bassDefs.length);
 			if (control.bassSeedValue > 999) control.bassSeedValue = 999;
+			//genRiff.trackInfo[2].variation=Math.floor(Math.random() * 3);
 			control.readChanged();
 			control.startPlay();
 			updateStyles();
@@ -473,6 +491,7 @@
 			console.log('tapBassDown');
 			control.bassSeedValue = control.bassSeedValue - Math.round(1000 / genRiff.bassDefs.length);
 			if (control.bassSeedValue < 0) control.bassSeedValue = 0;
+			//genRiff.trackInfo[2].variation=Math.floor(Math.random() * 3);
 			control.readChanged();
 			control.startPlay();
 			updateStyles();
@@ -554,9 +573,24 @@
 		}
 		function tapRandomize() {
 			console.log('tapRandomize');
+			genRiff.trackInfo[2].variation=Math.floor(Math.random() * 3);
+			genRiff.drumInfo[2].variation=Math.floor(Math.random() * 3);
+			genRiff.drumInfo[0].variation=genRiff.drumInfo[2].variation;
 			control.playRandom();
 			updateStyles();
 		}
+		
+		function rollBassOption(){
+			
+			if(genRiff.drumInfo[2].variation>1){
+				genRiff.drumInfo[2].variation=0;
+			}else{
+				genRiff.drumInfo[2].variation++;
+			}
+			genRiff.drumInfo[0].variation=genRiff.drumInfo[2].variation;
+			console.log('roll',genRiff.drumInfo[2].variation);
+		}
+
 		function handleOpenURL(url) {
 			console.log("received url: " + url);
 			//https://surikov.github.io/shareprogression/main.html?load=Am%2C%20G%2C%20F%2C%20E7%2F764%2F420%2F0%2F479", source: file:///android_asset/www/main.html (122)
