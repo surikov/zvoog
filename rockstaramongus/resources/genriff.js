@@ -969,7 +969,7 @@ var GenRiff = /** @class */ (function () {
                     pitch: 36,
                     title: 'Кик',
                     id: 0,
-                    volumeRatio: 0.6,
+                    volumeRatio: 0.5,
                     length: 0.3,
                     audioNode: null
                 }
@@ -1004,7 +1004,7 @@ var GenRiff = /** @class */ (function () {
                     pitch: 38,
                     title: 'Рабочий',
                     id: 2,
-                    volumeRatio: 0.75,
+                    volumeRatio: 0.85,
                     length: 0.3,
                     audioNode: null
                 }
