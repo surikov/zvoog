@@ -1767,9 +1767,9 @@ for (let i = 0; i < this.drumsDefsBase.length; i++) {
         , audioNode: null
 		,sub: {
 			//sound: (window as any)._drum_38_3_SBLive_sf2,
-			sound: (window as any)._drum_38_20_FluidR3_GM_sf2_file,
+			sound: (window as any)._drum_40_20_FluidR3_GM_sf2_file,
 			
-			pitch: 38, //40
+			pitch: 40, //40
 			title: 'Рабочий',
 			id: 2,
 			volumeRatio: 0.4,

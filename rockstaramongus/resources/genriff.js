@@ -992,8 +992,8 @@ var GenRiff = /** @class */ (function () {
                 audioNode: null,
                 sub: {
                     //sound: (window as any)._drum_38_3_SBLive_sf2,
-                    sound: window._drum_38_20_FluidR3_GM_sf2_file,
-                    pitch: 38,
+                    sound: window._drum_40_20_FluidR3_GM_sf2_file,
+                    pitch: 40,
                     title: 'Рабочий',
                     id: 2,
                     volumeRatio: 0.4,
