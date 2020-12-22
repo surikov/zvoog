@@ -155,6 +155,7 @@ class GenRiff {
 
 
     ];
+    
     pianoDefsData: PianoPatternDefinition[] = [
 
 
@@ -1242,11 +1243,17 @@ class GenRiff {
         this.resetProgressions();
         for (let i = 0; i < this.pianoDefsData.length; i++) {
             this.pianoStrumOverDefsData.push(this.pianoDefsData[i]);
+            this.pianoStrumOverDefsData.push(this.pianoDefsData[i]);
+            this.pianoStrumOverDefsData.push(this.pianoDefsData[i]);
         }
         for (let i = 0; i < this.arpeggioDefsDats.length; i++) {
             this.pianoStrumOverDefsData.push(this.arpeggioDefsDats[i]);
+            this.pianoStrumOverDefsData.push(this.arpeggioDefsDats[i]);
+            this.pianoStrumOverDefsData.push(this.arpeggioDefsDats[i]);
         }
         for (let i = 0; i < this.strumDefs.length; i++) {
+            this.pianoStrumOverDefsData.push(this.strumDefs[i]);
+            this.pianoStrumOverDefsData.push(this.strumDefs[i]);
             this.pianoStrumOverDefsData.push(this.strumDefs[i]);
         }
 
@@ -1657,6 +1664,9 @@ for (let i = 0; i < this.drumsDefsBase.length; i++) {
 		
 		
         let rhythmN = Math.floor(this.pianoStrumOverDefsData.length * _rhythmN / 1000);
+        this.trackInfo[3].variation=(rhythmN-1)%3;
+        this.trackInfo[6].variation=(rhythmN-1)%3;
+
         let padN = Math.floor(this.padMelodyDefsData.length * _padN / 1000);
         console.log('selection', progressionN, drumN, bassN, rhythmN, padN);
         this.selectedProgression = this.progressions[progressionN];
@@ -1729,16 +1739,18 @@ for (let i = 0; i < this.drumsDefsBase.length; i++) {
         length: 0.3
         , audioNode: null
 		,sub:{
-			sound: (window as any)._drum_36_13_JCLive_sf2_file,
+            //sound: (window as any)._drum_36_13_JCLive_sf2_file,
+            sound: (window as any)._drum_36_6_Chaos_sf2_file,
 			pitch: 36, //36
 			title: 'Кик',
 			id: 0,
-			volumeRatio: 0.3,
+			volumeRatio: 0.5,
 			length: 0.3
 			, audioNode: null
 		},subSub:{
 			//sound: (window as any)._drum_36_11_JCLive_sf2_file,
-			sound: (window as any)._drum_36_0_Chaos_sf2_file,
+            sound: (window as any)._drum_36_0_Chaos_sf2_file,
+            
 			
 			pitch: 36, //36
 			title: 'Кик',
@@ -1772,7 +1784,7 @@ for (let i = 0; i < this.drumsDefsBase.length; i++) {
 			pitch: 40, //40
 			title: 'Рабочий',
 			id: 2,
-			volumeRatio: 0.4,
+			volumeRatio: 0.6,
 			length: 0.3
 			, audioNode: null
 		}
@@ -1839,7 +1851,7 @@ for (let i = 0; i < this.drumsDefsBase.length; i++) {
         nn: 7,
         octave: 3,
         inChordDelay: 0.01,
-        volumeRatio: 0.5
+        volumeRatio: 0.8
         , audioNode: null
     }, {
         color: 'rgb(178,178,0)',
@@ -1901,20 +1913,62 @@ for (let i = 0; i < this.drumsDefsBase.length; i++) {
 			volumeRatio: 0.5
 			, audioNode: null
 		}
-	 }, {
+	 }, {variation:0,
         color: 'rgb(0,127,255)',
         shadow: 'rgba(0,127,255,0.4)',
         //color: 'rgba(00,153,255,1)',
         //shadow: 'rgba(00,153,255,0.4)',
         title: 'Пианино',
-        order: 3,
+        order: 2,
         sound: (window as any)._tone_0001_FluidR3_GM_sf2_file,
+        //sound: (window as any)._tone_0000_JCLive_sf2_file,
+        //sound: (window as any)._tone_0050_FluidR3_GM_sf2_file,
+        
+        
         volume: 70,//sureNumeric(readObjectFromlocalStorage('track4'), 0, 70, 100),
         nn: 4,
-        octave: 3,
+        octave: 2,
         inChordDelay: 0,
         volumeRatio: 0.5
         , audioNode: null
+        ,sub:{
+            color: 'rgb(0,127,255)',
+            shadow: 'rgba(0,127,255,0.4)',
+            //color: 'rgba(00,153,255,1)',
+            //shadow: 'rgba(00,153,255,0.4)',
+            title: 'Пианино',
+            order: 3,
+            sound: (window as any)._tone_0001_FluidR3_GM_sf2_file,
+            //sound: (window as any)._tone_0000_JCLive_sf2_file,
+            //sound: (window as any)._tone_0050_FluidR3_GM_sf2_file,
+            
+            
+            volume: 70,//sureNumeric(readObjectFromlocalStorage('track4'), 0, 70, 100),
+            nn: 4,
+            octave: 3,
+            inChordDelay: 0,
+            volumeRatio: 0.3
+            , audioNode: null
+        }
+        ,subSub:{
+            color: 'rgb(0,127,255)',
+            shadow: 'rgba(0,127,255,0.4)',
+            //color: 'rgba(00,153,255,1)',
+            //shadow: 'rgba(00,153,255,0.4)',
+            title: 'Пианино',
+            order: 3,
+            //sound: (window as any)._tone_0001_FluidR3_GM_sf2_file,
+            //sound: (window as any)._tone_0000_JCLive_sf2_file,
+            sound: (window as any)._tone_0050_FluidR3_GM_sf2_file,
+            
+            
+            volume: 70,//sureNumeric(readObjectFromlocalStorage('track4'), 0, 70, 100),
+            nn: 4,
+            octave: 3,
+            inChordDelay: 0,
+            volumeRatio: 0.3
+            , audioNode: null
+        }
     }, {
         color: 'rgb(140,35,0)',
         shadow: 'rgba(140,35,0,0.4)',
@@ -1944,7 +1998,7 @@ for (let i = 0; i < this.drumsDefsBase.length; i++) {
         octave: 4,
         volumeRatio: 0.7
         , audioNode: null
-    }, {
+    }, {variation:0,
         color: 'rgb(45,178,0)',
         shadow: 'rgba(45,178,0,0.4)',
         //color: 'rgba(0,153,0,1)',
@@ -1952,12 +2006,48 @@ for (let i = 0; i < this.drumsDefsBase.length; i++) {
         title: 'Аккуст. гитара',
         order: 6,
         sound: (window as any)._tone_0250_Chaos_sf2_file,
+        //sound: (window as any)._tone_0250_LK_AcousticSteel_SF2_file,
+        
         volume: 70,//sureNumeric(readObjectFromlocalStorage('track1'), 0, 70, 100),
         nn: 1,
         octave: 3,
         inChordDelay: 0.01,
-        volumeRatio: 0.5
+        volumeRatio: 0.75//0.5
         , audioNode: null
+       , sub:{
+            color: 'rgb(45,178,0)',
+            shadow: 'rgba(45,178,0,0.4)',
+            //color: 'rgba(0,153,0,1)',
+            //shadow: 'rgba(0,153,0,0.4)',
+            title: 'Аккуст. гитара',
+            order: 6,
+            //sound: (window as any)._tone_0250_Chaos_sf2_file,
+            sound: (window as any)._tone_0270_Aspirin_sf2_file,
+            
+            volume: 70,//sureNumeric(readObjectFromlocalStorage('track1'), 0, 70, 100),
+            nn: 1,
+            octave: 3,
+            inChordDelay: 0.01,
+            volumeRatio: 0.4//0.5
+            , audioNode: null
+        }
+        , subSub:{
+            color: 'rgb(45,178,0)',
+            shadow: 'rgba(45,178,0,0.4)',
+            //color: 'rgba(0,153,0,1)',
+            //shadow: 'rgba(0,153,0,0.4)',
+            title: 'Аккуст. гитара',
+            order: 6,
+            //sound: (window as any)._tone_0250_Chaos_sf2_file,
+            sound: (window as any)._tone_0250_LK_AcousticSteel_SF2_file,
+            
+            volume: 70,//sureNumeric(readObjectFromlocalStorage('track1'), 0, 70, 100),
+            nn: 1,
+            octave: 3,
+            inChordDelay: 0.01,
+            volumeRatio: 0.75//0.5
+            , audioNode: null
+        }
     }, {
         color: 'rgb(255,0,0)',
         shadow: 'rgba(255,0,0,0.4)',
@@ -2032,10 +2122,10 @@ for (let i = 0; i < this.drumsDefsBase.length; i++) {
             var tonechannel = this.trackInfo[7 - note.track];
 			if(tonechannel.variation){
 				//console.log(tonechannel);
-				if(tonechannel.variation==1){
+				if(tonechannel.variation==1 && (tonechannel.sub)){
 					tonechannel=tonechannel.sub;
 				}else{
-					if(tonechannel.variation==2){
+					if(tonechannel.variation==2 && tonechannel.subSub){
 						tonechannel=tonechannel.subSub;
 					}
 				}

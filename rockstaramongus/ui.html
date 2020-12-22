@@ -33,7 +33,17 @@
 	<!--<script src="resources/12836_11_JCLive_sf2_file.js"></script>-->
 	<script src="resources/12836_0_Chaos_sf2_file.js"></script>
 	
-	<script src="resources/12836_13_JCLive_sf2_file.js"></script>
+	<!--<script src="resources/12836_13_JCLive_sf2_file.js"></script>-->
+	<script src="resources/12836_6_Chaos_sf2_file.js"></script>
+	
+
+	<script src="resources/0000_JCLive_sf2_file.js"></script>
+	<script src="resources/0050_FluidR3_GM_sf2_file.js"></script>
+	
+
+
+	<script src="resources/0250_LK_AcousticSteel_SF2_file.js"></script>
+	<script src="resources/0270_Aspirin_sf2_file.js"></script>
 	
 	
 	
@@ -413,8 +423,8 @@
 
 			var leadN = Math.floor(genRiff.pianoStrumOverDefsData.length * control.leadSeedValue / 1000);
 			if (leadN > 0) document.getElementById('iconLead').src = 'resources/charpiano2.svg';
-			if (leadN > 12) document.getElementById('iconLead').src = 'resources/charguitar2.svg';
-			if (leadN > 23) document.getElementById('iconLead').src = 'resources/chardrive2.svg';
+			if (leadN > 36) document.getElementById('iconLead').src = 'resources/charguitar2.svg';
+			if (leadN > 69) document.getElementById('iconLead').src = 'resources/chardrive2.svg';
 
 			var padN = Math.floor(genRiff.padMelodyDefsData.length * control.padSeedValue / 1000);
 			if (padN > 0) document.getElementById('iconPad').src = 'resources/charviola2.svg';
@@ -432,8 +442,8 @@
 
 			var leadN = Math.floor(genRiff.pianoStrumOverDefsData.length * control.leadSeedValue / 1000);
 			if (leadN > 0) document.getElementById('iconLead').src = 'resources/charpiano.svg';
-			if (leadN > 12) document.getElementById('iconLead').src = 'resources/charguitar.svg';
-			if (leadN > 23) document.getElementById('iconLead').src = 'resources/chardrive.svg';
+			if (leadN > 36) document.getElementById('iconLead').src = 'resources/charguitar.svg';
+			if (leadN > 69) document.getElementById('iconLead').src = 'resources/chardrive.svg';
 
 			var padN = Math.floor(genRiff.padMelodyDefsData.length * control.padSeedValue / 1000);
 			if (padN > 0) document.getElementById('iconPad').src = 'resources/charviola.svg';
