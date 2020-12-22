@@ -78,7 +78,8 @@ class GenRiff {
         , { name: this.scaleModeAeolian, pitches: [2, 1, 2, 2, 1, 2, 2] }
         , { name: this.scaleModeLocrian, pitches: [1, 2, 2, 1, 2, 2, 2] }
     ];
-    drumsDefs: DrumPatternDefinition[] = [
+	drumsDefs: DrumPatternDefinition[] = [];
+    drumsDefsBase: DrumPatternDefinition[] = [
         { category: '', name: 'simpledance', start: { len16: 8 * 2, encoded: '0011011180448144' }, end: { len16: 8 * 2, encoded: '001101f980448144' } }
         , { category: '', name: 'bigroom', start: { len16: 8 * 2, encoded: '00110111201121114010411080448144' }, end: { len16: 8 * 2, encoded: '001101f120d1211140104110610c80cc81cc' } }
         , { category: '', name: 'bigroom2', start: { len16: 8 * 2, encoded: '001101152011211540104110a044a144' }, end: { len16: 8 * 2, encoded: '001101f5201121f54010a044a144' } }
@@ -111,7 +112,8 @@ class GenRiff {
         , { category: '', name: 'punk speed', start: { len16: 8 * 2, encoded: '0031012940444144c055c155' }, end: { len16: 8 * 2, encoded: '0033010921a0404441146140c055c115' } }
         , { category: '', name: 'power metal', start: { len16: 8 * 4, encoded: '00440144024603464011411142114311a010a111a211a311e001' }, end: { len16: 8 * 2, encoded: '00820108405d4157e041' } }
     ];
-    bassDefs: MelodyPatternDefinition[] = [
+	bassDefs: MelodyPatternDefinition[] = [];
+    bassDefsBase: MelodyPatternDefinition[] = [
         { category: '', name: 'octave1', chord: 'Am', len16: 8 * 4, encoded: '0050209400250215400450209400650215400850209400a50215400c50209400e50215401050209401250215401450209401650215401850209401a50215401c50109401d50115401e50109401f5011540' }
         , { category: '', name: 'octave2', chord: 'Am', len16: 8 * 2, encoded: '0050109400150209400250115400350215400450109400550209400650115400750215400850109400950209400a50115400b50215400c50109400d50209400e50115400f5021540' }
         , { category: '', name: 'edmtri', chord: 'Am', len16: 8 * 2, encoded: '005010940015010940025010c40035010940045010940055011040065010940075010940085010c400950109400a50109400b50110400c50109400d50109400e5010c400f5010940105010940115011040125010940135010940145010c401550109401650109401750110401850109401950109401a5010c401b50109401c50109401d50110401e50109401f5010940' }
@@ -1254,7 +1256,20 @@ class GenRiff {
         for (let i = 0; i < this.padDefsData2.length; i++) {
             this.padMelodyDefsData.push(this.padDefsData2[i]);
         }
-
+		
+		for (let i = 0; i < this.bassDefsBase.length; i++) {
+			this.bassDefs.push(this.bassDefsBase[i]);
+			this.bassDefs.push(this.bassDefsBase[i]);
+			this.bassDefs.push(this.bassDefsBase[i]);
+			
+        }
+		
+for (let i = 0; i < this.drumsDefsBase.length; i++) {
+			this.drumsDefs.push(this.drumsDefsBase[i]);
+			this.drumsDefs.push(this.drumsDefsBase[i]);
+			this.drumsDefs.push(this.drumsDefsBase[i]);
+			
+        }
 
         //console.log(this.rhythmDefsData);
 
@@ -1632,7 +1647,15 @@ class GenRiff {
         //console.log('generateAll', _progressionN, _drumN, _bassN, _rhythmN, _padN);
         let progressionN = Math.floor(this.progressions.length * _progressionN / 1000);
         let drumN = Math.floor(this.drumsDefs.length * _drumN / 1000);
+		this.drumInfo[0].variation=drumN%3;
+		this.drumInfo[2].variation=drumN%3;
+		
+		
+		
         let bassN = Math.floor(this.bassDefs.length * _bassN / 1000);
+		this.trackInfo[2].variation=bassN%3;
+		
+		
         let rhythmN = Math.floor(this.pianoStrumOverDefsData.length * _rhythmN / 1000);
         let padN = Math.floor(this.padMelodyDefsData.length * _padN / 1000);
         console.log('selection', progressionN, drumN, bassN, rhythmN, padN);

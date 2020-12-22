@@ -449,7 +449,7 @@
 		function tapBassStage() {
 			console.log('tapBassStage');
 			control.bassSeedValue = Math.floor(Math.random() * 1000);
-			genRiff.trackInfo[2].variation=Math.floor(Math.random() * 3);
+			//genRiff.trackInfo[2].variation=Math.floor(Math.random() * 3);
 			control.readChanged();
 			control.startPlay();
 			updateStyles();
@@ -457,8 +457,8 @@
 		function tapDrumStage() {
 			console.log('tapDrumStage');
 			control.drumSeedValue = Math.floor(Math.random() * 1000);
-			genRiff.drumInfo[2].variation=Math.floor(Math.random() * 3);
-			genRiff.drumInfo[0].variation=genRiff.drumInfo[2].variation;
+			//genRiff.drumInfo[2].variation=Math.floor(Math.random() * 3);
+			//genRiff.drumInfo[0].variation=genRiff.drumInfo[2].variation;
 			control.readChanged();
 			control.startPlay();
 			updateStyles();
@@ -573,13 +573,13 @@
 		}
 		function tapRandomize() {
 			console.log('tapRandomize');
-			genRiff.trackInfo[2].variation=Math.floor(Math.random() * 3);
-			genRiff.drumInfo[2].variation=Math.floor(Math.random() * 3);
-			genRiff.drumInfo[0].variation=genRiff.drumInfo[2].variation;
+			//genRiff.trackInfo[2].variation=Math.floor(Math.random() * 3);
+			//genRiff.drumInfo[2].variation=Math.floor(Math.random() * 3);
+			//genRiff.drumInfo[0].variation=genRiff.drumInfo[2].variation;
 			control.playRandom();
 			updateStyles();
 		}
-		
+		/*
 		function rollBassOption(){
 			
 			if(genRiff.drumInfo[2].variation>1){
@@ -589,7 +589,7 @@
 			}
 			genRiff.drumInfo[0].variation=genRiff.drumInfo[2].variation;
 			console.log('roll',genRiff.drumInfo[2].variation);
-		}
+		}*/
 
 		function handleOpenURL(url) {
 			console.log("received url: " + url);
