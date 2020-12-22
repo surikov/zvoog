@@ -964,11 +964,12 @@ var GenRiff = /** @class */ (function () {
                     length: 0.3,
                     audioNode: null
                 }, subSub: {
-                    sound: window._drum_36_11_JCLive_sf2_file,
+                    //sound: (window as any)._drum_36_11_JCLive_sf2_file,
+                    sound: window._drum_36_0_Chaos_sf2_file,
                     pitch: 36,
                     title: 'Кик',
                     id: 0,
-                    volumeRatio: 0.4,
+                    volumeRatio: 0.6,
                     length: 0.3,
                     audioNode: null
                 }
