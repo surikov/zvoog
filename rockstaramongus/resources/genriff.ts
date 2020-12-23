@@ -1784,7 +1784,7 @@ for (let i = 0; i < this.drumsDefsBase.length; i++) {
 			pitch: 40, //40
 			title: 'Рабочий',
 			id: 2,
-			volumeRatio: 0.6,
+			volumeRatio: 0.8,
 			length: 0.3
 			, audioNode: null
 		}
@@ -1793,7 +1793,7 @@ for (let i = 0; i < this.drumsDefsBase.length; i++) {
 			pitch: 38, //40
 			title: 'Рабочий',
 			id: 2,
-			volumeRatio: 0.4,
+			volumeRatio: 0.5,
 			length: 0.3
 			, audioNode: null
 		}
@@ -2028,7 +2028,7 @@ for (let i = 0; i < this.drumsDefsBase.length; i++) {
             nn: 1,
             octave: 3,
             inChordDelay: 0.01,
-            volumeRatio: 0.4//0.5
+            volumeRatio: 0.3//0.5
             , audioNode: null
         }
         , subSub:{
@@ -2045,7 +2045,7 @@ for (let i = 0; i < this.drumsDefsBase.length; i++) {
             nn: 1,
             octave: 3,
             inChordDelay: 0.01,
-            volumeRatio: 0.75//0.5
+            volumeRatio: 0.55//0.5
             , audioNode: null
         }
     }, {

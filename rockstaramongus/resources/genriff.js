@@ -997,7 +997,7 @@ var GenRiff = /** @class */ (function () {
                     pitch: 40,
                     title: 'Рабочий',
                     id: 2,
-                    volumeRatio: 0.6,
+                    volumeRatio: 0.8,
                     length: 0.3,
                     audioNode: null
                 },
@@ -1006,7 +1006,7 @@ var GenRiff = /** @class */ (function () {
                     pitch: 38,
                     title: 'Рабочий',
                     id: 2,
-                    volumeRatio: 0.4,
+                    volumeRatio: 0.5,
                     length: 0.3,
                     audioNode: null
                 }
@@ -1132,7 +1132,8 @@ var GenRiff = /** @class */ (function () {
                 //color: 'rgba(00,153,255,1)',
                 //shadow: 'rgba(00,153,255,0.4)',
                 title: 'Пианино',
-                order: 2, sound: window._tone_0001_FluidR3_GM_sf2_file, 
+                order: 2,
+                sound: window._tone_0001_FluidR3_GM_sf2_file,
                 //sound: (window as any)._tone_0000_JCLive_sf2_file,
                 //sound: (window as any)._tone_0050_FluidR3_GM_sf2_file,
                 volume: 70,
@@ -1140,7 +1141,8 @@ var GenRiff = /** @class */ (function () {
                 octave: 2,
                 inChordDelay: 0,
                 volumeRatio: 0.5,
-                audioNode: null, sub: {
+                audioNode: null,
+                sub: {
                     color: 'rgb(0,127,255)',
                     shadow: 'rgba(0,127,255,0.4)',
                     //color: 'rgba(00,153,255,1)',
@@ -1209,7 +1211,8 @@ var GenRiff = /** @class */ (function () {
                 //color: 'rgba(0,153,0,1)',
                 //shadow: 'rgba(0,153,0,0.4)',
                 title: 'Аккуст. гитара',
-                order: 6, sound: window._tone_0250_Chaos_sf2_file, 
+                order: 6,
+                sound: window._tone_0250_Chaos_sf2_file,
                 //sound: (window as any)._tone_0250_LK_AcousticSteel_SF2_file,
                 volume: 70,
                 nn: 1,
@@ -1217,7 +1220,8 @@ var GenRiff = /** @class */ (function () {
                 inChordDelay: 0.01,
                 volumeRatio: 0.75 //0.5
                 ,
-                audioNode: null, sub: {
+                audioNode: null,
+                sub: {
                     color: 'rgb(45,178,0)',
                     shadow: 'rgba(45,178,0,0.4)',
                     //color: 'rgba(0,153,0,1)',
@@ -1230,7 +1234,7 @@ var GenRiff = /** @class */ (function () {
                     nn: 1,
                     octave: 3,
                     inChordDelay: 0.01,
-                    volumeRatio: 0.4 //0.5
+                    volumeRatio: 0.3 //0.5
                     ,
                     audioNode: null
                 },
@@ -1247,7 +1251,7 @@ var GenRiff = /** @class */ (function () {
                     nn: 1,
                     octave: 3,
                     inChordDelay: 0.01,
-                    volumeRatio: 0.75 //0.5
+                    volumeRatio: 0.55 //0.5
                     ,
                     audioNode: null
                 }
